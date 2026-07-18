@@ -1,11 +1,14 @@
 package com.app.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.app.dto.ApplicationRequest;
 import com.app.dto.ApplicationResponse;
 import com.app.entity.Application;
+import com.app.entity.ApplicationStatus;
 import com.app.entity.Internship;
 import com.app.entity.Student;
 import com.app.repository.ApplicationRepository;
@@ -46,5 +49,28 @@ public class ApplicationService {
 
 		return new ApplicationResponse(application.getId(), student.getUser().getFullName(), internship.getTitle(),
 				application.getStatus(), application.getAppliedAt());
+	}
+
+	// get Comapnay applications
+	public List<ApplicationResponse> getCompanyApplications(Long companyId) {
+
+		return applicationRepository.findByInternshipCompanyId(companyId).stream()
+				.map(a -> new ApplicationResponse(a.getId(), a.getStudent().getUser().getFullName(),
+						a.getInternship().getTitle(), a.getStatus(), a.getAppliedAt()))
+				.toList();
+	}
+	
+	//update application status
+
+	public String updateApplicationStatus(Long applicationId, ApplicationStatus status) {
+
+		Application application = applicationRepository.findById(applicationId)
+				.orElseThrow(() -> new RuntimeException("Application not found"));
+
+		application.setStatus(status);
+
+		applicationRepository.save(application);
+
+		return "Application status updated successfully";
 	}
 }

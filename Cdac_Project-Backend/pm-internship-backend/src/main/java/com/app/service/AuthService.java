@@ -96,6 +96,7 @@ public class AuthService {
 
 		AuthResponse response = new AuthResponse();
 
+		response.setId(user.getId());
 		response.setToken(token);
 		response.setEmail(user.getEmail());
 		response.setRole(user.getRole().name());

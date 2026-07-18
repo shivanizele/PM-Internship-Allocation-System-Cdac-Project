@@ -30,25 +30,26 @@ public class AdminService {
 
     public AdminDashboardResponse getDashboard() {
 
-        long students = studentRepository.count();
-        long companies = companyRepository.count();
-        long internships = internshipRepository.count();
-        long applications = applicationRepository.count();
-        long allocations = allocationRepository.count();
+        long totalStudents = studentRepository.count();
+        long totalCompanies = companyRepository.count();
+        long totalInternships = internshipRepository.count();
+        long totalApplications = applicationRepository.count();
+        long totalAllocations = allocationRepository.count();
 
-        double placement = 0.0;
+        double placementPercentage = 0;
 
-        if (students > 0) {
-            placement = (allocations * 100.0) / students;
+        if (totalStudents > 0) {
+            placementPercentage =
+                    (totalAllocations * 100.0) / totalStudents;
         }
 
         return new AdminDashboardResponse(
-                students,
-                companies,
-                internships,
-                applications,
-                allocations,
-                placement
+                totalStudents,
+                totalCompanies,
+                totalInternships,
+                totalApplications,
+                totalAllocations,
+                placementPercentage
         );
     }
 }

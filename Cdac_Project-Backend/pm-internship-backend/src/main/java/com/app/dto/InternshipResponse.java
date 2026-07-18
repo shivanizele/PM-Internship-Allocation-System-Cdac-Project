@@ -12,17 +12,24 @@ public class InternshipResponse {
     private Double stipend;
     private Integer durationMonths;
     private String companyName;
+    private Double minimumCgpa;
+   // private Integer durationMonths;
+    private Integer availableSeats;
 
     public InternshipResponse() {
     }
 
-    public InternshipResponse(Long id,
-                              String title,
-                              String description,
-                              Set<String> requiredSkills,
-                              String location,
-                              Double stipend,
-                              String companyName) {
+    public InternshipResponse(
+            Long id,
+            String title,
+            String description,
+            Set<String> requiredSkills,
+            String location,
+            Double stipend,
+            Double minimumCgpa,
+            Integer durationMonths,
+            Integer availableSeats,
+            String companyName) {
 
         this.id = id;
         this.title = title;
@@ -30,6 +37,9 @@ public class InternshipResponse {
         this.requiredSkills = requiredSkills;
         this.location = location;
         this.stipend = stipend;
+        this.minimumCgpa = minimumCgpa;
+        this.durationMonths = durationMonths;
+        this.availableSeats = availableSeats;
         this.companyName = companyName;
     }
 
@@ -96,5 +106,22 @@ public class InternshipResponse {
 	public void setDurationMonths(Integer durationMonths) {
 		this.durationMonths = durationMonths;
 	}
+
+	public Double getMinimumCgpa() {
+		return minimumCgpa;
+	}
+
+	public void setMinimumCgpa(Double minimumCgpa) {
+		this.minimumCgpa = minimumCgpa;
+	}
+
+	public Integer getAvailableSeats() {
+		return availableSeats;
+	}
+
+	public void setAvailableSeats(Integer availableSeats) {
+		this.availableSeats = availableSeats;
+	}
+	
     
 }

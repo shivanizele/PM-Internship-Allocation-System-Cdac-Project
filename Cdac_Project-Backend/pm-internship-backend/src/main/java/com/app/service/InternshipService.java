@@ -28,7 +28,7 @@ public class InternshipService {
 
     @Autowired
     private SkillRepository skillRepository;
-
+//create internship 
     public InternshipResponse createInternship(InternshipRequest request) {
 
         Company company = companyRepository.findById(request.getCompanyId())
@@ -44,6 +44,7 @@ public class InternshipService {
         internship.setCompany(company);
         internship.setMinimumCgpa(request.getMinimumCgpa());
         internship.setDurationMonths(request.getDurationMonths());
+        internship.setAvailableSeats(request.getAvailableSeats());
         Set<Skill> skills = new HashSet<>();
 
         for (String skillName : request.getRequiredSkills()) {
@@ -68,6 +69,7 @@ public class InternshipService {
         return getInternship(internship.getId());
     }
 
+    //get internship by id
     public InternshipResponse getInternship(Long id) {
 
         Internship internship = internshipRepository.findById(id)
@@ -86,6 +88,9 @@ public class InternshipService {
                 skills,
                 internship.getLocation(),
                 internship.getStipend(),
+                internship.getMinimumCgpa(),
+                internship.getDurationMonths(),
+                internship.getAvailableSeats(),
                 internship.getCompany().getCompanyName()
         );
     }
@@ -108,12 +113,16 @@ public class InternshipService {
                             skills,
                             i.getLocation(),
                             i.getStipend(),
-                            
+                            i.getMinimumCgpa(),
+                            i.getDurationMonths(),
+                            i.getAvailableSeats(),
                             i.getCompany().getCompanyName()
                     );
                 })
                 .collect(Collectors.toList());
     }
+    
+    //update internship
 
     public InternshipResponse updateInternship(
             Long id,
@@ -127,6 +136,13 @@ public class InternshipService {
         internship.setDescription(request.getDescription());
         internship.setLocation(request.getLocation());
         internship.setStipend(request.getStipend());
+        internship.setMinimumCgpa(request.getMinimumCgpa());
+        internship.setDurationMonths(request.getDurationMonths());
+        internship.setAvailableSeats(request.getAvailableSeats());
+        Company company = companyRepository.findById(request.getCompanyId())
+                .orElseThrow(() -> new RuntimeException("Company not found"));
+
+        internship.setCompany(company);
 
         Set<Skill> skills = new HashSet<>();
 

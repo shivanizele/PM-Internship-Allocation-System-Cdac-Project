@@ -21,6 +21,7 @@ public class Internship {
 	private Integer durationMonths;
 	private Double minimumCgpa;
 	private LocalDateTime createdAt;
+	private Integer availableSeats;
 	
 	
 	@ManyToOne
@@ -133,5 +134,12 @@ public class Internship {
 
 	public void setAllocations(List<Allocation> allocations) {
 		this.allocations = allocations;
+	}
+	public Integer getAvailableSeats() {
+	    return availableSeats;
+	}
+
+	public void setAvailableSeats(Integer availableSeats) {
+	    this.availableSeats = availableSeats;
 	}
 }

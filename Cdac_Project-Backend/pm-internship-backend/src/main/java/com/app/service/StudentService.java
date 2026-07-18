@@ -45,23 +45,28 @@ public class StudentService {
 		student.setCgpa(request.getCgpa());
 
 		student.setLocation(request.getLocation());
+		
+		if (request.getSkills() != null) {
 
-		Set<Skill> skills = new HashSet<>();
+		    Set<Skill> skills = new HashSet<>();
 
-		for (String skillName : request.getSkills()) {
+		    for (String skillName : request.getSkills()) {
 
-			Skill skill = skillRepository.findBySkillName(skillName).orElseGet(() -> {
+		        Skill skill = skillRepository
+		                .findBySkillName(skillName)
+		                .orElseGet(() -> {
 
-				Skill s = new Skill();
-				s.setSkillName(skillName);
+		                    Skill s = new Skill();
+		                    s.setSkillName(skillName);
 
-				return skillRepository.save(s);
-			});
+		                    return skillRepository.save(s);
+		                });
 
-			skills.add(skill);
+		        skills.add(skill);
+		    }
+
+		    student.setSkills(skills);
 		}
-
-		student.setSkills(skills);
 
 		studentRepository.save(student);
 
@@ -72,17 +77,12 @@ public class StudentService {
 		return getStudent(id);
 	}
 
-//	public StudentResponse addStudent(StudentProfileRequest request) {
-//
-//	    Student student = new Student();
-//
-//	    student.setCollegeName(request.getCollegeName());
-//	    student.setBranch(request.getBranch());
-//	    student.setCgpa(request.getCgpa());
-//	    student.setLocation(request.getLocation());
-//
-//	    studentRepository.save(student);
-//
-//	    return new StudentResponse();
-//	}
+	//gete student by id
+	public StudentResponse getStudentByUserId(Long userId) {
+
+	    Student student = studentRepository.findByUserId(userId)
+	            .orElseThrow(() -> new RuntimeException("Student not found"));
+
+	    return getStudent(student.getId());
+	}
 }

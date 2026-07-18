@@ -21,116 +21,112 @@ import com.app.repository.StudentRepository;
 @Service
 public class AllocationService {
 
-    @Autowired
-    private AllocationRepository allocationRepository;
+	@Autowired
+	private AllocationRepository allocationRepository;
 
-    @Autowired
-    private ApplicationRepository applicationRepository;
+	@Autowired
+	private ApplicationRepository applicationRepository;
 
-    @Autowired
-    private StudentRepository studentRepository;
+	@Autowired
+	private StudentRepository studentRepository;
 
-    @Autowired
-    private InternshipRepository internshipRepository;
+	@Autowired
+	private InternshipRepository internshipRepository;
 
-    @Autowired
-    private AIRecommendationService aiService;
+	@Autowired
+	private AIRecommendationService aiService;
 
-    public String runAllocation() {
+	public String runAllocation() {
 
-        List<Student> students =
-                studentRepository.findAll();
+		List<Student> students = studentRepository.findAll();
 
-        int allocatedCount = 0;
+		int allocatedCount = 0;
 
-        for (Student student : students) {
+		for (Student student : students) {
 
-            if (allocationRepository
-                    .findByStudentId(student.getId())
-                    .isPresent()) {
-                continue;
-            }
+			if (allocationRepository.findByStudentId(student.getId()).isPresent()) {
+				continue;
+			}
 
-            List<Application> applications =
-                    applicationRepository
-                            .findByStudentId(student.getId());
+			List<Application> applications = applicationRepository.findByStudentId(student.getId());
+			System.out.println("--------------------------------");
+			System.out.println("Student ID: " + student.getId());
+			System.out.println("Applications Count: " + applications.size());
 
-            if (applications.isEmpty()) {
-                continue;
-            }
+			applications.forEach(a ->
+			    System.out.println("Applied Internship: " + a.getInternship().getId()));
 
-            List<MatchResponse> matches =
-                    aiService.recommendInternships(
-                            student.getId());
+			if (applications.isEmpty()) {
+				continue;
+			}
 
-            MatchResponse bestMatch =
-                    matches.stream()
-                           .filter(m -> m.getMatchPercentage() >= 60)
-                           .filter(m -> applications.stream()
-                                   .anyMatch(a ->
-                                           a.getInternship()
-                                            .getId()
-                                            .equals(
-                                              m.getInternshipId())))
-                           .max(Comparator.comparing(
-                                   MatchResponse::getMatchPercentage))
-                           .orElse(null);
+			List<MatchResponse> matches = aiService.recommendInternships(student.getId());
+			System.out.println("Recommendations:");
 
-            if (bestMatch == null) {
-                continue;
-            }
+			matches.forEach(m ->
+			    System.out.println(
+			        m.getInternshipId() + " -> " + m.getMatchPercentage()));
+			
 
-            Internship internship =
-                    internshipRepository
-                            .findById(bestMatch.getInternshipId())
-                            .orElseThrow();
+			MatchResponse bestMatch = matches.stream().filter(m -> m.getMatchPercentage() >= 20).filter(
+					m -> applications.stream().anyMatch(a -> a.getInternship().getId().equals(m.getInternshipId())))
+					.max(Comparator.comparing(MatchResponse::getMatchPercentage)).orElse(null);
 
-            Allocation allocation =
-                    new Allocation();
+			if (bestMatch == null) {
+				 System.out.println("Best Match = NULL");
+				continue;
+			}
 
-            allocation.setStudent(student);
-            allocation.setInternship(internship);
-            allocation.setMatchPercentage(
-                    bestMatch.getMatchPercentage());
+			Internship internship =
+			        internshipRepository
+			                .findById(bestMatch.getInternshipId())
+			                .orElseThrow();
 
-            allocationRepository.save(allocation);
+			// Check vacancy
+			if (internship.getAvailableSeats() <= 0) {
+			    continue;
+			}
 
-            allocatedCount++;
-        }
+			// Reduce available seats
+			internship.setAvailableSeats(
+			        internship.getAvailableSeats() - 1);
 
-        return allocatedCount +
-                " students allocated successfully";
-    }
+			internshipRepository.save(internship);
 
-    public List<AllocationResponse> getAllAllocations() {
+			// Create allocation
+			Allocation allocation = new Allocation();
 
-        List<AllocationResponse> responses =
-                new ArrayList<>();
+			allocation.setStudent(student);
+			allocation.setInternship(internship);
+			allocation.setMatchPercentage(
+			        bestMatch.getMatchPercentage());
+			System.out.println("Allocation Saved");
 
-        for (Allocation a :
-                allocationRepository.findAll()) {
+			allocationRepository.save(allocation);
 
-            responses.add(
-                new AllocationResponse(
-                    a.getId(),
-                    a.getStudent()
-                     .getUser()
-                     .getFullName(),
+			allocatedCount++;
+		}
 
-                    a.getInternship()
-                     .getTitle(),
+		return allocatedCount + " students allocated successfully";
+	}
 
-                    a.getInternship()
-                     .getCompany()
-                     .getCompanyName(),
+	public List<AllocationResponse> getAllAllocations() {
 
-                    a.getMatchPercentage(),
+		List<AllocationResponse> responses = new ArrayList<>();
 
-                    a.getAllocatedAt()
-                )
-            );
-        }
+		for (Allocation a : allocationRepository.findAll()) {
 
-        return responses;
-    }
+			responses.add(new AllocationResponse(a.getId(), a.getStudent().getUser().getFullName(),
+
+					a.getInternship().getTitle(),
+
+					a.getInternship().getCompany().getCompanyName(),
+
+					a.getMatchPercentage(),
+
+					a.getAllocatedAt()));
+		}
+
+		return responses;
+	}
 }

@@ -18,19 +18,25 @@ public class StudentController {
 	private StudentService studentService;
 
 	@Operation(summary = "Get student profile")
-	@GetMapping("/{id}")
+	@GetMapping("/profile/{id}")
 	public StudentResponse getStudent(@PathVariable Long id) {
 
 		return studentService.getStudent(id);
 	}
 
 	@Operation(summary = "Update student profile")
-	@PutMapping("/{id}")
+	@PutMapping("/profile/{id}")
 	public StudentResponse updateStudent(@PathVariable Long id, @RequestBody StudentProfileRequest request) {
 
 		return studentService.updateProfile(id, request);
 	}
-	
+
+	@GetMapping("/user/{userId}")
+	public StudentResponse getStudentByUserId(@PathVariable Long userId) {
+
+		return studentService.getStudentByUserId(userId);
+	}
+
 //	@PostMapping
 //	public StudentResponse addStudent(
 //	        @RequestBody StudentProfileRequest request) {

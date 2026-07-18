@@ -12,6 +12,7 @@ public class InternshipRequest {
     private Integer durationMonths;
 	private Long companyId;
     private Double minimumCgpa;
+    private Integer availableSeats;
     
     
 
@@ -81,6 +82,14 @@ public class InternshipRequest {
 
 	public void setCompanyId(Long companyId) {
 		this.companyId = companyId;
+	}
+
+	public Integer getAvailableSeats() {
+		return availableSeats;
+	}
+
+	public void setAvailableSeats(Integer availableSeats) {
+		this.availableSeats = availableSeats;
 	}
     
     

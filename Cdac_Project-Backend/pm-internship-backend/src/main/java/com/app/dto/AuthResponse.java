@@ -2,12 +2,17 @@ package com.app.dto;
 
 public class AuthResponse {
 
+	private Long id;
 	private String token;
 	private String email;
 	private String role;
 
 	public AuthResponse() {
 	}
+	
+	
+
+
 
 	public String getToken() {
 		return token;
@@ -17,6 +22,13 @@ public class AuthResponse {
 		this.token = token;
 	}
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 	public String getEmail() {
 		return email;
 	}

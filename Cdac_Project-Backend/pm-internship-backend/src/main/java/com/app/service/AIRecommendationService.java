@@ -30,7 +30,10 @@ public class AIRecommendationService {
 		Student student = studentRepository.findById(studentId)
 				.orElseThrow(() -> new RuntimeException("Student not found"));
 
-		Set<String> studentSkills = student.getSkills().stream().map(Skill::getSkillName).collect(Collectors.toSet());
+		// Set<String> studentSkills =
+		// student.getSkills().stream().map(Skill::getSkillName).collect(Collectors.toSet());
+		Set<String> studentSkills = student.getSkills().stream().map(s -> s.getSkillName().trim().toLowerCase())
+				.collect(Collectors.toSet());
 
 		List<MatchResponse> recommendations = new ArrayList<>();
 
@@ -41,8 +44,11 @@ public class AIRecommendationService {
 			// -------------------------
 			// 1. Skill Matching (70%)
 			// -------------------------
-			Set<String> requiredSkills = internship.getRequiredSkills().stream().map(Skill::getSkillName)
-					.collect(Collectors.toSet());
+//			Set<String> requiredSkills = internship.getRequiredSkills().stream().map(Skill::getSkillName)
+//					.collect(Collectors.toSet());
+
+			Set<String> requiredSkills = internship.getRequiredSkills().stream()
+					.map(s -> s.getSkillName().trim().toLowerCase()).collect(Collectors.toSet());
 
 			long matchedSkills = requiredSkills.stream().filter(studentSkills::contains).count();
 

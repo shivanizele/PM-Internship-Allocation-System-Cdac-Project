@@ -1,47 +1,72 @@
 package com.app.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.app.dto.CompanyProfileRequest;
 import com.app.dto.CompanyResponse;
+import com.app.dto.InternshipResponse;
 import com.app.entity.Company;
+import com.app.entity.Internship;
+import com.app.entity.Skill;
 import com.app.repository.CompanyRepository;
+import com.app.repository.InternshipRepository;
 
 @Service
 public class CompanyService {
 
-    @Autowired
-    private CompanyRepository companyRepository;
+	@Autowired
+	private CompanyRepository companyRepository;
+	@Autowired
+	private InternshipRepository internshipRepository;
 
-    public CompanyResponse getCompany(Long id) {
+	// get company
+	public CompanyResponse getCompany(Long id) {
 
-        Company company = companyRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Company not found"));
+		Company company = companyRepository.findById(id).orElseThrow(() -> new RuntimeException("Company not found"));
 
-        return new CompanyResponse(
-                company.getId(),
-                company.getCompanyName(),
-                company.getIndustry(),
-                company.getAddress(),
-                company.getWebsite(),
-                company.getUser().getEmail()
-        );
-    }
+		return new CompanyResponse(company.getId(), company.getCompanyName(), company.getIndustry(),
+				company.getAddress(), company.getWebsite(), company.getUser().getEmail());
+	}
 
-    public CompanyResponse updateCompany(Long id,
-                                         CompanyProfileRequest request) {
+	// update comany
 
-        Company company = companyRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Company not found"));
+	public CompanyResponse updateCompany(Long id, CompanyProfileRequest request) {
 
-        company.setCompanyName(request.getCompanyName());
-        company.setIndustry(request.getIndustry());
-        company.setAddress(request.getAddress());
-        company.setWebsite(request.getWebsite());
+		Company company = companyRepository.findById(id).orElseThrow(() -> new RuntimeException("Company not found"));
 
-        companyRepository.save(company);
+		company.setCompanyName(request.getCompanyName());
+		company.setIndustry(request.getIndustry());
+		company.setAddress(request.getAddress());
+		company.setWebsite(request.getWebsite());
 
-        return getCompany(id);
-    }
+		companyRepository.save(company);
+
+		return getCompany(id);
+	}
+
+	// getcompany internships
+	public List<InternshipResponse> getCompanyInternships(Long companyId) {
+
+		List<Internship> internships = internshipRepository.findByCompanyId(companyId);
+
+		return internships.stream()
+				.map(i -> new InternshipResponse(i.getId(), i.getTitle(), i.getDescription(),
+						i.getRequiredSkills().stream().map(Skill::getSkillName).collect(Collectors.toSet()),
+						i.getLocation(), i.getStipend(), i.getMinimumCgpa(), i.getDurationMonths(),
+						i.getAvailableSeats(), i.getCompany().getCompanyName()))
+				.collect(Collectors.toList());
+	}
+
+	// get companyBy userID
+	public CompanyResponse getCompanyByUserId(Long userId) {
+
+		Company company = companyRepository.findByUserId(userId)
+				.orElseThrow(() -> new RuntimeException("Company not found"));
+
+		return getCompany(company.getId());
+	}
 }
