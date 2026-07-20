@@ -1,0 +1,56 @@
+
+.company-table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:25px;
+    background:#fff;
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 5px 15px rgba(0,0,0,0.08);
+}
+
+.company-table th,
+.company-table td{
+    padding:15px;
+    border-bottom:1px solid #eee;
+    text-align:left;
+}
+
+.company-table th{
+    background:#2563EB;
+    color:#fff;
+    font-weight:600;
+}
+
+.company-table tr:hover{
+    background:#f8f9fa;
+}
+
+.search-box{
+    width:320px;
+    padding:12px;
+    margin:20px 0;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:16px;
+    outline:none;
+}
+
+.search-box:focus{
+    border-color:#2563EB;
+}
+
+.delete-btn{
+    background:#dc3545;
+    color:#fff;
+    border:none;
+    padding:8px 15px;
+    border-radius:6px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.delete-btn:hover{
+    background:#b02a37;
+}
+

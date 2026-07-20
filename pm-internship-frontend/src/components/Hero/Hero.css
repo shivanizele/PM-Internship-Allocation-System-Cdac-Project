@@ -1,0 +1,75 @@
+.hero{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+padding:80px 8%;
+
+}
+
+.hero-left{
+
+width:50%;
+
+}
+
+.hero-left h1{
+
+font-size:55px;
+
+color:#1E3A8A;
+
+margin-bottom:20px;
+
+}
+
+.hero-left p{
+
+font-size:20px;
+
+margin-bottom:30px;
+
+color:#555;
+
+}
+
+.hero-left button{
+
+padding:15px 35px;
+
+background:linear-gradient(45deg,#2563EB,#60A5FA);
+
+border:none;
+
+color:white;
+
+font-size:18px;
+
+border-radius:40px;
+
+cursor:pointer;
+
+transition:.4s;
+
+}
+
+.hero-left button:hover{
+
+transform:translateY(-5px);
+
+box-shadow:0 15px 30px rgba(37,99,235,.3);
+
+}
+
+.hero-right img{
+
+width:550px;
+
+height:auto;
+
+display:block;
+
+}
