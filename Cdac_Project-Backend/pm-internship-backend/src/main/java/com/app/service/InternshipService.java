@@ -174,4 +174,6 @@ public class InternshipService {
 
         return "Internship deleted successfully";
     }
+    
+    
 }

@@ -129,4 +129,16 @@ public class AllocationService {
 
 		return responses;
 	}
+	
+	
+	public void deleteAllocation(Long id) {
+
+	    if (!allocationRepository.existsById(id)) {
+	        throw new RuntimeException("Allocation not found");
+	    }
+
+	    allocationRepository.deleteById(id);
+	}
+	
+
 }

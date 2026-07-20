@@ -21,6 +21,7 @@ public class Allocation {
 	private Double matchPercentage;
 
     private LocalDateTime allocatedAt;
+    private String status;
 
 	@PrePersist
 	public void prePersist() {
@@ -81,6 +82,19 @@ public class Allocation {
 	public void setAllocatedAt(LocalDateTime allocatedAt) {
 		this.allocatedAt = allocatedAt;
 	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public void setAllocationDate(LocalDateTime allocationDate) {
+		this.allocationDate = allocationDate;
+	}
+	
 
 //	public void setAllocationDate(LocalDateTime allocationDate) {
 //		this.allocationDate = allocationDate;

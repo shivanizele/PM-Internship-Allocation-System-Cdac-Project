@@ -1,6 +1,7 @@
 package com.app.service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -84,5 +85,42 @@ public class StudentService {
 	            .orElseThrow(() -> new RuntimeException("Student not found"));
 
 	    return getStudent(student.getId());
+	}
+	
+	public List<StudentResponse> getAllStudents() {
+
+	    return studentRepository.findAll()
+	            .stream()
+	            .map(student -> {
+
+	                Set<String> skills = student.getSkills()
+	                        .stream()
+	                        .map(Skill::getSkillName)
+	                        .collect(Collectors.toSet());
+
+	                return new StudentResponse(
+
+	                        student.getId(),
+
+	                        student.getUser().getFullName(),
+
+	                        student.getUser().getEmail(),
+
+	                        student.getCollegeName(),
+
+	                        student.getBranch(),
+
+	                        student.getCgpa(),
+
+	                        student.getLocation(),
+
+	                        skills
+	                );
+	            })
+	            .collect(Collectors.toList());
+	}
+	public void deleteStudent(Long id) {
+
+	    studentRepository.deleteById(id);
 	}
 }

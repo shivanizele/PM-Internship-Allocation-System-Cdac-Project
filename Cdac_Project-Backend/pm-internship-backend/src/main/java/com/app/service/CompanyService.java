@@ -60,6 +60,8 @@ public class CompanyService {
 						i.getAvailableSeats(), i.getCompany().getCompanyName()))
 				.collect(Collectors.toList());
 	}
+	
+	
 
 	// get companyBy userID
 	public CompanyResponse getCompanyByUserId(Long userId) {
@@ -69,4 +71,31 @@ public class CompanyService {
 
 		return getCompany(company.getId());
 	}
+	
+	public List<CompanyResponse> getAllCompanies() {
+
+	    return companyRepository.findAll()
+	            .stream()
+	            .map(company ->
+
+	                new CompanyResponse(
+
+	                    company.getId(),
+	                    company.getCompanyName(),
+	                    company.getIndustry(),
+	                    company.getAddress(),
+	                    company.getWebsite(),
+	                    company.getUser().getEmail()
+
+	                )
+
+	            )
+	            .toList();
+	}
+	
+	public void deleteCompany(Long id) {
+
+	    companyRepository.deleteById(id);
+	}
+	
 }
