@@ -10,7 +10,7 @@ public class InternshipRequest {
     private String location;
     private Double stipend;
     private Integer durationMonths;
-	private Long companyId;
+	//private Long companyId;
     private Double minimumCgpa;
     private Integer availableSeats;
     
@@ -76,13 +76,13 @@ public class InternshipRequest {
 	}
 	
 
-	public Long getCompanyId() {
-		return companyId;
-	}
-
-	public void setCompanyId(Long companyId) {
-		this.companyId = companyId;
-	}
+//	public Long getCompanyId() {
+//		return companyId;
+//	}
+//
+//	public void setCompanyId(Long companyId) {
+//		this.companyId = companyId;
+//	}
 
 	public Integer getAvailableSeats() {
 		return availableSeats;

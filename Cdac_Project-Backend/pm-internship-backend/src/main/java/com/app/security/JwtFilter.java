@@ -49,6 +49,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
 			UserDetails userDetails = userService.loadUserByUsername(email);
 			System.out.println("Authorities: " + userDetails.getAuthorities());
+			System.out.println("Authentication: " + SecurityContextHolder.getContext().getAuthentication());
 
 			if (jwtUtil.validateToken(token, userDetails.getUsername())) {
 

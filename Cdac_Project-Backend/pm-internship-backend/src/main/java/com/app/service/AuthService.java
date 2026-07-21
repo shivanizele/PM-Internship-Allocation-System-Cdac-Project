@@ -82,25 +82,53 @@ public class AuthService {
 		return "User registered successfully";
 	}
 
+	/*
+	 * public AuthResponse login(LoginRequest request) {
+	 * 
+	 * User user = userRepository.findByEmail(request.getEmail()) .orElseThrow(() ->
+	 * new RuntimeException("Invalid email or password"));
+	 * 
+	 * if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+	 * 
+	 * throw new RuntimeException("Invalid email or password"); }
+	 * 
+	 * String token = jwtUtil.generateToken(user.getEmail());
+	 * 
+	 * AuthResponse response = new AuthResponse();
+	 * 
+	 * response.setId(user.getId()); response.setToken(token);
+	 * response.setEmail(user.getEmail()); response.setRole(user.getRole().name());
+	 * 
+	 * return response; }
+	 */
+	
 	public AuthResponse login(LoginRequest request) {
 
-		User user = userRepository.findByEmail(request.getEmail())
-				.orElseThrow(() -> new RuntimeException("Invalid email or password"));
+	    User user = userRepository.findByEmail(request.getEmail())
+	            .orElseThrow(() -> new RuntimeException("Invalid email or password"));
 
-		if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+	    if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+	        throw new RuntimeException("Invalid email or password");
+	    }
 
-			throw new RuntimeException("Invalid email or password");
-		}
+	    String token = jwtUtil.generateToken(user.getEmail());
 
-		String token = jwtUtil.generateToken(user.getEmail());
+	    AuthResponse response = new AuthResponse();
 
-		AuthResponse response = new AuthResponse();
+	    response.setId(user.getId());
+	    response.setToken(token);
+	    response.setEmail(user.getEmail());
+	    response.setRole(user.getRole().name());
 
-		response.setId(user.getId());
-		response.setToken(token);
-		response.setEmail(user.getEmail());
-		response.setRole(user.getRole().name());
+	    // NEW
+	    if (user.getRole() == Role.COMPANY) {
 
-		return response;
+	        Company company = companyRepository.findByUserId(user.getId())
+	                .orElseThrow(() -> new RuntimeException("Company not found"));
+
+	        response.setCompanyId(company.getId());
+	    }
+
+	    return response;
 	}
 }

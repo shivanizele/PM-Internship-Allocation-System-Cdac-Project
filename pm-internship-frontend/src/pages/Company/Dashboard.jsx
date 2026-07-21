@@ -1,58 +1,23 @@
+
 import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/Dashboard/DashboardLayout";
 import DashboardCard from "../../components/DashboardCard/DashboardCard";
 import api from "../../services/api";
 import "./Dashboard.css";
 
+function CompanyDashboard() {
 
-function Dashboard() {
+    const companyId = localStorage.getItem("id");
 
-    const [company, setCompany] = useState(null);
-    const [internships, setInternships] = useState([]);
+    const [dashboard, setDashboard] = useState({});
 
     useEffect(() => {
 
-        loadCompany();
+        api.get(`/company/dashboard/${companyId}`)
+            .then(res => setDashboard(res.data))
+            .catch(err => console.log(err));
 
-    }, []);
-
-    const loadCompany = async () => {
-
-        try {
-
-            const id = localStorage.getItem("id");
-
-            const companyRes = await api.get(`/company/profile/${id}`);
-
-            setCompany(companyRes.data);
-
-            const internshipRes = await api.get(`/company/${id}/internships`);
-
-            setInternships(internshipRes.data);
-
-        }
-
-        catch (error) {
-
-            console.log(error);
-
-        }
-
-    };
-
-    if (!company) {
-
-        return (
-
-            <DashboardLayout>
-
-                <h2>Loading...</h2>
-
-            </DashboardLayout>
-
-        );
-
-    }
+    }, [companyId]);
 
     return (
 
@@ -63,20 +28,20 @@ function Dashboard() {
             <div className="dashboard-grid">
 
                 <DashboardCard
-                    title="Company"
-                    value={company.companyName}
+                    title="My Internships"
+                    value={dashboard.totalInternships || 0}
                     color="#2563EB"
                 />
 
                 <DashboardCard
-                    title="Internships"
-                    value={internships.length}
-                    color="#10B981"
+                    title="Applications"
+                    value={dashboard.totalApplications || 0}
+                    color="#16A34A"
                 />
 
                 <DashboardCard
-                    title="Industry"
-                    value={company.industry}
+                    title="Selected Students"
+                    value={dashboard.selectedStudents || 0}
                     color="#F59E0B"
                 />
 
@@ -88,4 +53,5 @@ function Dashboard() {
 
 }
 
-export default Dashboard;
+export default CompanyDashboard;
+

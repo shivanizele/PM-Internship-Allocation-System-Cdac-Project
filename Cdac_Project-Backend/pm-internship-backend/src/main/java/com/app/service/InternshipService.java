@@ -13,9 +13,14 @@ import com.app.dto.InternshipResponse;
 import com.app.entity.Company;
 import com.app.entity.Internship;
 import com.app.entity.Skill;
+import com.app.entity.User;
 import com.app.repository.CompanyRepository;
 import com.app.repository.InternshipRepository;
 import com.app.repository.SkillRepository;
+import com.app.repository.UserRepository;
+import com.app.security.JwtUtil;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @Service
 public class InternshipService {
@@ -28,10 +33,28 @@ public class InternshipService {
 
     @Autowired
     private SkillRepository skillRepository;
-//create internship 
-    public InternshipResponse createInternship(InternshipRequest request) {
+   
 
-        Company company = companyRepository.findById(request.getCompanyId())
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+//create internship 
+    public InternshipResponse createInternship(
+            InternshipRequest request,
+            HttpServletRequest httpRequest) {
+
+    	String token = httpRequest.getHeader("Authorization")
+    	        .replace("Bearer ", "");
+
+    	String email = jwtUtil.extractEmail(token);
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new RuntimeException("User not found"));
+
+        Company company = companyRepository.findByUserId(user.getId())
                 .orElseThrow(() ->
                         new RuntimeException("Company not found"));
 
@@ -41,10 +64,10 @@ public class InternshipService {
         internship.setDescription(request.getDescription());
         internship.setLocation(request.getLocation());
         internship.setStipend(request.getStipend());
-        internship.setCompany(company);
         internship.setMinimumCgpa(request.getMinimumCgpa());
         internship.setDurationMonths(request.getDurationMonths());
         internship.setAvailableSeats(request.getAvailableSeats());
+
         Set<Skill> skills = new HashSet<>();
 
         for (String skillName : request.getRequiredSkills()) {
@@ -63,6 +86,9 @@ public class InternshipService {
         }
 
         internship.setRequiredSkills(skills);
+
+        // Automatically assign the logged-in company
+        internship.setCompany(company);
 
         internshipRepository.save(internship);
 
@@ -139,10 +165,10 @@ public class InternshipService {
         internship.setMinimumCgpa(request.getMinimumCgpa());
         internship.setDurationMonths(request.getDurationMonths());
         internship.setAvailableSeats(request.getAvailableSeats());
-        Company company = companyRepository.findById(request.getCompanyId())
-                .orElseThrow(() -> new RuntimeException("Company not found"));
-
-        internship.setCompany(company);
+//        Company company = companyRepository.findById(request.getCompanyId())
+//                .orElseThrow(() -> new RuntimeException("Company not found"));
+//
+//        internship.setCompany(company);
 
         Set<Skill> skills = new HashSet<>();
 

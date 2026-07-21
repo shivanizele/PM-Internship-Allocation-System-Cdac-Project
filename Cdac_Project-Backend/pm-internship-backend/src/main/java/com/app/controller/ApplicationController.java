@@ -43,4 +43,11 @@ public class ApplicationController {
 	            applicationId,
 	            request.getStatus());
 	}
+	@GetMapping("/internship/{id}")
+	public List<ApplicationResponse> getApplications(
+	        @PathVariable Long id) {
+
+	    return applicationService.getApplicationsByInternship(id);
+	}
+	
 }

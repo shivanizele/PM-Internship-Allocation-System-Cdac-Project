@@ -15,6 +15,11 @@ import Internships from "./pages/Student/Internships";
 import Students from "./pages/Admin/Students";
 import Companies from "./pages/Admin/Companies";
 import Allocations from "./pages/Admin/Allocations";
+import MyInternships from "./pages/Company/MyInternships";
+import AddInternship from "./pages/Company/AddInternship";
+import EditInternship from "./pages/Company/EditInternship";
+import CompanyProfile from "./pages/Company/CompanyProfile";
+import CompanyApplications from "./pages/Company/CompanyApplications";
 
 
 
@@ -45,6 +50,13 @@ function App() {
                 <Route path="/admin/companies" element={<Companies />}/>
                 <Route path="/admin/internships" element={<Internships />}/>
                 <Route path="/admin/allocations" element={<Allocations />} />
+                <Route path="/company" element={<CompanyDashboard />}/>
+                <Route path="/company/internships" element={<MyInternships />}/>
+                <Route path="/company/add-internship" element={<AddInternship />}/>
+                <Route path="/company/edit-internship/:id" element={<EditInternship />}/>
+                <Route path="/company/profile" element={<CompanyProfile />} />
+                <Route path="/company/applications/:id" element={<CompanyApplications />}/>
+                
                 
 
             </Routes>

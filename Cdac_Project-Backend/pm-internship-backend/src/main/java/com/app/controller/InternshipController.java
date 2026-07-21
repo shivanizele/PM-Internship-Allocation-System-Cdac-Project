@@ -9,6 +9,8 @@ import com.app.dto.InternshipRequest;
 import com.app.dto.InternshipResponse;
 import com.app.service.InternshipService;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/api/internships")
 @CrossOrigin("http://localhost:3000")
@@ -17,11 +19,18 @@ public class InternshipController {
     @Autowired
     private InternshipService internshipService;
 
+//    @PostMapping
+//    public InternshipResponse createInternship(
+//            @RequestBody InternshipRequest request) {
+//
+//        return internshipService.createInternship(request);
+//    }
     @PostMapping
     public InternshipResponse createInternship(
-            @RequestBody InternshipRequest request) {
+            @RequestBody InternshipRequest request,
+            HttpServletRequest httpRequest) {
 
-        return internshipService.createInternship(request);
+        return internshipService.createInternship(request, httpRequest);
     }
 
     @GetMapping("/{id}")
@@ -48,6 +57,7 @@ public class InternshipController {
     @DeleteMapping("/{id}")
     public String deleteInternship(
             @PathVariable Long id) {
+        System.out.println("DELETE Controller called. Internship ID = " + id);
 
         return internshipService.deleteInternship(id);
     }

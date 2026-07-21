@@ -59,8 +59,9 @@ public class ApplicationService {
 						a.getInternship().getTitle(), a.getStatus(), a.getAppliedAt()))
 				.toList();
 	}
+
 	
-	//update application status
+	// update application status
 
 	public String updateApplicationStatus(Long applicationId, ApplicationStatus status) {
 
@@ -73,4 +74,47 @@ public class ApplicationService {
 
 		return "Application status updated successfully";
 	}
+
+	private ApplicationResponse convertToResponse(Application application) {
+
+		ApplicationResponse response = new ApplicationResponse();
+
+		return new ApplicationResponse(application.getId(), application.getStudent().getUser().getFullName(),
+				application.getInternship().getTitle(), application.getStatus(), application.getAppliedAt());
+	}
+
+	public List<ApplicationResponse> getApplicationsByCompany(Long companyId) {
+
+		return applicationRepository.findByInternshipCompanyId(companyId).stream().map(this::convertToResponse)
+				.toList();
+	}
+	
+	
+	public List<ApplicationResponse> getApplicationsByInternship(Long internshipId){
+
+	    List<Application> list =
+	            applicationRepository.findByInternshipId(internshipId);
+
+	    return list.stream().map(a -> {
+
+	        ApplicationResponse response =
+	                new ApplicationResponse();
+
+	        response.setId(a.getId());
+	        response.setStudentName(
+	                a.getStudent().getUser().getFullName());
+
+	        response.setInternshipTitle(
+	                a.getInternship().getTitle());
+
+	        response.setStatus(a.getStatus());
+
+	        response.setAppliedAt(a.getAppliedAt());
+
+	        return response;
+
+	    }).toList();
+	}
+	
+	
 }

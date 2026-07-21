@@ -1,0 +1,35 @@
+.profile-container{
+    padding:30px;
+}
+
+.profile-container h1{
+    margin-bottom:25px;
+    color:#1e3a8a;
+}
+
+.profile-card{
+    width:600px;
+    background:#fff;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0 3px 10px rgba(0,0,0,.1);
+}
+
+.profile-row{
+    display:flex;
+    flex-direction:column;
+    margin-bottom:20px;
+}
+
+.profile-row label{
+    margin-bottom:8px;
+    font-weight:bold;
+}
+
+.profile-row input{
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:6px;
+    font-size:16px;
+    background:#f8f8f8;
+}

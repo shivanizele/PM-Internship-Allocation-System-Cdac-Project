@@ -48,4 +48,25 @@ public class ApplicationResponse {
     public LocalDateTime getAppliedAt() {
         return appliedAt;
     }
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setStudentName(String studentName) {
+		this.studentName = studentName;
+	}
+
+	public void setInternshipTitle(String internshipTitle) {
+		this.internshipTitle = internshipTitle;
+	}
+
+	public void setStatus(ApplicationStatus status) {
+		this.status = status;
+	}
+
+	public void setAppliedAt(LocalDateTime appliedAt) {
+		this.appliedAt = appliedAt;
+	}
+    
 }

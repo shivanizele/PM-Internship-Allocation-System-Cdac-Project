@@ -41,6 +41,9 @@ function Sidebar() {
                     <Link to="/admin/allocations">
                         <FaClipboardList /> Allocations
                     </Link>
+                    <Link to="/company/internships">
+                       My Internships</Link>
+                       <Link to="/company/add-internship">Add Internship</Link>
 
                 </>
 

@@ -1,10 +1,12 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import DashboardLayout from "../../components/Dashboard/DashboardLayout";
 import api from "../../services/api";
 import "./AddInternship.css";
 
-function AddInternship() {
+function EditInternship() {
+
+    const { id } = useParams();
 
     const navigate = useNavigate();
 
@@ -21,22 +23,42 @@ function AddInternship() {
 
     });
 
+    useEffect(() => {
+
+        api.get(`/internships/${id}`)
+            .then(res => {
+
+                setInternship({
+
+                    ...res.data,
+
+                    requiredSkills: res.data.requiredSkills.join(", ")
+
+                });
+
+            });
+
+    }, [id]);
+
     const handleChange = (e) => {
 
         setInternship({
+
             ...internship,
+
             [e.target.name]: e.target.value
+
         });
 
     };
 
-    const saveInternship = async (e) => {
+    const updateInternship = async (e) => {
 
         e.preventDefault();
 
         try {
 
-            await api.post("/internships", {
+            await api.put(`/internships/${id}`, {
 
                 title: internship.title,
                 description: internship.description,
@@ -52,7 +74,7 @@ function AddInternship() {
 
             });
 
-            alert("Internship Added Successfully");
+            alert("Internship Updated");
 
             navigate("/company/internships");
 
@@ -62,8 +84,6 @@ function AddInternship() {
 
             console.log(err);
 
-            alert("Unable to Add Internship");
-
         }
 
     };
@@ -72,47 +92,47 @@ function AddInternship() {
 
         <DashboardLayout>
 
-            <h2>Add Internship</h2>
+            <h2>Edit Internship</h2>
 
             <form
                 className="internship-form"
-                onSubmit={saveInternship}>
+                onSubmit={updateInternship}>
 
                 <input
                     name="title"
-                    placeholder="Title"
+                    value={internship.title}
                     onChange={handleChange}
                 />
 
                 <textarea
                     name="description"
-                    placeholder="Description"
+                    value={internship.description}
                     onChange={handleChange}
                 />
 
                 <input
                     name="requiredSkills"
-                    placeholder="Java, Spring Boot, React"
+                    value={internship.requiredSkills}
                     onChange={handleChange}
                 />
 
                 <input
                     name="location"
-                    placeholder="Location"
+                    value={internship.location}
                     onChange={handleChange}
                 />
 
                 <input
                     type="number"
                     name="stipend"
-                    placeholder="Stipend"
+                    value={internship.stipend}
                     onChange={handleChange}
                 />
 
                 <input
                     type="number"
                     name="durationMonths"
-                    placeholder="Duration"
+                    value={internship.durationMonths}
                     onChange={handleChange}
                 />
 
@@ -120,20 +140,20 @@ function AddInternship() {
                     type="number"
                     step="0.1"
                     name="minimumCgpa"
-                    placeholder="Minimum CGPA"
+                    value={internship.minimumCgpa}
                     onChange={handleChange}
                 />
 
                 <input
                     type="number"
                     name="availableSeats"
-                    placeholder="Available Seats"
+                    value={internship.availableSeats}
                     onChange={handleChange}
                 />
 
                 <button type="submit">
 
-                    Save Internship
+                    Update Internship
 
                 </button>
 
@@ -145,4 +165,4 @@ function AddInternship() {
 
 }
 
-export default AddInternship;
+export default EditInternship;

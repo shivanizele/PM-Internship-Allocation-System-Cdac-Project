@@ -6,12 +6,15 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.app.dto.CompanyDashboardResponse;
 import com.app.dto.CompanyProfileRequest;
 import com.app.dto.CompanyResponse;
 import com.app.dto.InternshipResponse;
 import com.app.entity.Company;
 import com.app.entity.Internship;
 import com.app.entity.Skill;
+import com.app.repository.AllocationRepository;
+import com.app.repository.ApplicationRepository;
 import com.app.repository.CompanyRepository;
 import com.app.repository.InternshipRepository;
 
@@ -22,6 +25,11 @@ public class CompanyService {
 	private CompanyRepository companyRepository;
 	@Autowired
 	private InternshipRepository internshipRepository;
+	@Autowired
+	private ApplicationRepository applicationRepository;
+
+	@Autowired
+	private AllocationRepository allocationRepository;
 
 	// get company
 	public CompanyResponse getCompany(Long id) {
@@ -97,5 +105,27 @@ public class CompanyService {
 
 	    companyRepository.deleteById(id);
 	}
+	
+
+	public CompanyDashboardResponse getDashboard(Long companyId) {
+
+	    long internships =
+	            internshipRepository.countByCompanyId(companyId);
+
+	    long applications =
+	            applicationRepository.countByCompanyId(companyId);
+
+	    long selected =
+	            allocationRepository.countByCompanyId(companyId);
+
+	    return new CompanyDashboardResponse(
+	            internships,
+	            applications,
+	            selected
+	    );
+	}
+	
+	
+
 	
 }

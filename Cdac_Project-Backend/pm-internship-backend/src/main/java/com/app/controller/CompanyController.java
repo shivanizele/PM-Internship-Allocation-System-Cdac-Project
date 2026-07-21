@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import com.app.dto.CompanyDashboardResponse;
 import com.app.dto.CompanyProfileRequest;
 import com.app.dto.CompanyResponse;
 import com.app.dto.InternshipResponse;
@@ -17,6 +18,7 @@ public class CompanyController {
 
     @Autowired
     private CompanyService companyService;
+    
 
     @GetMapping("/profile/{id}")
     public CompanyResponse getCompany(@PathVariable Long id) {
@@ -42,5 +44,16 @@ public class CompanyController {
 
         return companyService.getCompanyByUserId(userId);
     }
+    
+   
+    @GetMapping("/dashboard/{companyId}")
+    public CompanyDashboardResponse dashboard(
+            @PathVariable Long companyId) {
+
+        return companyService.getDashboard(companyId);
+    }
+   
+    
+
 
 }
