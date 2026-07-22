@@ -1,0 +1,26 @@
+.accept-btn{
+    background:#16a34a;
+    color:white;
+    border:none;
+    padding:6px 12px;
+    margin-right:8px;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.reject-btn{
+    background:#dc2626;
+    color:white;
+    border:none;
+    padding:6px 12px;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.accept-btn:hover{
+    background:#15803d;
+}
+
+.reject-btn:hover{
+    background:#b91c1c;
+}

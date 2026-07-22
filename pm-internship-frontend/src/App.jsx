@@ -20,6 +20,11 @@ import AddInternship from "./pages/Company/AddInternship";
 import EditInternship from "./pages/Company/EditInternship";
 import CompanyProfile from "./pages/Company/CompanyProfile";
 import CompanyApplications from "./pages/Company/CompanyApplications";
+import MyApplications from "./pages/Student/MyApplications";
+import StudentProfile from "./pages/Student/StudentProfile";
+import EditStudentProfile from "./pages/Student/EditStudentProfile";
+import StudentResume from "./pages/Student/StudentResume";
+import EditCompanyProfile from "./pages/Company/EditCompanyProfile";
 
 
 
@@ -56,8 +61,13 @@ function App() {
                 <Route path="/company/edit-internship/:id" element={<EditInternship />}/>
                 <Route path="/company/profile" element={<CompanyProfile />} />
                 <Route path="/company/applications/:id" element={<CompanyApplications />}/>
+                <Route path="/student/applications" element={<MyApplications />}/>
+                <Route path="/student/profile" element={<StudentProfile />}/>
+                <Route path="/student/profile/edit" element={<EditStudentProfile />}/>
+                <Route path="/student/resume" element={<StudentResume/>}/>
+                <Route path="/company/profile/edit" element={<EditCompanyProfile />}/>
                 
-                
+
 
             </Routes>
 

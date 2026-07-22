@@ -41,9 +41,12 @@ function Sidebar() {
                     <Link to="/admin/allocations">
                         <FaClipboardList /> Allocations
                     </Link>
-                    <Link to="/company/internships">
+                    {/* <Link to="/company/internships">
                        My Internships</Link>
                        <Link to="/company/add-internship">Add Internship</Link>
+                    <Link to="/student/resume">
+                     Resume
+                    </Link> */}
 
                 </>
 
@@ -88,6 +91,9 @@ function Sidebar() {
                     <Link to="/company/internships">
                         <FaBriefcase /> Internships
                     </Link>
+                     <Link to="/company/add-internship">
+            <FaBriefcase /> Add Internship
+        </Link>
 
                 </>
 

@@ -63,6 +63,10 @@ function AdminDashboard() {
                     value={dashboard.totalAllocations}
                     color="#DC2626"
                 />
+                <DashboardCard
+                title="Available Seats"
+                value={dashboard.availableSeats || 0}
+                color="#8B5CF6"/>
 
             </div>
 

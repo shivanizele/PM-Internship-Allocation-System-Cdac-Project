@@ -11,6 +11,7 @@ public class ApplicationResponse {
     private String internshipTitle;
     private ApplicationStatus status;
     private LocalDateTime appliedAt;
+    private String resume;
 
     public ApplicationResponse() {
     }
@@ -20,13 +21,16 @@ public class ApplicationResponse {
             String studentName,
             String internshipTitle,
             ApplicationStatus status,
-            LocalDateTime appliedAt) {
+            LocalDateTime appliedAt,
+            String resume) {
 
         this.id = id;
         this.studentName = studentName;
         this.internshipTitle = internshipTitle;
         this.status = status;
         this.appliedAt = appliedAt;
+        this.resume=resume;
+        
     }
 
     public Long getId() {
@@ -68,5 +72,14 @@ public class ApplicationResponse {
 	public void setAppliedAt(LocalDateTime appliedAt) {
 		this.appliedAt = appliedAt;
 	}
+
+	public String getResume() {
+		return resume;
+	}
+
+	public void setResume(String resume) {
+		this.resume = resume;
+	}
     
+	
 }

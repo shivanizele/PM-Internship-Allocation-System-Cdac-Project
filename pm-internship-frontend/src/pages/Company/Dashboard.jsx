@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/Dashboard/DashboardLayout";
 import DashboardCard from "../../components/DashboardCard/DashboardCard";
@@ -7,14 +6,17 @@ import "./Dashboard.css";
 
 function CompanyDashboard() {
 
-    const companyId = localStorage.getItem("id");
+    const companyId = localStorage.getItem("companyId");
 
     const [dashboard, setDashboard] = useState({});
 
     useEffect(() => {
 
         api.get(`/company/dashboard/${companyId}`)
-            .then(res => setDashboard(res.data))
+            .then(res => {
+                console.log(res.data);
+                setDashboard(res.data);
+            })
             .catch(err => console.log(err));
 
     }, [companyId]);
@@ -50,8 +52,6 @@ function CompanyDashboard() {
         </DashboardLayout>
 
     );
-
 }
 
 export default CompanyDashboard;
-

@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.app.dto.StudentProfileRequest;
 import com.app.dto.StudentResponse;
@@ -14,6 +15,10 @@ import com.app.entity.Skill;
 import com.app.entity.Student;
 import com.app.repository.SkillRepository;
 import com.app.repository.StudentRepository;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 @Service
 public class StudentService {
@@ -37,90 +42,112 @@ public class StudentService {
 	public StudentResponse updateProfile(Long id, StudentProfileRequest request) {
 		try {
 
-		Student student = studentRepository.findById(id).orElseThrow(() -> new RuntimeException("Student not found"));
+			Student student = studentRepository.findById(id)
+					.orElseThrow(() -> new RuntimeException("Student not found"));
 
-		student.setCollegeName(request.getCollegeName());
+			student.setCollegeName(request.getCollegeName());
 
-		student.setBranch(request.getBranch());
+			student.setBranch(request.getBranch());
 
-		student.setCgpa(request.getCgpa());
+			student.setCgpa(request.getCgpa());
 
-		student.setLocation(request.getLocation());
-		
-		if (request.getSkills() != null) {
+			student.setLocation(request.getLocation());
 
-		    Set<Skill> skills = new HashSet<>();
+			if (request.getSkills() != null) {
 
-		    for (String skillName : request.getSkills()) {
+				Set<Skill> skills = new HashSet<>();
 
-		        Skill skill = skillRepository
-		                .findBySkillName(skillName)
-		                .orElseGet(() -> {
+				for (String skillName : request.getSkills()) {
 
-		                    Skill s = new Skill();
-		                    s.setSkillName(skillName);
+					Skill skill = skillRepository.findBySkillName(skillName).orElseGet(() -> {
 
-		                    return skillRepository.save(s);
-		                });
+						Skill s = new Skill();
+						s.setSkillName(skillName);
 
-		        skills.add(skill);
-		    }
+						return skillRepository.save(s);
+					});
 
-		    student.setSkills(skills);
-		}
+					skills.add(skill);
+				}
 
-		studentRepository.save(student);
+				student.setSkills(skills);
+			}
 
-		return getStudent(id);
-		}catch(Exception e) {
+			studentRepository.save(student);
+
+			return getStudent(id);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return getStudent(id);
 	}
 
-	//gete student by id
+	// gete student by id
 	public StudentResponse getStudentByUserId(Long userId) {
 
-	    Student student = studentRepository.findByUserId(userId)
-	            .orElseThrow(() -> new RuntimeException("Student not found"));
+		Student student = studentRepository.findByUserId(userId)
+				.orElseThrow(() -> new RuntimeException("Student not found"));
 
-	    return getStudent(student.getId());
+		return getStudent(student.getId());
 	}
-	
+
 	public List<StudentResponse> getAllStudents() {
 
-	    return studentRepository.findAll()
-	            .stream()
-	            .map(student -> {
+		return studentRepository.findAll().stream().map(student -> {
 
-	                Set<String> skills = student.getSkills()
-	                        .stream()
-	                        .map(Skill::getSkillName)
-	                        .collect(Collectors.toSet());
+			Set<String> skills = student.getSkills().stream().map(Skill::getSkillName).collect(Collectors.toSet());
 
-	                return new StudentResponse(
+			return new StudentResponse(
 
-	                        student.getId(),
+					student.getId(),
 
-	                        student.getUser().getFullName(),
+					student.getUser().getFullName(),
 
-	                        student.getUser().getEmail(),
+					student.getUser().getEmail(),
 
-	                        student.getCollegeName(),
+					student.getCollegeName(),
 
-	                        student.getBranch(),
+					student.getBranch(),
 
-	                        student.getCgpa(),
+					student.getCgpa(),
 
-	                        student.getLocation(),
+					student.getLocation(),
 
-	                        skills
-	                );
-	            })
-	            .collect(Collectors.toList());
+					skills);
+		}).collect(Collectors.toList());
 	}
+
 	public void deleteStudent(Long id) {
 
-	    studentRepository.deleteById(id);
+		studentRepository.deleteById(id);
 	}
+
+	public StudentResponse uploadResume(Long id, MultipartFile file) {
+
+		Student student = studentRepository.findById(id).orElseThrow();
+
+		String fileName = file.getOriginalFilename();
+
+		try {
+
+			Path path = Paths.get("uploads");
+
+			if (!Files.exists(path))
+				Files.createDirectories(path);
+
+			Files.copy(file.getInputStream(), path.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
+
+		} catch (Exception e) {
+
+			throw new RuntimeException(e);
+
+		}
+
+		student.setResume(fileName);
+
+		studentRepository.save(student);
+
+		return getStudent(id);
+	}
+
 }

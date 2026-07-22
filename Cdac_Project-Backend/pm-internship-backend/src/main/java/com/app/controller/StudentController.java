@@ -2,6 +2,7 @@ package com.app.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.app.dto.StudentProfileRequest;
 import com.app.dto.StudentResponse;
@@ -35,6 +36,14 @@ public class StudentController {
 	public StudentResponse getStudentByUserId(@PathVariable Long userId) {
 
 		return studentService.getStudentByUserId(userId);
+	}
+	
+	@PostMapping("/uploadResume/{id}")
+	public StudentResponse uploadResume(
+	        @PathVariable Long id,
+	        @RequestParam MultipartFile file) {
+
+	    return studentService.uploadResume(id, file);
 	}
 
 //	@PostMapping

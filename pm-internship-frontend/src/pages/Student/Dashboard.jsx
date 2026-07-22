@@ -6,8 +6,8 @@ import "./Dashboard.css";
 
 function StudentDashboard() {
 
-    const studentId = localStorage.getItem("id");
-
+    //const studentId = localStorage.getItem("id");
+    const studentId = localStorage.getItem("studentId");
     const [profile, setProfile] = useState({});
     const [applications, setApplications] = useState([]);
     const [recommendations, setRecommendations] = useState([]);

@@ -118,10 +118,22 @@ public class CompanyService {
 	    long selected =
 	            allocationRepository.countByCompanyId(companyId);
 
+	    long availableSeats =
+	            internshipRepository.findByCompanyId(companyId)
+	                    .stream()
+	                    .mapToLong(Internship::getAvailableSeats)
+	                    .sum();
+
 	    return new CompanyDashboardResponse(
+
 	            internships,
+
 	            applications,
-	            selected
+
+	            selected,
+
+	            availableSeats
+
 	    );
 	}
 	

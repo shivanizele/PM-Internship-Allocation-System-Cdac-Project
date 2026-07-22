@@ -6,7 +6,8 @@ public class AuthResponse {
 	private String token;
 	private String email;
 	private String role;
-	 private Long companyId; 
+    private Long companyId; 
+    private Long studentId;
 
 	public AuthResponse() {
 	}
@@ -47,15 +48,30 @@ public class AuthResponse {
 	}
 
 
-
 	public Long getCompanyId() {
 		return companyId;
 	}
 
 
-
 	public void setCompanyId(Long companyId) {
 		this.companyId = companyId;
 	}
+
+
+
+
+
+	public Long getStudentId() {
+		return studentId;
+	}
+
+
+
+
+
+	public void setStudentId(Long studentId) {
+		this.studentId = studentId;
+	}
+	
 	
 }

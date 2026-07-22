@@ -1,4 +1,3 @@
-
 package com.app.dto;
 
 public class CompanyDashboardResponse {
@@ -6,17 +5,21 @@ public class CompanyDashboardResponse {
     private long totalInternships;
     private long totalApplications;
     private long selectedStudents;
+    private long availableSeats;
 
     public CompanyDashboardResponse() {
     }
 
-    public CompanyDashboardResponse(long totalInternships,
-                                    long totalApplications,
-                                    long selectedStudents) {
+    public CompanyDashboardResponse(
+            long totalInternships,
+            long totalApplications,
+            long selectedStudents,
+            long availableSeats) {
 
         this.totalInternships = totalInternships;
         this.totalApplications = totalApplications;
         this.selectedStudents = selectedStudents;
+        this.availableSeats = availableSeats;
     }
 
     public long getTotalInternships() {
@@ -42,5 +45,12 @@ public class CompanyDashboardResponse {
     public void setSelectedStudents(long selectedStudents) {
         this.selectedStudents = selectedStudents;
     }
-}
 
+    public long getAvailableSeats() {
+        return availableSeats;
+    }
+
+    public void setAvailableSeats(long availableSeats) {
+        this.availableSeats = availableSeats;
+    }
+}

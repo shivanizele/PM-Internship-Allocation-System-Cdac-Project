@@ -18,103 +18,152 @@ import com.app.repository.StudentRepository;
 @Service
 public class ApplicationService {
 
-	@Autowired
-	private ApplicationRepository applicationRepository;
+    @Autowired
+    private ApplicationRepository applicationRepository;
 
-	@Autowired
-	private StudentRepository studentRepository;
+    @Autowired
+    private StudentRepository studentRepository;
 
-	@Autowired
-	private InternshipRepository internshipRepository;
+    @Autowired
+    private InternshipRepository internshipRepository;
 
-	public ApplicationResponse apply(ApplicationRequest request) {
+    // Apply Internship
+    public ApplicationResponse apply(ApplicationRequest request) {
 
-		Student student = studentRepository.findById(request.getStudentId())
-				.orElseThrow(() -> new RuntimeException("Student not found"));
+        Student student = studentRepository.findById(request.getStudentId())
+                .orElseThrow(() -> new RuntimeException("Student not found"));
 
-		Internship internship = internshipRepository.findById(request.getInternshipId())
-				.orElseThrow(() -> new RuntimeException("Internship not found"));
+        Internship internship = internshipRepository.findById(request.getInternshipId())
+                .orElseThrow(() -> new RuntimeException("Internship not found"));
 
-		if (applicationRepository.existsByStudentAndInternship(student, internship)) {
+        if (applicationRepository.existsByStudentAndInternship(student, internship)) {
+            throw new RuntimeException("You have already applied for this internship");
+        }
 
-			throw new RuntimeException("You have already applied for this internship");
-		}
+        Application application = new Application();
 
-		Application application = new Application();
+        application.setStudent(student);
+        application.setInternship(internship);
 
-		application.setStudent(student);
-		application.setInternship(internship);
+        applicationRepository.save(application);
 
-		applicationRepository.save(application);
+        return new ApplicationResponse(
+                application.getId(),
+                student.getUser().getFullName(),
+                internship.getTitle(),
+                application.getStatus(),
+                application.getAppliedAt(),
+                student.getResume()
+        );
+    }
 
-		return new ApplicationResponse(application.getId(), student.getUser().getFullName(), internship.getTitle(),
-				application.getStatus(), application.getAppliedAt());
-	}
+    // Common Response Method
+    private ApplicationResponse convertToResponse(Application application) {
 
-	// get Comapnay applications
-	public List<ApplicationResponse> getCompanyApplications(Long companyId) {
+        return new ApplicationResponse(
+                application.getId(),
+                application.getStudent().getUser().getFullName(),
+                application.getInternship().getTitle(),
+                application.getStatus(),
+                application.getAppliedAt(),
+                application.getStudent().getResume()
+        );
+    }
 
-		return applicationRepository.findByInternshipCompanyId(companyId).stream()
-				.map(a -> new ApplicationResponse(a.getId(), a.getStudent().getUser().getFullName(),
-						a.getInternship().getTitle(), a.getStatus(), a.getAppliedAt()))
-				.toList();
-	}
+    // Company Applications
+    public List<ApplicationResponse> getCompanyApplications(Long companyId) {
 
-	
-	// update application status
+        return applicationRepository
+                .findByInternshipCompanyId(companyId)
+                .stream()
+                .map(this::convertToResponse)
+                .toList();
+    }
 
-	public String updateApplicationStatus(Long applicationId, ApplicationStatus status) {
+    // Applications by Company
+    public List<ApplicationResponse> getApplicationsByCompany(Long companyId) {
 
-		Application application = applicationRepository.findById(applicationId)
-				.orElseThrow(() -> new RuntimeException("Application not found"));
+        return applicationRepository
+                .findByInternshipCompanyId(companyId)
+                .stream()
+                .map(this::convertToResponse)
+                .toList();
+    }
 
-		application.setStatus(status);
+    // Applications by Internship
+    public List<ApplicationResponse> getApplicationsByInternship(Long internshipId) {
 
-		applicationRepository.save(application);
+        return applicationRepository
+                .findByInternshipId(internshipId)
+                .stream()
+                .map(this::convertToResponse)
+                .toList();
+    }
 
-		return "Application status updated successfully";
-	}
+    // Student Applications
+    public List<ApplicationResponse> getStudentApplications(Long studentId) {
 
-	private ApplicationResponse convertToResponse(Application application) {
+        return applicationRepository
+                .findByStudentId(studentId)
+                .stream()
+                .map(this::convertToResponse)
+                .toList();
+    }
 
-		ApplicationResponse response = new ApplicationResponse();
+    // Duplicate API (if used)
+    public List<ApplicationResponse> getApplicationsByStudent(Long studentId) {
 
-		return new ApplicationResponse(application.getId(), application.getStudent().getUser().getFullName(),
-				application.getInternship().getTitle(), application.getStatus(), application.getAppliedAt());
-	}
+        return applicationRepository
+                .findByStudentId(studentId)
+                .stream()
+                .map(this::convertToResponse)
+                .toList();
+    }
 
-	public List<ApplicationResponse> getApplicationsByCompany(Long companyId) {
+    // Update Status (Enum)
+    public String updateApplicationStatus(Long applicationId, ApplicationStatus status) {
 
-		return applicationRepository.findByInternshipCompanyId(companyId).stream().map(this::convertToResponse)
-				.toList();
-	}
-	
-	
-	public List<ApplicationResponse> getApplicationsByInternship(Long internshipId){
+        Application application = applicationRepository.findById(applicationId)
+                .orElseThrow(() -> new RuntimeException("Application not found"));
 
-	    List<Application> list =
-	            applicationRepository.findByInternshipId(internshipId);
+        application.setStatus(status);
 
-	    return list.stream().map(a -> {
+        applicationRepository.save(application);
 
-	        ApplicationResponse response =
-	                new ApplicationResponse();
+        return "Application status updated successfully";
+    }
 
-	        response.setId(a.getId());
-	        response.setStudentName(
-	                a.getStudent().getUser().getFullName());
+    // Accept / Reject
+    public String updateStatus(Long applicationId, String status) {
 
-	        response.setInternshipTitle(
-	                a.getInternship().getTitle());
+        Application application = applicationRepository.findById(applicationId)
+                .orElseThrow(() -> new RuntimeException("Application not found"));
 
-	        response.setStatus(a.getStatus());
+        if (application.getStatus() == ApplicationStatus.SELECTED) {
+            return "Already Selected";
+        }
 
-	        response.setAppliedAt(a.getAppliedAt());
+        ApplicationStatus newStatus = ApplicationStatus.valueOf(status);
 
-	        return response;
+        application.setStatus(newStatus);
 
-	    }).toList();
-	}
-	
-	
+        if (newStatus == ApplicationStatus.SELECTED) {
+
+            Internship internship = application.getInternship();
+
+            if (internship.getAvailableSeats() == 0) {
+                throw new RuntimeException("No seats available");
+            }
+
+            internship.setAvailableSeats(
+                    internship.getAvailableSeats() - 1);
+
+            internshipRepository.save(internship);
+        }
+
+        applicationRepository.save(application);
+
+        return "Updated Successfully";
+    }
+
 }

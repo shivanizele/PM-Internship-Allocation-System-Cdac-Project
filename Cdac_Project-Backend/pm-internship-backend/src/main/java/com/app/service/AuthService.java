@@ -128,6 +128,13 @@ public class AuthService {
 
 	        response.setCompanyId(company.getId());
 	    }
+	    if (user.getRole() == Role.STUDENT) {
+
+	        Student student = studentRepository.findByUserId(user.getId())
+	                .orElseThrow(() -> new RuntimeException("Student not found"));
+
+	        response.setStudentId(student.getId());
+	    }
 
 	    return response;
 	}

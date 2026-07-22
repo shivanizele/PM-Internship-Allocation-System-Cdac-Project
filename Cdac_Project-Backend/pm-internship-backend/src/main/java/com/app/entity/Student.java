@@ -28,6 +28,7 @@ public class Student {
 	private List<Application> applications = new ArrayList<>();
 	@OneToMany(mappedBy = "student")
 	private List<Allocation> allocations = new ArrayList<>();
+	private String resume;
 
 	public Student() {
 	}
@@ -111,4 +112,13 @@ public class Student {
 	public void setAllocations(List<Allocation> allocations) {
 		this.allocations = allocations;
 	}
+
+	public String getResume() {
+		return resume;
+	}
+
+	public void setResume(String resume) {
+		this.resume = resume;
+	}
+	
 }

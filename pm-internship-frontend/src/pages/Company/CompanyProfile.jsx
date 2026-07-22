@@ -1,39 +1,29 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import DashboardLayout from "../../components/Dashboard/DashboardLayout";
 import api from "../../services/api";
 import "./CompanyProfile.css";
 
 function CompanyProfile() {
-   // alert("CompanyProfile Loaded");
 
-    // const companyId = localStorage.getItem("id");
     const companyId = localStorage.getItem("companyId");
+    const navigate = useNavigate();
 
     const [company, setCompany] = useState({});
 
-//     useEffect(() => {
-//     api.get(`/company/profile/${companyId}`)
-//         .then((res) => {
-//             console.log(res.data);
-//             setCompany(res.data);
-//         })
-//         .catch((err) => console.log(err));
-// }, [companyId]);
-useEffect(() => {
+    useEffect(() => {
 
-    console.log("Company ID:", companyId);
-    console.log("Calling:", `/company/profile/${companyId}`);
+        api.get(`/company/profile/${companyId}`)
+            .then((res) => {
+                console.log(res.data);
+                setCompany(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
 
-    api.get(`/company/profile/${companyId}`)
-        .then((res) => {
-            console.log("SUCCESS:", res.data);
-            setCompany(res.data);
-        })
-        .catch((err) => {
-            console.log("ERROR:", err.response);
-        });
+    }, [companyId]);
 
-}, [companyId]);
     return (
 
         <DashboardLayout>
@@ -90,6 +80,13 @@ useEffect(() => {
                     </div>
 
                 </div>
+
+                <button
+                    className="btn-primary"
+                    onClick={() => navigate("/company/profile/edit")}
+                >
+                    Edit Profile
+                </button>
 
             </div>
 

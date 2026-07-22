@@ -33,3 +33,28 @@
     font-size:16px;
     background:#f8f8f8;
 }
+.profile-actions{
+    text-align:center;
+    margin-top:25px;
+}
+
+.btn-primary{
+    background:#2563eb;
+    color:#fff;
+    border:none;
+    padding:12px 28px;
+    border-radius:8px;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.btn-primary:hover{
+    background:#1d4ed8;
+    transform:translateY(-2px);
+}
+
+.btn-primary:active{
+    transform:scale(0.98);
+}

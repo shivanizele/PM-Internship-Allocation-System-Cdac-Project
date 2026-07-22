@@ -26,6 +26,9 @@ localStorage.setItem("id", response.data.id);               // User ID
 localStorage.setItem("companyId", response.data.companyId); // Company ID
 localStorage.setItem("role", response.data.role);
 localStorage.setItem("email", response.data.email);
+localStorage.setItem("studentId", response.data.studentId);
+localStorage.setItem("role", response.data.role);
+localStorage.setItem("token", response.data.token);
 
 if (response.data.role === "ADMIN") {
     navigate("/admin");
