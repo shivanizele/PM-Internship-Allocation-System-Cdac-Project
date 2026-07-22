@@ -30,10 +30,23 @@ public class Internship {
 	@ManyToMany
 	@JoinTable(name = "internship_skills", joinColumns = @JoinColumn(name = "internship_id"), inverseJoinColumns = @JoinColumn(name = "skill_id"))
 	private Set<Skill> requiredSkills = new HashSet<>();
-	@OneToMany(mappedBy = "internship")
-	private List<Application> applications = new ArrayList<>();
-	@OneToMany(mappedBy = "internship")
-	private List<Allocation> allocations = new ArrayList<>();
+//	@OneToMany(mappedBy = "internship")
+//	private List<Application> applications = new ArrayList<>();
+//	@OneToMany(mappedBy = "internship")
+//	private List<Allocation> allocations = new ArrayList<>();
+	@OneToMany(
+		    mappedBy = "internship",
+		    cascade = CascadeType.ALL,
+		    orphanRemoval = true
+		)
+		private List<Application> applications = new ArrayList<>();
+
+		@OneToMany(
+		    mappedBy = "internship",
+		    cascade = CascadeType.ALL,
+		    orphanRemoval = true
+		)
+		private List<Allocation> allocations = new ArrayList<>();
 
 	
 	@PrePersist

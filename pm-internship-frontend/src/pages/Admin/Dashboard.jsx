@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/Dashboard/DashboardLayout";
 import DashboardCard from "../../components/DashboardCard/DashboardCard";
 import api from "../../services/api";
+import "./Dashboard.css";
 
 function AdminDashboard() {
 

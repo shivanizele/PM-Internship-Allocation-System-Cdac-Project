@@ -39,3 +39,17 @@
 .delete-btn:hover{
     background:#dc2626;
 }
+.resume-btn {
+    background: #2563eb;
+    color: white;
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    font-size: 14px;
+    display: inline-block;
+    transition: 0.3s;
+}
+
+.resume-btn:hover {
+    background: #1d4ed8;
+}

@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/Dashboard/DashboardLayout";
 import api from "../../services/api";
@@ -21,26 +20,14 @@ function Allocations() {
 
     };
 
-    const runAllocation = () => {
-
-        api.post("/admin/allocate")
-            .then(res => {
-
-                alert(res.data);
-
-                loadAllocations();
-
-            });
-
-    };
-
     const deleteAllocation = (id) => {
 
-        if (!window.confirm("Delete Allocation?"))
+        if (!window.confirm("Delete this allocation?"))
             return;
 
         api.delete(`/admin/allocations/${id}`)
-            .then(() => loadAllocations());
+            .then(() => loadAllocations())
+            .catch(err => console.log(err));
 
     };
 
@@ -48,18 +35,7 @@ function Allocations() {
 
         <DashboardLayout>
 
-            <div className="allocation-header">
-
-                <h1>Internship Allocations</h1>
-
-                <button
-                    className="allocate-btn"
-                    onClick={runAllocation}
-                >
-                    Run AI Allocation
-                </button>
-
-            </div>
+            <h1>Allocations</h1>
 
             <input
                 className="search-box"
@@ -68,16 +44,15 @@ function Allocations() {
                 onChange={(e) => setSearch(e.target.value)}
             />
 
-            <table className="allocation-table">
+            <table className="student-table">
 
                 <thead>
 
                     <tr>
 
                         <th>Student</th>
-                        <th>Internship</th>
                         <th>Company</th>
-                        <th>Match %</th>
+                        <th>Internship</th>
                         <th>Allocated On</th>
                         <th>Action</th>
 
@@ -99,19 +74,10 @@ function Allocations() {
                                 <tr key={a.id}>
 
                                     <td>{a.studentName}</td>
-
-                                    <td>{a.internshipTitle}</td>
-
                                     <td>{a.companyName}</td>
-
-                                    <td>{a.matchPercentage}%</td>
-
+                                    <td>{a.internshipTitle}</td>
                                     <td>
-                                        {
-                                            a.allocatedAt
-                                                ? new Date(a.allocatedAt).toLocaleDateString()
-                                                : "-"
-                                        }
+                                    {new Date(a.allocatedAt).toLocaleDateString("en-IN")}
                                     </td>
 
                                     <td>
@@ -141,4 +107,3 @@ function Allocations() {
 }
 
 export default Allocations;
-

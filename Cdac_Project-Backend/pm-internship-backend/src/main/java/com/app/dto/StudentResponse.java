@@ -12,12 +12,13 @@ public class StudentResponse {
 	private Double cgpa;
 	private String location;
 	private Set<String> skills;
+	private String resume;
 
 	public StudentResponse() {
 	}
 
 	public StudentResponse(Long id, String fullName, String email, String collegeName, String branch, Double cgpa,
-			String location, Set<String> skills) {
+			String location, Set<String> skills,String resume) {
 
 		this.id = id;
 		this.fullName = fullName;
@@ -27,6 +28,7 @@ public class StudentResponse {
 		this.cgpa = cgpa;
 		this.location = location;
 		this.skills = skills;
+		this.resume = resume;
 	}
 
 	public Long getId() {
@@ -92,6 +94,15 @@ public class StudentResponse {
 	public void setSkills(Set<String> skills) {
 		this.skills = skills;
 	}
+
+	public String getResume() {
+		return resume;
+	}
+
+	public void setResume(String resume) {
+		this.resume = resume;
+	}
+	
 
 	// Generate Getters and Setters
 }

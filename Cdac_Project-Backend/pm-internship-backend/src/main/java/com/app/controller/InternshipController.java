@@ -55,10 +55,12 @@ public class InternshipController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteInternship(
-            @PathVariable Long id) {
+    public String deleteInternship(@PathVariable Long id) {
+
         System.out.println("DELETE Controller called. Internship ID = " + id);
 
-        return internshipService.deleteInternship(id);
+        internshipService.deleteInternship(id);
+
+        return "Internship deleted successfully";
     }
 }

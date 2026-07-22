@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.app.dto.CompanyDashboardResponse;
 import com.app.dto.CompanyProfileRequest;
@@ -13,10 +14,12 @@ import com.app.dto.InternshipResponse;
 import com.app.entity.Company;
 import com.app.entity.Internship;
 import com.app.entity.Skill;
+import com.app.entity.User;
 import com.app.repository.AllocationRepository;
 import com.app.repository.ApplicationRepository;
 import com.app.repository.CompanyRepository;
 import com.app.repository.InternshipRepository;
+import com.app.repository.UserRepository;
 
 @Service
 public class CompanyService {
@@ -30,6 +33,9 @@ public class CompanyService {
 
 	@Autowired
 	private AllocationRepository allocationRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
 
 	// get company
 	public CompanyResponse getCompany(Long id) {
@@ -101,11 +107,25 @@ public class CompanyService {
 	            .toList();
 	}
 	
+//	public void deleteCompany(Long id) {
+//
+//	    companyRepository.deleteById(id);
+//	}
+	
+	@Transactional
 	public void deleteCompany(Long id) {
 
-	    companyRepository.deleteById(id);
+	    Company company = companyRepository.findById(id)
+	            .orElseThrow(() -> new RuntimeException("Company not found"));
+
+	    User user = company.getUser();
+
+	    user.setCompany(null);
+
+	    companyRepository.delete(company);
+
+	    userRepository.delete(user);
 	}
-	
 
 	public CompanyDashboardResponse getDashboard(Long companyId) {
 

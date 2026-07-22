@@ -7,14 +7,18 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.app.dto.StudentProfileRequest;
 import com.app.dto.StudentResponse;
 import com.app.entity.Skill;
 import com.app.entity.Student;
+import com.app.entity.User;
 import com.app.repository.SkillRepository;
 import com.app.repository.StudentRepository;
+import com.app.repository.UserRepository;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,6 +32,8 @@ public class StudentService {
 
 	@Autowired
 	private SkillRepository skillRepository;
+	@Autowired
+	private UserRepository userRepository;
 
 	public StudentResponse getStudent(Long id) {
 
@@ -36,7 +42,8 @@ public class StudentService {
 		Set<String> skills = student.getSkills().stream().map(Skill::getSkillName).collect(Collectors.toSet());
 
 		return new StudentResponse(student.getId(), student.getUser().getFullName(), student.getUser().getEmail(),
-				student.getCollegeName(), student.getBranch(), student.getCgpa(), student.getLocation(), skills);
+				student.getCollegeName(), student.getBranch(), student.getCgpa(), student.getLocation(), skills,
+				student.getResume());
 	}
 
 	public StudentResponse updateProfile(Long id, StudentProfileRequest request) {
@@ -97,29 +104,23 @@ public class StudentService {
 
 			Set<String> skills = student.getSkills().stream().map(Skill::getSkillName).collect(Collectors.toSet());
 
-			return new StudentResponse(
-
-					student.getId(),
-
-					student.getUser().getFullName(),
-
-					student.getUser().getEmail(),
-
-					student.getCollegeName(),
-
-					student.getBranch(),
-
-					student.getCgpa(),
-
-					student.getLocation(),
-
-					skills);
+			return new StudentResponse(student.getId(), student.getUser().getFullName(), student.getUser().getEmail(),
+					student.getCollegeName(), student.getBranch(), student.getCgpa(), student.getLocation(),
+					student.getSkills().stream().map(Skill::getSkillName).collect(Collectors.toSet()),
+					student.getResume());
 		}).collect(Collectors.toList());
 	}
 
+	@Transactional
 	public void deleteStudent(Long id) {
 
-		studentRepository.deleteById(id);
+		Student student = studentRepository.findById(id).orElseThrow(() -> new RuntimeException("Student not found"));
+
+		User user = student.getUser();
+
+		studentRepository.delete(student);
+
+		userRepository.delete(user);
 	}
 
 	public StudentResponse uploadResume(Long id, MultipartFile file) {

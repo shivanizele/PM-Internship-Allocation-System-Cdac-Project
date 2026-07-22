@@ -17,8 +17,15 @@ public class Company {
 	@OneToOne
 	@JoinColumn(name = "user_id")
 	private User user;
-	@OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
-	private List<Internship> internships = new ArrayList<>();
+//	@OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+//	private List<Internship> internships = new ArrayList<>();
+	
+	@OneToMany(
+		    mappedBy = "company",
+		    cascade = CascadeType.ALL,
+		    orphanRemoval = true
+		)
+		private List<Internship> internships = new ArrayList<>();
 
 	public Company() {
 	}

@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.app.dto.InternshipRequest;
 import com.app.dto.InternshipResponse;
@@ -25,181 +26,143 @@ import jakarta.servlet.http.HttpServletRequest;
 @Service
 public class InternshipService {
 
-    @Autowired
-    private InternshipRepository internshipRepository;
+	@Autowired
+	private InternshipRepository internshipRepository;
 
-    @Autowired
-    private CompanyRepository companyRepository;
+	@Autowired
+	private CompanyRepository companyRepository;
 
-    @Autowired
-    private SkillRepository skillRepository;
-   
+	@Autowired
+	private SkillRepository skillRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+	@Autowired
+	private UserRepository userRepository;
 
-    @Autowired
-    private JwtUtil jwtUtil;
+	@Autowired
+	private JwtUtil jwtUtil;
+
 //create internship 
-    public InternshipResponse createInternship(
-            InternshipRequest request,
-            HttpServletRequest httpRequest) {
+	public InternshipResponse createInternship(InternshipRequest request, HttpServletRequest httpRequest) {
 
-    	String token = httpRequest.getHeader("Authorization")
-    	        .replace("Bearer ", "");
+		String token = httpRequest.getHeader("Authorization").replace("Bearer ", "");
 
-    	String email = jwtUtil.extractEmail(token);
+		String email = jwtUtil.extractEmail(token);
 
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() ->
-                        new RuntimeException("User not found"));
+		User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
 
-        Company company = companyRepository.findByUserId(user.getId())
-                .orElseThrow(() ->
-                        new RuntimeException("Company not found"));
+		Company company = companyRepository.findByUserId(user.getId())
+				.orElseThrow(() -> new RuntimeException("Company not found"));
 
-        Internship internship = new Internship();
+		Internship internship = new Internship();
 
-        internship.setTitle(request.getTitle());
-        internship.setDescription(request.getDescription());
-        internship.setLocation(request.getLocation());
-        internship.setStipend(request.getStipend());
-        internship.setMinimumCgpa(request.getMinimumCgpa());
-        internship.setDurationMonths(request.getDurationMonths());
-        internship.setAvailableSeats(request.getAvailableSeats());
+		internship.setTitle(request.getTitle());
+		internship.setDescription(request.getDescription());
+		internship.setLocation(request.getLocation());
+		internship.setStipend(request.getStipend());
+		internship.setMinimumCgpa(request.getMinimumCgpa());
+		internship.setDurationMonths(request.getDurationMonths());
+		internship.setAvailableSeats(request.getAvailableSeats());
 
-        Set<Skill> skills = new HashSet<>();
+		Set<Skill> skills = new HashSet<>();
 
-        for (String skillName : request.getRequiredSkills()) {
+		for (String skillName : request.getRequiredSkills()) {
 
-            Skill skill = skillRepository
-                    .findBySkillName(skillName)
-                    .orElseGet(() -> {
+			Skill skill = skillRepository.findBySkillName(skillName).orElseGet(() -> {
 
-                        Skill s = new Skill();
-                        s.setSkillName(skillName);
+				Skill s = new Skill();
+				s.setSkillName(skillName);
 
-                        return skillRepository.save(s);
-                    });
+				return skillRepository.save(s);
+			});
 
-            skills.add(skill);
-        }
+			skills.add(skill);
+		}
 
-        internship.setRequiredSkills(skills);
+		internship.setRequiredSkills(skills);
 
-        // Automatically assign the logged-in company
-        internship.setCompany(company);
+		// Automatically assign the logged-in company
+		internship.setCompany(company);
 
-        internshipRepository.save(internship);
+		internshipRepository.save(internship);
 
-        return getInternship(internship.getId());
-    }
+		return getInternship(internship.getId());
+	}
 
-    //get internship by id
-    public InternshipResponse getInternship(Long id) {
+	// get internship by id
+	public InternshipResponse getInternship(Long id) {
 
-        Internship internship = internshipRepository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Internship not found"));
+		Internship internship = internshipRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Internship not found"));
 
-        Set<String> skills = internship.getRequiredSkills()
-                .stream()
-                .map(Skill::getSkillName)
-                .collect(Collectors.toSet());
+		Set<String> skills = internship.getRequiredSkills().stream().map(Skill::getSkillName)
+				.collect(Collectors.toSet());
 
-        return new InternshipResponse(
-                internship.getId(),
-                internship.getTitle(),
-                internship.getDescription(),
-                skills,
-                internship.getLocation(),
-                internship.getStipend(),
-                internship.getMinimumCgpa(),
-                internship.getDurationMonths(),
-                internship.getAvailableSeats(),
-                internship.getCompany().getCompanyName()
-        );
-    }
+		return new InternshipResponse(internship.getId(), internship.getTitle(), internship.getDescription(), skills,
+				internship.getLocation(), internship.getStipend(), internship.getMinimumCgpa(),
+				internship.getDurationMonths(), internship.getAvailableSeats(),
+				internship.getCompany().getCompanyName());
+	}
 
-    public List<InternshipResponse> getAllInternships() {
+	public List<InternshipResponse> getAllInternships() {
 
-        return internshipRepository.findAll()
-                .stream()
-                .map(i -> {
+		return internshipRepository.findAll().stream().map(i -> {
 
-                    Set<String> skills = i.getRequiredSkills()
-                            .stream()
-                            .map(Skill::getSkillName)
-                            .collect(Collectors.toSet());
+			Set<String> skills = i.getRequiredSkills().stream().map(Skill::getSkillName).collect(Collectors.toSet());
 
-                    return new InternshipResponse(
-                            i.getId(),
-                            i.getTitle(),
-                            i.getDescription(),
-                            skills,
-                            i.getLocation(),
-                            i.getStipend(),
-                            i.getMinimumCgpa(),
-                            i.getDurationMonths(),
-                            i.getAvailableSeats(),
-                            i.getCompany().getCompanyName()
-                    );
-                })
-                .collect(Collectors.toList());
-    }
-    
-    //update internship
+			return new InternshipResponse(i.getId(), i.getTitle(), i.getDescription(), skills, i.getLocation(),
+					i.getStipend(), i.getMinimumCgpa(), i.getDurationMonths(), i.getAvailableSeats(),
+					i.getCompany().getCompanyName());
+		}).collect(Collectors.toList());
+	}
 
-    public InternshipResponse updateInternship(
-            Long id,
-            InternshipRequest request) {
+	// update internship
 
-        Internship internship = internshipRepository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Internship not found"));
+	public InternshipResponse updateInternship(Long id, InternshipRequest request) {
 
-        internship.setTitle(request.getTitle());
-        internship.setDescription(request.getDescription());
-        internship.setLocation(request.getLocation());
-        internship.setStipend(request.getStipend());
-        internship.setMinimumCgpa(request.getMinimumCgpa());
-        internship.setDurationMonths(request.getDurationMonths());
-        internship.setAvailableSeats(request.getAvailableSeats());
+		Internship internship = internshipRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Internship not found"));
+
+		internship.setTitle(request.getTitle());
+		internship.setDescription(request.getDescription());
+		internship.setLocation(request.getLocation());
+		internship.setStipend(request.getStipend());
+		internship.setMinimumCgpa(request.getMinimumCgpa());
+		internship.setDurationMonths(request.getDurationMonths());
+		internship.setAvailableSeats(request.getAvailableSeats());
 //        Company company = companyRepository.findById(request.getCompanyId())
 //                .orElseThrow(() -> new RuntimeException("Company not found"));
 //
 //        internship.setCompany(company);
 
-        Set<Skill> skills = new HashSet<>();
+		Set<Skill> skills = new HashSet<>();
 
-        for (String skillName : request.getRequiredSkills()) {
+		for (String skillName : request.getRequiredSkills()) {
 
-            Skill skill = skillRepository
-                    .findBySkillName(skillName)
-                    .orElseGet(() -> {
+			Skill skill = skillRepository.findBySkillName(skillName).orElseGet(() -> {
 
-                        Skill s = new Skill();
-                        s.setSkillName(skillName);
+				Skill s = new Skill();
+				s.setSkillName(skillName);
 
-                        return skillRepository.save(s);
-                    });
+				return skillRepository.save(s);
+			});
 
-            skills.add(skill);
-        }
+			skills.add(skill);
+		}
 
-        internship.setRequiredSkills(skills);
+		internship.setRequiredSkills(skills);
 
-        internshipRepository.save(internship);
+		internshipRepository.save(internship);
 
-        return getInternship(id);
-    }
+		return getInternship(id);
+	}
 
-    public String deleteInternship(Long id) {
+	@Transactional
+	public void deleteInternship(Long id) {
 
-        internshipRepository.deleteById(id);
+		Internship internship = internshipRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Internship not found"));
 
-        return "Internship deleted successfully";
-    }
-    
-    
+		internshipRepository.delete(internship);
+	}
+
 }

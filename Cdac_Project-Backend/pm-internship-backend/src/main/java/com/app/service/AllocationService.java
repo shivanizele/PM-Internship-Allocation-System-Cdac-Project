@@ -53,8 +53,7 @@ public class AllocationService {
 			System.out.println("Student ID: " + student.getId());
 			System.out.println("Applications Count: " + applications.size());
 
-			applications.forEach(a ->
-			    System.out.println("Applied Internship: " + a.getInternship().getId()));
+			applications.forEach(a -> System.out.println("Applied Internship: " + a.getInternship().getId()));
 
 			if (applications.isEmpty()) {
 				continue;
@@ -63,33 +62,31 @@ public class AllocationService {
 			List<MatchResponse> matches = aiService.recommendInternships(student.getId());
 			System.out.println("Recommendations:");
 
-			matches.forEach(m ->
-			    System.out.println(
-			        m.getInternshipId() + " -> " + m.getMatchPercentage()));
-			
+			matches.forEach(m -> System.out.println(m.getInternshipId() + " -> " + m.getMatchPercentage()));
 
-			MatchResponse bestMatch = matches.stream().filter(m -> m.getMatchPercentage() >= 20).filter(
-					m -> applications.stream().anyMatch(a -> a.getInternship().getId().equals(m.getInternshipId())))
-					.max(Comparator.comparing(MatchResponse::getMatchPercentage)).orElse(null);
+//			MatchResponse bestMatch = matches.stream().filter(m -> m.getMatchPercentage() >= 20).filter(
+//					m -> applications.stream().anyMatch(a -> a.getInternship().getId().equals(m.getInternshipId())))
+//					.max(Comparator.comparing(MatchResponse::getMatchPercentage)).orElse(null);
+			
+			MatchResponse bestMatch = matches.stream()
+			        .filter(m -> m.getMatchPercentage() >= 20)
+			        .max(Comparator.comparing(MatchResponse::getMatchPercentage))
+			        .orElse(null);
 
 			if (bestMatch == null) {
-				 System.out.println("Best Match = NULL");
+				System.out.println("Best Match = NULL");
 				continue;
 			}
 
-			Internship internship =
-			        internshipRepository
-			                .findById(bestMatch.getInternshipId())
-			                .orElseThrow();
+			Internship internship = internshipRepository.findById(bestMatch.getInternshipId()).orElseThrow();
 
 			// Check vacancy
 			if (internship.getAvailableSeats() <= 0) {
-			    continue;
+				continue;
 			}
 
 			// Reduce available seats
-			internship.setAvailableSeats(
-			        internship.getAvailableSeats() - 1);
+			internship.setAvailableSeats(internship.getAvailableSeats() - 1);
 
 			internshipRepository.save(internship);
 
@@ -98,8 +95,7 @@ public class AllocationService {
 
 			allocation.setStudent(student);
 			allocation.setInternship(internship);
-			allocation.setMatchPercentage(
-			        bestMatch.getMatchPercentage());
+			allocation.setMatchPercentage(bestMatch.getMatchPercentage());
 			System.out.println("Allocation Saved");
 
 			allocationRepository.save(allocation);
@@ -129,16 +125,14 @@ public class AllocationService {
 
 		return responses;
 	}
-	
-	
+
 	public void deleteAllocation(Long id) {
 
-	    if (!allocationRepository.existsById(id)) {
-	        throw new RuntimeException("Allocation not found");
-	    }
+		if (!allocationRepository.existsById(id)) {
+			throw new RuntimeException("Allocation not found");
+		}
 
-	    allocationRepository.deleteById(id);
+		allocationRepository.deleteById(id);
 	}
-	
 
 }

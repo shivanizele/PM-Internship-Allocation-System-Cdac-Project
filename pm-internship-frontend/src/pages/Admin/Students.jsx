@@ -52,6 +52,7 @@ function Students() {
                         <th>Branch</th>
                         <th>CGPA</th>
                         <th>Location</th>
+                        <th>Resume</th>
                         <th>Action</th>
 
                     </tr>
@@ -78,14 +79,34 @@ function Students() {
 
                                     <td>
 
-                                        <button
-                                            className="delete-btn"
-                                            onClick={() => deleteStudent(student.id)}
-                                        >
-                                            Delete
-                                        </button>
+                                  {student.resume ? (
 
-                                    </td>
+                                  <a
+                                   href={`http://localhost:8080/api/resume/${student.resume}`}
+                                   target="_blank"
+                                   rel="noreferrer"
+                                   className="resume-btn">
+                                   View Resume
+                                  </a>
+
+                                ) : (
+
+                               <span>No Resume</span>
+
+                               )}
+
+                            </td>
+
+<td>
+
+    <button
+        className="delete-btn"
+        onClick={() => deleteStudent(student.id)}
+    >
+        Delete
+    </button>
+
+</td>
 
                                 </tr>
 

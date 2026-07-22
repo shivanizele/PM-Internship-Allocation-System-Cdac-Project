@@ -1,103 +1,92 @@
 package com.app.entity;
 
 import java.time.LocalDateTime;
+
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "allocations")
 public class Allocation {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	private Double matchScore;
-	private LocalDateTime allocationDate;
-	@ManyToOne
-	@JoinColumn(name = "student_id")
-	private Student student;
-	@ManyToOne
-	@JoinColumn(name = "internship_id")
-	private Internship internship;
-	
-	private Double matchPercentage;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "student_id", nullable = false)
+    private Student student;
+
+    @ManyToOne
+    @JoinColumn(name = "internship_id", nullable = false)
+    private Internship internship;
+
+    @Column(name = "match_percentage")
+    private Double matchPercentage;
+
+    @Column(name = "allocated_at")
     private LocalDateTime allocatedAt;
+
     private String status;
 
-	@PrePersist
-	public void prePersist() {
-		allocationDate = LocalDateTime.now();
-	}
+    public Allocation() {
+    }
 
-	public Allocation() {
-	}
+    @PrePersist
+    public void prePersist() {
+        allocatedAt = LocalDateTime.now();
 
-	public Long getId() {
-		return id;
-	}
+        if (status == null) {
+            status = "ALLOCATED";
+        }
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    // ================= Getters & Setters =================
 
-	public Double getMatchScore() {
-		return matchScore;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setMatchScore(Double matchScore) {
-		this.matchScore = matchScore;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public LocalDateTime getAllocationDate() {
-		return allocationDate;
-	}
+    public Student getStudent() {
+        return student;
+    }
 
-	public Student getStudent() {
-		return student;
-	}
+    public void setStudent(Student student) {
+        this.student = student;
+    }
 
-	public void setStudent(Student student) {
-		this.student = student;
-	}
+    public Internship getInternship() {
+        return internship;
+    }
 
-	public Internship getInternship() {
-		return internship;
-	}
+    public void setInternship(Internship internship) {
+        this.internship = internship;
+    }
 
-	public void setInternship(Internship internship) {
-		this.internship = internship;
-	}
+    public Double getMatchPercentage() {
+        return matchPercentage;
+    }
 
-	public Double getMatchPercentage() {
-		return matchPercentage;
-	}
+    public void setMatchPercentage(Double matchPercentage) {
+        this.matchPercentage = matchPercentage;
+    }
 
-	public void setMatchPercentage(Double matchPercentage) {
-		this.matchPercentage = matchPercentage;
-	}
+    public LocalDateTime getAllocatedAt() {
+        return allocatedAt;
+    }
 
-	public LocalDateTime getAllocatedAt() {
-		return allocatedAt;
-	}
+    public void setAllocatedAt(LocalDateTime allocatedAt) {
+        this.allocatedAt = allocatedAt;
+    }
 
-	public void setAllocatedAt(LocalDateTime allocatedAt) {
-		this.allocatedAt = allocatedAt;
-	}
+    public String getStatus() {
+        return status;
+    }
 
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public void setAllocationDate(LocalDateTime allocationDate) {
-		this.allocationDate = allocationDate;
-	}
-	
-
-//	public void setAllocationDate(LocalDateTime allocationDate) {
-//		this.allocationDate = allocationDate;
-//	}
-//	
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }

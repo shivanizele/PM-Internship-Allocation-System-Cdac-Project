@@ -1,93 +1,38 @@
-
-.allocation-header{
-
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:20px;
-
-}
-
-.allocate-btn{
-
-    background:#2563EB;
-    color:white;
-    border:none;
-    padding:12px 20px;
-    border-radius:8px;
-    cursor:pointer;
-    font-weight:600;
-}
-
-.allocate-btn:hover{
-
-    background:#1D4ED8;
-
-}
-
 .search-box{
-
-    width:320px;
-    padding:12px;
-    border:1px solid #ddd;
-    border-radius:8px;
-    margin-bottom:20px;
-    outline:none;
-
+    width:300px;
+    padding:10px;
+    margin:20px 0;
+    border:1px solid #ccc;
+    border-radius:6px;
 }
 
-.search-box:focus{
-
-    border-color:#2563EB;
-
-}
-
-.allocation-table{
-
+.student-table{
     width:100%;
     border-collapse:collapse;
-    background:white;
-    border-radius:10px;
-    overflow:hidden;
-    box-shadow:0 5px 15px rgba(0,0,0,.08);
-
+    background:#fff;
 }
 
-.allocation-table th{
+.student-table th,
+.student-table td{
+    border:1px solid #ddd;
+    padding:12px;
+    text-align:left;
+}
 
+.student-table th{
     background:#2563EB;
     color:white;
-    padding:15px;
-    text-align:left;
-
-}
-
-.allocation-table td{
-
-    padding:15px;
-    border-bottom:1px solid #eee;
-
-}
-
-.allocation-table tr:hover{
-
-    background:#f8f9fa;
-
 }
 
 .delete-btn{
-
-    background:#DC2626;
+    background:#dc2626;
     color:white;
     border:none;
-    padding:8px 15px;
+    padding:8px 16px;
     border-radius:6px;
     cursor:pointer;
-
 }
 
 .delete-btn:hover{
-
-    background:#B91C1C;
-
+    background:#b91c1c;
 }
