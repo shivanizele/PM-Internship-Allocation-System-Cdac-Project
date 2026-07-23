@@ -1,5 +1,6 @@
 import "./Footer.css";
-
+import googlePlay from "../../assets/images/google-play.png";
+import qrCode from "../../assets/images/qr.png";
 function Footer() {
     return (
         <footer className="footer">
@@ -65,13 +66,13 @@ function Footer() {
                     <div className="playstore-box">
 
                         <img
-                            src="/images/google-play.png"
+                            src={googlePlay}
                             alt="Google Play"
                             className="playstore"
                         />
 
                         <img
-                            src="/images/qr.png"
+                            src={qrCode}
                             alt="QR Code"
                             className="qr"
                         />
