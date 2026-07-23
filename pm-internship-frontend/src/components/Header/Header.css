@@ -1,0 +1,169 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Segoe UI,sans-serif;
+}
+
+/* Top Strip */
+
+.gov-strip{
+
+    background:#000;
+    color:#fff;
+
+    height:42px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:0 40px;
+}
+
+.gov-left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+}
+
+.gov-left img{
+
+    width:32px;
+}
+
+.gov-left span{
+
+    font-size:18px;
+    font-weight:500;
+}
+
+.gov-right{
+
+    display:flex;
+    gap:20px;
+    font-size:18px;
+}
+
+/* Main Header */
+
+.main-header{
+
+    background:#fff;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:18px 40px;
+
+    border-bottom:1px solid #ddd;
+}
+
+.logo-area{
+
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
+
+.college-logo{
+
+    width:70px;
+}
+
+.portal-title h2{
+
+    color:#17345d;
+
+    font-size:36px;
+
+    font-weight:700;
+}
+
+.portal-title p{
+
+    color:#666;
+
+    margin-top:4px;
+}
+
+.login-btn{
+
+    background:#f57c00;
+
+    color:white;
+
+    text-decoration:none;
+
+    padding:14px 30px;
+
+    border-radius:12px;
+
+    font-size:20px;
+
+    font-weight:600;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    transition:.3s;
+}
+
+.login-btn:hover{
+
+    background:#d96b00;
+}
+
+/* Navigation */
+
+.menu-bar{
+
+    background:#12335d;
+
+    height:60px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:45px;
+
+    border-radius:0 0 10px 10px;
+}
+
+.menu-bar a{
+
+    color:white;
+
+    text-decoration:none;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    font-size:17px;
+
+    font-weight:600;
+
+    transition:.3s;
+}
+
+.menu-bar a:hover{
+
+    color:#ffc107;
+}
