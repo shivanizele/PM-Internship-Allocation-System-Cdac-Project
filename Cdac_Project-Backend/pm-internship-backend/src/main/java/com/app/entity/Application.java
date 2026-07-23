@@ -19,6 +19,8 @@ public class Application {
 	@ManyToOne
 	@JoinColumn(name = "internship_id")
 	private Internship internship;
+	@Column(name = "resume")
+	private String resume;
 
 	@PrePersist
 	public void prePersist() {
@@ -63,4 +65,17 @@ public class Application {
 	public void setInternship(Internship internship) {
 		this.internship = internship;
 	}
+
+	public String getResume() {
+		return resume;
+	}
+
+	public void setResume(String resume) {
+		this.resume = resume;
+	}
+
+	public void setAppliedAt(LocalDateTime appliedAt) {
+		this.appliedAt = appliedAt;
+	}
+	
 }

@@ -1,11 +1,12 @@
 import "./Hero.css";
 import { motion } from "framer-motion";
 import heroImage from "../../assets/images/hero.svg";
+import { Link } from "react-router-dom";
 function Hero(){
 
 return(
 
-<section className="hero">
+<section id="home" className="hero">
 
 <div className="hero-left">
 
@@ -29,11 +30,12 @@ Find the best internship using Artificial Intelligence.
 
 </p>
 
-<button>
-
-Get Started
-
-</button>
+ <Link
+                    to="/login"
+                    className="hero-btn"
+                >
+                    Get Started
+                </Link>
 
 </div>
 

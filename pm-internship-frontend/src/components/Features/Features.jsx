@@ -5,7 +5,7 @@ function Features(){
 
 return(
 
-<section className="features">
+<section id="features" className="features">
 
 <h2>Why Choose Us?</h2>
 

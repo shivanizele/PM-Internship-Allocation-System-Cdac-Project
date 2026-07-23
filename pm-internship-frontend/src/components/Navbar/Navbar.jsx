@@ -1,5 +1,6 @@
 import "./Navbar.css";
 import { FaRobot } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 function Navbar() {
 
@@ -10,17 +11,27 @@ function Navbar() {
             <div className="logo">
 
                 <FaRobot />
-
                 <span>AI Internship</span>
 
             </div>
 
             <ul>
 
-                <li>Home</li>
-                <li>Features</li>
-                <li>About</li>
-                <li>Login</li>
+                <li>
+                    <a href="#home">Home</a>
+                </li>
+
+                <li>
+                    <a href="#features">Features</a>
+                </li>
+
+                <li>
+                    <a href="#about">About</a>
+                </li>
+
+                <li>
+                    <Link to="/login">Login</Link>
+                </li>
 
             </ul>
 

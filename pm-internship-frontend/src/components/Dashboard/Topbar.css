@@ -1,17 +1,82 @@
 .topbar{
 
-    height:70px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:15px 30px;
 
     background:white;
 
-    box-shadow:0 5px 15px rgba(0,0,0,.08);
+    box-shadow:0 2px 8px rgba(0,0,0,.1);
+
+}
+
+.topbar-left{
 
     display:flex;
-
     align-items:center;
+    gap:20px;
 
-    justify-content:flex-end;
+}
 
-    padding:0 30px;
+.home-link{
+
+    display:flex;
+    align-items:center;
+    gap:8px;
+
+    background:#2563eb;
+    color:white;
+
+    padding:8px 15px;
+
+    border-radius:8px;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+}
+
+.home-link:hover{
+
+    background:#1d4ed8;
+
+}
+
+.topbar-user{
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    font-weight:600;
+
+}
+.home-btn{
+
+    display:flex;
+    align-items:center;
+    gap:8px;
+
+    background:#2563eb;
+    color:white;
+
+    border:none;
+
+    padding:8px 16px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+}
+
+.home-btn:hover{
+
+    background:#1d4ed8;
 
 }

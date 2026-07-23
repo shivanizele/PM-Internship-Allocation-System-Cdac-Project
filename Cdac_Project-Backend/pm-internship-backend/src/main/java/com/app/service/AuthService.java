@@ -119,6 +119,7 @@ public class AuthService {
 	    response.setToken(token);
 	    response.setEmail(user.getEmail());
 	    response.setRole(user.getRole().name());
+	    response.setFullName(user.getFullName());
 
 	    // NEW
 	    if (user.getRole() == Role.COMPANY) {

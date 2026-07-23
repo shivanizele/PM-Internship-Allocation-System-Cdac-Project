@@ -3,7 +3,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Landing from "./pages/Landing/Landing";
 import Login from "./pages/Login/Login";
 
-// Student
+import ProtectedRoute from "./components/ProtectedRoute";
+
+// ================= STUDENT =================
 import StudentDashboard from "./pages/Student/Dashboard";
 import StudentInternships from "./pages/Student/Internships";
 import MyApplications from "./pages/Student/MyApplications";
@@ -11,7 +13,7 @@ import StudentProfile from "./pages/Student/StudentProfile";
 import EditStudentProfile from "./pages/Student/EditStudentProfile";
 import StudentResume from "./pages/Student/StudentResume";
 
-// Company
+// ================= COMPANY =================
 import CompanyDashboard from "./pages/Company/Dashboard";
 import CompanyProfile from "./pages/Company/CompanyProfile";
 import EditCompanyProfile from "./pages/Company/EditCompanyProfile";
@@ -20,7 +22,7 @@ import AddInternship from "./pages/Company/AddInternship";
 import EditInternship from "./pages/Company/EditInternship";
 import CompanyApplications from "./pages/Company/CompanyApplications";
 
-// Admin
+// ================= ADMIN =================
 import AdminDashboard from "./pages/Admin/Dashboard";
 import Students from "./pages/Admin/Students";
 import Companies from "./pages/Admin/Companies";
@@ -35,103 +37,184 @@ function App() {
 
             <Routes>
 
-                {/* Landing */}
-                <Route path="/" element={<Landing />} />
+                {/* Public Routes */}
 
-                {/* Login */}
-                <Route path="/login" element={<Login />} />
+                <Route
+                    path="/"
+                    element={<Landing />}
+                />
+
+                <Route
+                    path="/login"
+                    element={<Login />}
+                />
 
                 {/* ================= STUDENT ================= */}
 
-                <Route path="/student" element={<StudentDashboard />} />
+                <Route
+                    path="/student"
+                    element={
+                        <ProtectedRoute allowedRole="STUDENT">
+                            <StudentDashboard />
+                        </ProtectedRoute>
+                    }
+                />
 
                 <Route
                     path="/student/internships"
-                    element={<StudentInternships />}
+                    element={
+                        <ProtectedRoute allowedRole="STUDENT">
+                            <StudentInternships />
+                        </ProtectedRoute>
+                    }
                 />
 
                 <Route
                     path="/student/applications"
-                    element={<MyApplications />}
+                    element={
+                        <ProtectedRoute allowedRole="STUDENT">
+                            <MyApplications />
+                        </ProtectedRoute>
+                    }
                 />
 
                 <Route
                     path="/student/profile"
-                    element={<StudentProfile />}
+                    element={
+                        <ProtectedRoute allowedRole="STUDENT">
+                            <StudentProfile />
+                        </ProtectedRoute>
+                    }
                 />
 
                 <Route
                     path="/student/profile/edit"
-                    element={<EditStudentProfile />}
+                    element={
+                        <ProtectedRoute allowedRole="STUDENT">
+                            <EditStudentProfile />
+                        </ProtectedRoute>
+                    }
                 />
 
                 <Route
                     path="/student/resume"
-                    element={<StudentResume />}
+                    element={
+                        <ProtectedRoute allowedRole="STUDENT">
+                            <StudentResume />
+                        </ProtectedRoute>
+                    }
                 />
 
                 {/* ================= COMPANY ================= */}
 
                 <Route
                     path="/company"
-                    element={<CompanyDashboard />}
+                    element={
+                        <ProtectedRoute allowedRole="COMPANY">
+                            <CompanyDashboard />
+                        </ProtectedRoute>
+                    }
                 />
 
                 <Route
                     path="/company/profile"
-                    element={<CompanyProfile />}
+                    element={
+                        <ProtectedRoute allowedRole="COMPANY">
+                            <CompanyProfile />
+                        </ProtectedRoute>
+                    }
                 />
 
                 <Route
                     path="/company/profile/edit"
-                    element={<EditCompanyProfile />}
+                    element={
+                        <ProtectedRoute allowedRole="COMPANY">
+                            <EditCompanyProfile />
+                        </ProtectedRoute>
+                    }
                 />
 
                 <Route
                     path="/company/internships"
-                    element={<MyInternships />}
+                    element={
+                        <ProtectedRoute allowedRole="COMPANY">
+                            <MyInternships />
+                        </ProtectedRoute>
+                    }
                 />
 
                 <Route
                     path="/company/add-internship"
-                    element={<AddInternship />}
+                    element={
+                        <ProtectedRoute allowedRole="COMPANY">
+                            <AddInternship />
+                        </ProtectedRoute>
+                    }
                 />
 
                 <Route
                     path="/company/edit-internship/:id"
-                    element={<EditInternship />}
+                    element={
+                        <ProtectedRoute allowedRole="COMPANY">
+                            <EditInternship />
+                        </ProtectedRoute>
+                    }
                 />
 
                 <Route
                     path="/company/applications/:id"
-                    element={<CompanyApplications />}
+                    element={
+                        <ProtectedRoute allowedRole="COMPANY">
+                            <CompanyApplications />
+                        </ProtectedRoute>
+                    }
                 />
 
                 {/* ================= ADMIN ================= */}
 
                 <Route
                     path="/admin"
-                    element={<AdminDashboard />}
+                    element={
+                        <ProtectedRoute allowedRole="ADMIN">
+                            <AdminDashboard />
+                        </ProtectedRoute>
+                    }
                 />
 
                 <Route
                     path="/admin/students"
-                    element={<Students />}
+                    element={
+                        <ProtectedRoute allowedRole="ADMIN">
+                            <Students />
+                        </ProtectedRoute>
+                    }
                 />
 
                 <Route
                     path="/admin/companies"
-                    element={<Companies />}
+                    element={
+                        <ProtectedRoute allowedRole="ADMIN">
+                            <Companies />
+                        </ProtectedRoute>
+                    }
                 />
 
                 <Route
                     path="/admin/internships"
-                    element={<AdminInternships />}
+                    element={
+                        <ProtectedRoute allowedRole="ADMIN">
+                            <AdminInternships />
+                        </ProtectedRoute>
+                    }
                 />
 
                 <Route
                     path="/admin/allocations"
-                    element={<Allocations />}
+                    element={
+                        <ProtectedRoute allowedRole="ADMIN">
+                            <Allocations />
+                        </ProtectedRoute>
+                    }
                 />
 
             </Routes>

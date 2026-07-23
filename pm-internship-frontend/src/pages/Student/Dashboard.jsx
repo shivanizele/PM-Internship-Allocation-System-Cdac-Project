@@ -33,7 +33,7 @@ function StudentDashboard() {
 
         <DashboardLayout>
 
-            <h1>Student Dashboard</h1>
+            {/* <h1>Student Dashboard</h1> */}
 
             <h3>Welcome {profile.fullName}</h3>
 

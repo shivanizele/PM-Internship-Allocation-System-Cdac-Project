@@ -1,61 +1,36 @@
 .navbar{
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-padding:20px 8%;
-
-background:white;
-
-box-shadow:0 5px 20px rgba(0,0,0,.08);
-
-position:sticky;
-
-top:0;
-
-z-index:1000;
-
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px 60px;
+    background:#2563eb;
 }
 
 .logo{
-
-display:flex;
-
-align-items:center;
-
-gap:10px;
-
-font-size:24px;
-
-font-weight:700;
-
-color:#2563EB;
-
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:white;
+    font-size:24px;
+    font-weight:bold;
 }
 
 .navbar ul{
-
-display:flex;
-
-gap:35px;
-
+    display:flex;
+    list-style:none;
+    gap:35px;
+    margin:0;
+    padding:0;
 }
 
-.navbar li{
-
-cursor:pointer;
-
-font-weight:600;
-
-transition:.3s;
-
+.navbar ul li a{
+    text-decoration:none;
+    color:white;          /* Makes Home, Features, About white */
+    font-size:18px;
+    font-weight:600;
+    transition:0.3s;
 }
 
-.navbar li:hover{
-
-color:#2563EB;
-
+.navbar ul li a:hover{
+    color:#FFD700;        /* Golden on hover */
 }

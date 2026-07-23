@@ -61,17 +61,42 @@ function StudentProfile() {
                             <td>Location</td>
                             <td>{student.location}</td>
                         </tr>
+                        
 
                         <tr>
-                            <td>Skills</td>
-                            <td>
-                            {student.skills?.map((skill, index) => (
-                             <span key={index} className="skill-chip">
-                             {skill}
-                            </span>
-                   ))}
-</td>
-                        </tr>
+    <td>Skills</td>
+    <td>
+        {student.skills?.map((skill, index) => (
+            <span key={index} className="skill-chip">
+                {skill}
+            </span>
+        ))}
+    </td>
+</tr>
+
+<tr>
+    <td>Resume</td>
+    <td>
+        {
+            student.resume ?
+
+            <a
+                href={`http://localhost:8080/api/resume/${student.resume}`}
+                target="_blank"
+                rel="noreferrer"
+                className="resume-link"
+            >
+                📄 View Resume
+            </a>
+
+            :
+
+            <span className="no-resume">
+                No Resume Uploaded
+            </span>
+        }
+    </td>
+</tr>
 
                     </tbody>
 

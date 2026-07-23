@@ -8,7 +8,7 @@ return(
 
 <p>
 
-© 2026 AI Internship Allocation System
+© 2026 AI Internship Allocation System All rights reserved.
 
 </p>
 

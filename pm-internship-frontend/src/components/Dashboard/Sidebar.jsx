@@ -10,6 +10,7 @@ import {
 
 import { Link } from "react-router-dom";
 
+
 function Sidebar() {
 
     const role = localStorage.getItem("role");
@@ -18,7 +19,10 @@ function Sidebar() {
 
         <div className="sidebar">
 
-            <h2>AI Internship</h2>
+            {/* import { Link } from "react-router-dom"; */}
+            <Link to="/" className="sidebar-logo">
+             <h2>AI Internship</h2>
+             </Link>
 
             {role === "ADMIN" && (
 
@@ -71,6 +75,9 @@ function Sidebar() {
 
                     <Link to="/student/applications">
                         <FaClipboardList /> Applications
+                    </Link>
+                    <Link to="/student/resume">
+                    📄 Resume
                     </Link>
 
                 </>

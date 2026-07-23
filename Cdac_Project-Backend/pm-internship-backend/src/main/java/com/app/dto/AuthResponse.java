@@ -8,6 +8,7 @@ public class AuthResponse {
 	private String role;
     private Long companyId; 
     private Long studentId;
+    private String fullName;
 
 	public AuthResponse() {
 	}
@@ -57,21 +58,24 @@ public class AuthResponse {
 		this.companyId = companyId;
 	}
 
-
-
-
-
 	public Long getStudentId() {
 		return studentId;
 	}
 
-
-
-
-
 	public void setStudentId(Long studentId) {
 		this.studentId = studentId;
 	}
+
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+	
+	
 	
 	
 }

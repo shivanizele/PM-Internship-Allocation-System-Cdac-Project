@@ -9,6 +9,7 @@ function EditStudentProfile() {
     const navigate = useNavigate();
 
     const studentId = localStorage.getItem("studentId");
+    const [resume, setResume] = useState(null);
 
     const [student, setStudent] = useState({
         collegeName: "",
@@ -40,7 +41,7 @@ function EditStudentProfile() {
     });
 };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
 
     e.preventDefault();
 
@@ -52,12 +53,43 @@ function EditStudentProfile() {
             .filter(skill => skill !== "")
     };
 
-    api.put(`/student/profile/${studentId}`, request)
-        .then(() => {
-            alert("Profile Updated Successfully");
-            navigate("/student/profile");
-        })
-        .catch(err => console.log(err));
+    try {
+
+        // Update profile
+        await api.put(`/student/profile/${studentId}`, request);
+
+        // Upload resume if selected
+        if (resume) {
+
+            const formData = new FormData();
+
+            formData.append("file", resume);
+
+            await api.post(
+                `/resume/upload/${studentId}`,
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data"
+                    }
+                }
+            );
+
+        }
+
+        alert("Profile Updated Successfully");
+
+        navigate("/student/profile");
+
+    }
+    catch (err) {
+
+        console.log(err);
+
+        alert("Update Failed");
+
+    }
+
 };
 
     return (
@@ -119,6 +151,45 @@ function EditStudentProfile() {
     placeholder="Java, Spring Boot, React"
 />
     </div>
+
+    <div className="form-group">
+
+    <label>Current Resume</label>
+
+    {
+        student.resume ?
+
+        <div>
+
+            <a
+                href={`http://localhost:8080/api/resume/${student.resume}`}
+                target="_blank"
+                rel="noreferrer"
+                className="resume-link"
+            >
+                📄 View Resume
+            </a>
+
+        </div>
+
+        :
+
+        <p>No Resume Uploaded</p>
+    }
+
+</div>
+
+<div className="form-group">
+
+    <label>Upload New Resume (PDF)</label>
+
+    <input
+        type="file"
+        accept=".pdf"
+        onChange={(e) => setResume(e.target.files[0])}
+    />
+
+</div>
 
     <div className="button-group">
         <button

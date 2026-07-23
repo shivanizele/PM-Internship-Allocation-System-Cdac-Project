@@ -44,16 +44,21 @@ public class ApplicationService {
 
         application.setStudent(student);
         application.setInternship(internship);
+        application.setStatus(ApplicationStatus.APPLIED); 
+
+        // Save student's current resume
+        application.setResume(student.getResume());
 
         applicationRepository.save(application);
 
         return new ApplicationResponse(
-                application.getId(),
-                student.getUser().getFullName(),
-                internship.getTitle(),
-                application.getStatus(),
-                application.getAppliedAt(),
-                student.getResume()
+        		   application.getId(),
+        	        internship.getId(),
+        	        student.getUser().getFullName(),
+        	        internship.getTitle(),
+        	        application.getStatus(),
+        	        application.getAppliedAt(),
+        	        application.getResume()
         );
     }
 
@@ -61,12 +66,13 @@ public class ApplicationService {
     private ApplicationResponse convertToResponse(Application application) {
 
         return new ApplicationResponse(
-                application.getId(),
+        		application.getId(),
+                application.getInternship().getId(),
                 application.getStudent().getUser().getFullName(),
                 application.getInternship().getTitle(),
                 application.getStatus(),
                 application.getAppliedAt(),
-                application.getStudent().getResume()
+                application.getResume()
         );
     }
 

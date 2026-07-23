@@ -67,4 +67,6 @@ public class ApplicationController {
 	    return applicationService.getStudentApplications(studentId);
 	}
 	
+	
+	
 }
