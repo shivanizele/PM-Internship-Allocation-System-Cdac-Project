@@ -39,79 +39,136 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-    	http
-        .cors(cors -> {})
-        .csrf(csrf -> csrf.disable())
+        http
+            .cors(cors -> {})
+            .csrf(csrf -> csrf.disable())
 
             .sessionManagement(session ->
-                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
             .authorizeHttpRequests(auth -> auth
 
-                // Public APIs
-                .requestMatchers(
-                        "/api/auth/**",
-                        "/swagger-ui/**",
-                        "/swagger-ui.html",
-                        "/v3/api-docs/**")
-                .permitAll()
+                    // Public APIs
+                    .requestMatchers(
+                            "/api/auth/**",
+                            "/api/resume/**",
+                            "/api/student/**",
+                            "/swagger-ui/**",
+                            "/swagger-ui.html",
+                            "/v3/api-docs/**")
+                    .permitAll()
 
-                // Student APIs
-                .requestMatchers("/api/student/**")
-                .permitAll() // Change to hasRole("STUDENT") later
+                    // Recommendation
+                    .requestMatchers("/api/recommend/**")
+                    .hasAnyRole("STUDENT", "ADMIN")
 
-                // Company APIs
-                .requestMatchers("/api/company/**")
-                .hasRole("COMPANY")
+                    // Applications
+                    .requestMatchers("/api/applications/**")
+                    .hasAnyRole("STUDENT", "COMPANY", "ADMIN")
 
-                // Admin APIs
-                .requestMatchers("/api/admin/**")
-                .hasRole("ADMIN")
+                    // Internship APIs
+                    .requestMatchers(HttpMethod.GET, "/api/internships/**")
+                    .hasAnyRole("STUDENT", "COMPANY", "ADMIN")
 
-                // Recommendation APIs
-                .requestMatchers("/api/recommend/**")
-                .hasAnyRole("STUDENT", "ADMIN")
+                    .requestMatchers("/api/internships/**")
+                    .hasAnyRole("COMPANY", "ADMIN")
 
-                // Application APIs
-                .requestMatchers("/api/applications/**")
-                .hasAnyRole("STUDENT", "COMPANY", "ADMIN")
+                    // Company
+                    .requestMatchers("/api/company/**")
+                    .hasRole("COMPANY")
 
-                // Internship APIs
-//                .requestMatchers("/api/internships/**")
-//                .hasAnyRole("COMPANY", "ADMIN")
-                .requestMatchers(HttpMethod.GET, "/api/internships/**")
-                .hasAnyRole("STUDENT", "COMPANY", "ADMIN")
+                    // Admin
+                    .requestMatchers("/api/admin/**")
+                    .hasRole("ADMIN")
 
-                .requestMatchers("/api/internships/**")
-                .hasAnyRole("COMPANY", "ADMIN")
-                
-                .requestMatchers(
-                        "/api/auth/**",
-                        "/swagger-ui/**",
-                        "/swagger-ui.html",
-                        "/v3/api-docs/**")
-                .permitAll()
+                    // Allocation
+                    .requestMatchers("/api/allocation/**")
+                    .hasRole("ADMIN")
 
-                .requestMatchers("/api/resume/**")
-                .permitAll()
+                    .anyRequest()
+                    .authenticated()
+            )
 
-                .requestMatchers("/api/student/**")
-                .permitAll()
-
-                // Allocation APIs
-                .requestMatchers("/api/allocation/**")
-                .hasRole("ADMIN")
-
-                .anyRequest()
-                .authenticated()
-            );
-
-        http.addFilterBefore(
-                jwtFilter,
-                UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
+//    @Bean
+//    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//
+//    	http
+//        .cors(cors -> {})
+//        .csrf(csrf -> csrf.disable())
+//
+//            .sessionManagement(session ->
+//                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//
+//            .authorizeHttpRequests(auth -> auth
+//
+//                // Public APIs
+//                .requestMatchers(
+//                        "/api/auth/**",
+//                        "/swagger-ui/**",
+//                        "/swagger-ui.html",
+//                        "/v3/api-docs/**")
+//                .permitAll()
+//
+//                // Student APIs
+//                .requestMatchers("/api/student/**")
+//                .permitAll() // Change to hasRole("STUDENT") later
+//
+//                // Company APIs
+//                .requestMatchers("/api/company/**")
+//                .hasRole("COMPANY")
+//
+//                // Admin APIs
+//                .requestMatchers("/api/admin/**")
+//                .hasRole("ADMIN")
+//
+//                // Recommendation APIs
+//                .requestMatchers("/api/recommend/**")
+//                .hasAnyRole("STUDENT", "ADMIN")
+//
+//                // Application APIs
+//                .requestMatchers("/api/applications/**")
+//                .hasAnyRole("STUDENT", "COMPANY", "ADMIN")
+//
+//                // Internship APIs
+////                .requestMatchers("/api/internships/**")
+////                .hasAnyRole("COMPANY", "ADMIN")
+//                .requestMatchers(HttpMethod.GET, "/api/internships/**")
+//                .hasAnyRole("STUDENT", "COMPANY", "ADMIN")
+//
+//                .requestMatchers("/api/internships/**")
+//                .hasAnyRole("COMPANY", "ADMIN")
+//                
+//                .requestMatchers(
+//                        "/api/auth/**",
+//                        "/swagger-ui/**",
+//                        "/swagger-ui.html",
+//                        "/v3/api-docs/**")
+//                .permitAll()
+//
+//                .requestMatchers("/api/resume/**")
+//                .permitAll()
+//
+//                .requestMatchers("/api/student/**")
+//                .permitAll()
+//
+//                // Allocation APIs
+//                .requestMatchers("/api/allocation/**")
+//                .hasRole("ADMIN")
+//
+//                .anyRequest()
+//                .authenticated()
+//            );
+//
+//        http.addFilterBefore(
+//                jwtFilter,
+//                UsernamePasswordAuthenticationFilter.class);
+//
+//        return http.build();
+//    }
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
 

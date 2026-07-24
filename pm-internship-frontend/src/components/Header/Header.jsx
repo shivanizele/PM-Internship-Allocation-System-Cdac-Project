@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import {
     FaHome,
-    FaBuilding,
+    FaBriefcase,
     FaInfoCircle,
     FaEnvelope,
     FaUserCircle,
@@ -44,37 +44,59 @@ export default function Header() {
                     </div>
                 </div>
 
-                <Link to="/login" className="login-btn">
-                    <FaUserCircle /> Login / Register
-                </Link>
+                <div className="header-buttons">
+
+    <Link
+        to="/login"
+        className="login-btn"
+    >
+
+        <FaUserCircle />
+
+        Login
+
+    </Link>
+
+    <Link
+        to="/register"
+        className="register-btn"
+    >
+
+        Register
+
+    </Link>
+
+</div>
             </header>
 
-            {/* Navigation */}
+{/* Navigation */}
+
             <nav className="menu-bar">
 
-                <Link to="/">
-                    <FaHome /> Home
-                </Link>
+                <a href="/">
+                    <FaHome />
+                    Home
+                </a>
 
-                <Link to="/internships">
-                    <FaBuilding /> Internships
-                </Link>
+                <a href="/#features">
+                    <FaBriefcase />
+                    Features
+                </a>
 
-                <Link to="/companies">
-                    <FaBuilding /> Companies
-                </Link>
+                <a href="/#about">
+                    <FaInfoCircle />
+                    About
+                </a>
 
-                <Link to="/faq">
-                    <FaQuestionCircle /> FAQ
-                </Link>
+                <a href="/#contact">
+                    <FaEnvelope />
+                    Contact
+                </a>
 
-                <Link to="/about">
-                    <FaInfoCircle /> About
-                </Link>
-
-                <Link to="/contact">
-                    <FaEnvelope /> Contact
-                </Link>
+                <a href="/#faq">
+               <FaQuestionCircle />
+                FAQ
+                </a>
 
             </nav>
         </>

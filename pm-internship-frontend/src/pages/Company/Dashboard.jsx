@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import DashboardLayout from "../../components/Dashboard/DashboardLayout";
 import DashboardCard from "../../components/DashboardCard/DashboardCard";
 import api from "../../services/api";
@@ -6,20 +7,46 @@ import "./Dashboard.css";
 
 function CompanyDashboard() {
 
+    const navigate = useNavigate();
+
     const companyId = localStorage.getItem("companyId");
 
-    const [dashboard, setDashboard] = useState({});
+    const [company, setCompany] = useState({});
+    const [internships, setInternships] = useState([]);
+    const [applications, setApplications] = useState([]);
 
     useEffect(() => {
 
-        api.get(`/company/dashboard/${companyId}`)
+        // Company Profile
+        api.get(`/company/profile/${companyId}`)
             .then(res => {
-                console.log(res.data);
-                setDashboard(res.data);
+
+                setCompany(res.data);
+
+                // First Login -> Complete Profile
+                if (
+                    !res.data.companyName ||
+                    !res.data.industry ||
+                    !res.data.address ||
+                    !res.data.website
+                ) {
+                    navigate("/company/profile/edit");
+                }
+
             })
             .catch(err => console.log(err));
 
-    }, [companyId]);
+        // My Internships
+        api.get(`/internships/company/${companyId}`)
+            .then(res => setInternships(res.data))
+            .catch(err => console.log(err));
+
+        // Applications
+        api.get(`/applications/company/${companyId}`)
+            .then(res => setApplications(res.data))
+            .catch(err => console.log(err));
+
+    }, [companyId, navigate]);
 
     return (
 
@@ -27,23 +54,29 @@ function CompanyDashboard() {
 
             <h1>Company Dashboard</h1>
 
+            <h3>Welcome, {company.companyName}</h3>
+
             <div className="dashboard-grid">
 
                 <DashboardCard
                     title="My Internships"
-                    value={dashboard.totalInternships || 0}
+                    value={internships.length}
                     color="#2563EB"
                 />
 
                 <DashboardCard
                     title="Applications"
-                    value={dashboard.totalApplications || 0}
+                    value={applications.length}
                     color="#16A34A"
                 />
 
                 <DashboardCard
                     title="Selected Students"
-                    value={dashboard.selectedStudents || 0}
+                    value={
+                        applications.filter(
+                            app => app.status === "SELECTED"
+                        ).length
+                    }
                     color="#F59E0B"
                 />
 
@@ -52,6 +85,7 @@ function CompanyDashboard() {
         </DashboardLayout>
 
     );
+
 }
 
 export default CompanyDashboard;

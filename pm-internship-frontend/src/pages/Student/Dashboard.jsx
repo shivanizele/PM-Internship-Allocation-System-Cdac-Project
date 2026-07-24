@@ -3,21 +3,45 @@ import DashboardLayout from "../../components/Dashboard/DashboardLayout";
 import DashboardCard from "../../components/DashboardCard/DashboardCard";
 import api from "../../services/api";
 import "./Dashboard.css";
+import { useNavigate } from "react-router-dom";
+
 
 function StudentDashboard() {
 
     //const studentId = localStorage.getItem("id");
     const studentId = localStorage.getItem("studentId");
-    const [profile, setProfile] = useState({});
+  //  const [profile, setProfile] = useState({});
     const [applications, setApplications] = useState([]);
     const [recommendations, setRecommendations] = useState([]);
     const [internships, setInternships] = useState([]);
+    const navigate = useNavigate();
+    // const studentId = localStorage.getItem("studentId");
+
+    const [student, setStudent] = useState({});
 
     useEffect(() => {
 
-        api.get(`/student/profile/${studentId}`)
-            .then(res => setProfile(res.data));
+api.get(`/student/profile/${studentId}`)
+    .then(res => {
 
+        setStudent(res.data);
+
+        const profileComplete =
+            res.data.collegeName &&
+            res.data.branch &&
+            res.data.location &&
+            res.data.cgpa > 0;
+
+        if (!profileComplete) {
+
+            alert("Please complete your profile before applying for internships.");
+
+            navigate("/student/profile/edit");
+
+            return;
+        }
+
+        // Only after profile is complete
         api.get(`/applications/student/${studentId}`)
             .then(res => setApplications(res.data));
 
@@ -27,15 +51,17 @@ function StudentDashboard() {
         api.get("/internships")
             .then(res => setInternships(res.data));
 
-    }, [studentId]);
+    })
+    .catch(err => console.log(err));
 
+}, [studentId, navigate]);
     return (
 
         <DashboardLayout>
 
             {/* <h1>Student Dashboard</h1> */}
 
-            <h3>Welcome {profile.fullName}</h3>
+            <h3>Welcome {student.fullName}</h3>
 
             <div className="dashboard-grid">
 

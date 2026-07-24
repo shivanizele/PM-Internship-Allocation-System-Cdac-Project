@@ -16,6 +16,11 @@ function EditCompanyProfile() {
         address: "",
         website: ""
     });
+    const isFirstTime =
+    !company.companyName &&
+    !company.industry &&
+    !company.address &&
+    !company.website;
 
     useEffect(() => {
 
@@ -59,7 +64,20 @@ function EditCompanyProfile() {
 
             <div className="edit-profile-container">
 
-                <h2>Edit Company Profile</h2>
+                <h2> {isFirstTime ? "Complete Company Profile" : "Edit Company Profile"}</h2>
+                {
+    isFirstTime &&
+
+    <div className="profile-info">
+
+        <h4>👋 Welcome</h4>
+
+        <p>
+            Please complete your company profile before posting internships.
+        </p>
+
+    </div>
+}
 
                 <form className="edit-profile-form" onSubmit={handleSubmit}>
 
@@ -67,7 +85,7 @@ function EditCompanyProfile() {
                     <input
                         type="text"
                         name="companyName"
-                        value={company.companyName}
+                        value={company.companyName || ""}
                         onChange={handleChange}
                     />
 
@@ -75,7 +93,7 @@ function EditCompanyProfile() {
                     <input
                         type="text"
                         name="industry"
-                        value={company.industry}
+                        value={company.industry || ""}
                         onChange={handleChange}
                     />
 
@@ -83,7 +101,7 @@ function EditCompanyProfile() {
                     <input
                         type="text"
                         name="address"
-                        value={company.address}
+                        value={company.address || ""}
                         onChange={handleChange}
                     />
 
@@ -91,25 +109,33 @@ function EditCompanyProfile() {
                     <input
                         type="text"
                         name="website"
-                        value={company.website}
+                       value={company.website || ""}
                         onChange={handleChange}
                     />
 
                     <div className="button-group">
 
-                        <button
-                            type="button"
-                            className="cancel-btn"
-                            onClick={() => navigate("/company/profile")}
-                        >
-                            Cancel
-                        </button>
+                        {
+    !isFirstTime &&
+
+    <button
+        type="button"
+        className="cancel-btn"
+        onClick={() => navigate("/company/profile")}
+    >
+        Cancel
+    </button>
+}
 
                         <button
                             type="submit"
                             className="update-btn"
                         >
-                            Update Profile
+                            {
+    isFirstTime
+        ? "Complete Profile"
+        : "Update Profile"
+}
                         </button>
 
                     </div>

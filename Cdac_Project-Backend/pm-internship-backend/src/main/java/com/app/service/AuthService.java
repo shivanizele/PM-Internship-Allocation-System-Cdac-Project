@@ -56,11 +56,15 @@ public class AuthService {
 
 			Student student = new Student();
 
-			student.setUser(savedUser);
-			student.setCollegeName("");
-			student.setBranch("");
-			student.setLocation("");
-			student.setCgpa(0.0);
+		student.setUser(savedUser);
+//			student.setCollegeName("");
+//			student.setBranch("");
+//			student.setLocation("");
+//			student.setCgpa(0.0);
+			student.setCollegeName(request.getCollegeName());
+			student.setBranch(request.getBranch());
+			student.setLocation(request.getLocation());
+			student.setCgpa(request.getCgpa());
 
 			studentRepository.save(student);
 		}
@@ -71,10 +75,14 @@ public class AuthService {
 			Company company = new Company();
 
 			company.setUser(savedUser);
-			company.setCompanyName("");
-			company.setIndustry("");
-			company.setAddress("");
-			company.setWebsite("");
+//			company.setCompanyName("");
+//			company.setIndustry("");
+//			company.setAddress("");
+//			company.setWebsite("");
+			company.setCompanyName(request.getCompanyName());
+			company.setIndustry(request.getIndustry());
+			company.setAddress(request.getAddress());
+			company.setWebsite(request.getWebsite());
 
 			companyRepository.save(company);
 		}

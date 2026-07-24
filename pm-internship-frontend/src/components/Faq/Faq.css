@@ -1,0 +1,22 @@
+.faq{
+    padding:80px 10%;
+    background:#f8f9fa;
+}
+
+.faq h2{
+    text-align:center;
+    margin-bottom:40px;
+    color:#1e3a8a;
+}
+
+.faq-item{
+    background:white;
+    padding:20px;
+    margin-bottom:20px;
+    border-radius:10px;
+    box-shadow:0 2px 10px rgba(0,0,0,.1);
+}
+
+.faq-item h4{
+    margin-bottom:10px;
+}

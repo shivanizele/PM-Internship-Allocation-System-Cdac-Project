@@ -4,6 +4,7 @@ import Hero from "../../components/Hero/Hero";
 import Features from "../../components/Features/Features";
 import About from "../../components/About/About";
 import Footer from "../../components/Footer/Footer";
+import Faq from "../../components/Faq/Faq";
 
 function Landing() {
 
@@ -14,6 +15,7 @@ function Landing() {
             <Hero />
             <Features />
             <About />
+            <Faq />
             <Footer />
         </>
     );

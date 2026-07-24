@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../../services/api";
 import "./Login.css";
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 function Login() {
 
@@ -94,6 +95,18 @@ else {
                 <button type="submit">
                     Login
                 </button>
+
+                <p>
+
+               Don't have an account?
+
+              <Link to="/register">
+
+                Register
+
+               </Link>
+
+</p>
 
             </form>
 

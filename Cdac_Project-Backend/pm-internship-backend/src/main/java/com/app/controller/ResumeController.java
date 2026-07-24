@@ -23,6 +23,8 @@ public class ResumeController {
     public ResponseEntity<String> uploadResume(
             @PathVariable Long studentId,
             @RequestParam("file") MultipartFile file) {
+        System.out.println("===== Resume Upload Controller Called =====");
+
 
         return ResponseEntity.ok(
                 resumeService.uploadResume(studentId, file));
@@ -34,5 +36,7 @@ public class ResumeController {
 
         return resumeService.downloadResume(fileName);
     }
+    
+    
 
 }

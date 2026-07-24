@@ -18,6 +18,11 @@ function EditStudentProfile() {
         location: "",
         skills: ""
     });
+   const isFirstTime =
+    !student.collegeName ||
+    !student.branch ||
+    !student.location ||
+    student.cgpa === 0;
 
     useEffect(() => {
 
@@ -44,6 +49,11 @@ function EditStudentProfile() {
     const handleSubmit = async (e) => {
 
     e.preventDefault();
+    const firstTime =
+    !student.collegeName ||
+    !student.branch ||
+    !student.location ||
+    student.cgpa === 0;
 
     const request = {
         ...student,
@@ -79,7 +89,11 @@ function EditStudentProfile() {
 
         alert("Profile Updated Successfully");
 
-        navigate("/student/profile");
+if (firstTime) {
+    navigate("/student");
+} else {
+    navigate("/student/profile");
+}
 
     }
     catch (err) {
@@ -97,7 +111,17 @@ function EditStudentProfile() {
 
         <div className="edit-profile-container">
 
-            <h2>Edit Profile</h2>
+            <h2>
+    {isFirstTime ? "Complete Your Profile" : "Edit Profile"}
+</h2>
+           {isFirstTime && (
+    <div className="profile-info">
+        <h4>👋 Welcome</h4>
+        <p>
+            Please complete your profile before applying for internships.
+        </p>
+    </div>
+)}
 
             <form className="profile-form" onSubmit={handleSubmit}>
 
@@ -191,7 +215,9 @@ function EditStudentProfile() {
 
 </div>
 
-    <div className="button-group">
+<div className="button-group">
+
+    {!isFirstTime && (
         <button
             type="button"
             className="cancel-btn"
@@ -199,14 +225,16 @@ function EditStudentProfile() {
         >
             Cancel
         </button>
+    )}
 
-        <button
-            type="submit"
-            className="update-btn"
-        >
-            Update Profile
-        </button>
-    </div>
+    <button
+        type="submit"
+        className="update-btn"
+    >
+        {isFirstTime ? "Complete Profile" : "Update Profile"}
+    </button>
+
+</div>
 
 </form>
 

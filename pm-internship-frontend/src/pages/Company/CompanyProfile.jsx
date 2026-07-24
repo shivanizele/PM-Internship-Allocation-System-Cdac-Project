@@ -38,7 +38,7 @@ function CompanyProfile() {
                         <label>Company Name</label>
                         <input
                             type="text"
-                            value={company.companyName || ""}
+                            value={company.companyName || "Not Added"}
                             readOnly
                         />
                     </div>
@@ -47,7 +47,7 @@ function CompanyProfile() {
                         <label>Email</label>
                         <input
                             type="text"
-                            value={company.email || ""}
+                            value={company.industry || "Not Added"}
                             readOnly
                         />
                     </div>
@@ -65,7 +65,7 @@ function CompanyProfile() {
                         <label>Address</label>
                         <input
                             type="text"
-                            value={company.address || ""}
+                            value={company.address || "Not Added"}
                             readOnly
                         />
                     </div>
@@ -74,7 +74,7 @@ function CompanyProfile() {
                         <label>Website</label>
                         <input
                             type="text"
-                            value={company.website || ""}
+                           value={company.website || "Not Added"}
                             readOnly
                         />
                     </div>

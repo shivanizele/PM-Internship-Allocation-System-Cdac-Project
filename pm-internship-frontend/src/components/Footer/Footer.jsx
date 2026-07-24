@@ -3,7 +3,7 @@ import googlePlay from "../../assets/images/google-play.png";
 import qrCode from "../../assets/images/qr.png";
 function Footer() {
     return (
-        <footer className="footer">
+        <footer id="contact" className="footer">
 
             {/* Top Section */}
             <div className="footer-top">

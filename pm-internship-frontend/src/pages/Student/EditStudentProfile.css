@@ -84,3 +84,19 @@
     justify-content: space-between;
     gap: 15px;
 }
+.profile-info{
+    background:#e8f5e9;
+    border-left:5px solid #2e7d32;
+    padding:18px;
+    margin-bottom:20px;
+    border-radius:8px;
+}
+
+.profile-info h4{
+    color:#2e7d32;
+    margin-bottom:8px;
+}
+
+.profile-info p{
+    color:#555;
+}
