@@ -12,6 +12,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.app.dto.StudentProfileRequest;
 import com.app.dto.StudentResponse;
+import com.app.dto.QualificationRequest;
+import com.app.dto.QualificationResponse;
+import com.app.entity.Qualification;
 import com.app.entity.Skill;
 import com.app.entity.Student;
 import com.app.entity.User;
@@ -43,7 +46,7 @@ public class StudentService {
 
 		return new StudentResponse(student.getId(), student.getUser().getFullName(), student.getUser().getEmail(),
 				student.getCollegeName(), student.getBranch(), student.getCgpa(), student.getLocation(), skills,
-				student.getResume());
+				student.getResume(), mapQualification(student.getQualification()), isProfileComplete(student));
 	}
 
 	public StudentResponse updateProfile(Long id, StudentProfileRequest request) {
@@ -80,6 +83,17 @@ public class StudentService {
 				student.setSkills(skills);
 			}
 
+            if (request.getQualification() != null) {
+                Qualification qualification = student.getQualification();
+                if (qualification == null) {
+                    qualification = new Qualification();
+                    qualification.setStudent(student);
+                }
+
+                updateQualification(qualification, request.getQualification());
+                student.setQualification(qualification);
+            }
+
 			studentRepository.save(student);
 
 			return getStudent(id);
@@ -107,7 +121,7 @@ public class StudentService {
 			return new StudentResponse(student.getId(), student.getUser().getFullName(), student.getUser().getEmail(),
 					student.getCollegeName(), student.getBranch(), student.getCgpa(), student.getLocation(),
 					student.getSkills().stream().map(Skill::getSkillName).collect(Collectors.toSet()),
-					student.getResume());
+					student.getResume(), mapQualification(student.getQualification()), isProfileComplete(student));
 		}).collect(Collectors.toList());
 	}
 
@@ -150,5 +164,67 @@ public class StudentService {
 
 		return getStudent(id);
 	}
+
+    private QualificationResponse mapQualification(Qualification qualification) {
+        if (qualification == null) {
+            return null;
+        }
+
+        return new QualificationResponse(
+                qualification.getHighestQualification(),
+                qualification.getDegree(),
+                qualification.getSpecialization(),
+                qualification.getCollegeOrUniversity(),
+                qualification.getPassingYear(),
+                qualification.getPercentageOrCgpa(),
+                qualification.getTenthPercentage(),
+                qualification.getTwelfthOrDiplomaPercentage(),
+                qualification.getCertifications());
+    }
+
+    private void updateQualification(Qualification qualification, QualificationRequest request) {
+        qualification.setHighestQualification(trimToNull(request.getHighestQualification()));
+        qualification.setDegree(trimToNull(request.getDegree()));
+        qualification.setSpecialization(trimToNull(request.getSpecialization()));
+        qualification.setCollegeOrUniversity(trimToNull(request.getCollegeOrUniversity()));
+        qualification.setPassingYear(request.getPassingYear());
+        qualification.setPercentageOrCgpa(trimToNull(request.getPercentageOrCgpa()));
+        qualification.setTenthPercentage(trimToNull(request.getTenthPercentage()));
+        qualification.setTwelfthOrDiplomaPercentage(trimToNull(request.getTwelfthOrDiplomaPercentage()));
+        qualification.setCertifications(trimToNull(request.getCertifications()));
+    }
+
+    private boolean isProfileComplete(Student student) {
+        Qualification qualification = student.getQualification();
+
+        return hasText(student.getCollegeName())
+                && hasText(student.getBranch())
+                && student.getCgpa() != null
+                && student.getCgpa() > 0
+                && hasText(student.getLocation())
+                && student.getSkills() != null
+                && !student.getSkills().isEmpty()
+                && qualification != null
+                && hasText(qualification.getHighestQualification())
+                && hasText(qualification.getDegree())
+                && hasText(qualification.getSpecialization())
+                && hasText(qualification.getCollegeOrUniversity())
+                && qualification.getPassingYear() != null
+                && hasText(qualification.getPercentageOrCgpa())
+                && hasText(qualification.getTenthPercentage())
+                && hasText(qualification.getTwelfthOrDiplomaPercentage());
+    }
+
+    private boolean hasText(String value) {
+        return value != null && !value.isBlank();
+    }
+
+    private String trimToNull(String value) {
+        if (value == null) {
+            return null;
+        }
+        String trimmed = value.trim();
+        return trimmed.isEmpty() ? null : trimmed;
+    }
 
 }

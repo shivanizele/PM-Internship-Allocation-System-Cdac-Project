@@ -80,10 +80,13 @@ public class SecurityConfig {
                     // Admin
                     .requestMatchers("/api/admin/**")
                     .hasRole("ADMIN")
+                    
+                    .requestMatchers("/api/test/**").permitAll()
 
                     // Allocation
                     .requestMatchers("/api/allocation/**")
                     .hasRole("ADMIN")
+                    
 
                     .anyRequest()
                     .authenticated()

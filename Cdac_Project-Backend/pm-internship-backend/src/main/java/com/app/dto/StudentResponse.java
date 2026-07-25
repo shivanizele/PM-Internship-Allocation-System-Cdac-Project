@@ -13,12 +13,15 @@ public class StudentResponse {
 	private String location;
 	private Set<String> skills;
 	private String resume;
+    private QualificationResponse qualification;
+    private boolean profileComplete;
 
 	public StudentResponse() {
 	}
 
 	public StudentResponse(Long id, String fullName, String email, String collegeName, String branch, Double cgpa,
-			String location, Set<String> skills,String resume) {
+			String location, Set<String> skills, String resume, QualificationResponse qualification,
+            boolean profileComplete) {
 
 		this.id = id;
 		this.fullName = fullName;
@@ -29,6 +32,8 @@ public class StudentResponse {
 		this.location = location;
 		this.skills = skills;
 		this.resume = resume;
+        this.qualification = qualification;
+        this.profileComplete = profileComplete;
 	}
 
 	public Long getId() {
@@ -102,7 +107,20 @@ public class StudentResponse {
 	public void setResume(String resume) {
 		this.resume = resume;
 	}
-	
 
-	// Generate Getters and Setters
+    public QualificationResponse getQualification() {
+        return qualification;
+    }
+
+    public void setQualification(QualificationResponse qualification) {
+        this.qualification = qualification;
+    }
+
+    public boolean isProfileComplete() {
+        return profileComplete;
+    }
+
+    public void setProfileComplete(boolean profileComplete) {
+        this.profileComplete = profileComplete;
+    }
 }

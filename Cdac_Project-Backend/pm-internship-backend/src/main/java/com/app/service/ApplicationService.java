@@ -27,6 +27,9 @@ public class ApplicationService {
     @Autowired
     private InternshipRepository internshipRepository;
 
+    @Autowired
+    private EmailService emailService;
+
     // Apply Internship
     public ApplicationResponse apply(ApplicationRequest request) {
 
@@ -145,11 +148,16 @@ public class ApplicationService {
         Application application = applicationRepository.findById(applicationId)
                 .orElseThrow(() -> new RuntimeException("Application not found"));
 
-        if (application.getStatus() == ApplicationStatus.SELECTED) {
-            return "Already Selected";
+        ApplicationStatus currentStatus = application.getStatus();
+        ApplicationStatus newStatus = ApplicationStatus.valueOf(status.toUpperCase());
+
+        if (currentStatus == newStatus) {
+            return "Application status is already " + newStatus.name();
         }
 
-        ApplicationStatus newStatus = ApplicationStatus.valueOf(status);
+        if (currentStatus == ApplicationStatus.SELECTED) {
+            return "Already Selected";
+        }
 
         application.setStatus(newStatus);
 
@@ -168,6 +176,12 @@ public class ApplicationService {
         }
 
         applicationRepository.save(application);
+
+        if (newStatus == ApplicationStatus.SELECTED) {
+            emailService.sendSelectionEmail(application);
+        } else if (newStatus == ApplicationStatus.REJECTED) {
+            emailService.sendRejectionEmail(application);
+        }
 
         return "Updated Successfully";
     }

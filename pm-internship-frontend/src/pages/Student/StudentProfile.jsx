@@ -61,9 +61,14 @@ function StudentProfile() {
                             <td>Location</td>
                             <td>{student.location}</td>
                         </tr>
-                        
 
                         <tr>
+                            <td>Profile Status</td>
+                            <td>{student.profileComplete ? "Complete" : "Incomplete"}</td>
+                        </tr>
+                        
+
+<tr>
     <td>Skills</td>
     <td>
         {student.skills?.map((skill, index) => (
@@ -73,6 +78,51 @@ function StudentProfile() {
         ))}
     </td>
 </tr>
+
+                        <tr>
+                            <td>Highest Qualification</td>
+                            <td>{student.qualification?.highestQualification || "-"}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Degree</td>
+                            <td>{student.qualification?.degree || "-"}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Specialization / Branch</td>
+                            <td>{student.qualification?.specialization || "-"}</td>
+                        </tr>
+
+                        <tr>
+                            <td>College / University</td>
+                            <td>{student.qualification?.collegeOrUniversity || "-"}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Passing Year</td>
+                            <td>{student.qualification?.passingYear || "-"}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Percentage / CGPA</td>
+                            <td>{student.qualification?.percentageOrCgpa || "-"}</td>
+                        </tr>
+
+                        <tr>
+                            <td>10th Percentage</td>
+                            <td>{student.qualification?.tenthPercentage || "-"}</td>
+                        </tr>
+
+                        <tr>
+                            <td>12th / Diploma Percentage</td>
+                            <td>{student.qualification?.twelfthOrDiplomaPercentage || "-"}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Certifications</td>
+                            <td>{student.qualification?.certifications || "-"}</td>
+                        </tr>
 
 <tr>
     <td>Resume</td>

@@ -52,3 +52,9 @@
     margin:3px;
     font-size:14px;
 }
+
+.resume-link{
+    color:#2563eb;
+    font-weight:600;
+    text-decoration:none;
+}

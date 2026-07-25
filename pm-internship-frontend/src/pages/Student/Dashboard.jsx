@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/Dashboard/DashboardLayout";
 import DashboardCard from "../../components/DashboardCard/DashboardCard";
 import api from "../../services/api";
+import { isStudentProfileComplete } from "../../utils/studentProfile";
 import "./Dashboard.css";
 import { useNavigate } from "react-router-dom";
 
@@ -26,11 +27,7 @@ api.get(`/student/profile/${studentId}`)
 
         setStudent(res.data);
 
-        const profileComplete =
-            res.data.collegeName &&
-            res.data.branch &&
-            res.data.location &&
-            res.data.cgpa > 0;
+        const profileComplete = isStudentProfileComplete(res.data);
 
         if (!profileComplete) {
 

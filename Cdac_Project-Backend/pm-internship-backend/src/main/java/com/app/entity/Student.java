@@ -29,6 +29,8 @@ public class Student {
 	@OneToMany(mappedBy = "student")
 	private List<Allocation> allocations = new ArrayList<>();
 	private String resume;
+    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Qualification qualification;
 
 	public Student() {
 	}
@@ -120,5 +122,13 @@ public class Student {
 	public void setResume(String resume) {
 		this.resume = resume;
 	}
+
+    public Qualification getQualification() {
+        return qualification;
+    }
+
+    public void setQualification(Qualification qualification) {
+        this.qualification = qualification;
+    }
 	
 }
