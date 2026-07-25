@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../../services/api";
+import { isPasswordValid, validatePassword } from "../../utils/passwordValidation";
 import "./Register.css";
 
 function Register() {
@@ -11,8 +12,11 @@ function Register() {
         fullName: "",
         email: "",
         password: "",
+        confirmPassword: "",
         role: "STUDENT"
     });
+    const [errors, setErrors] = useState({});
+    const passwordChecks = validatePassword(user.password);
 
     const handleChange = (e) => {
 
@@ -20,12 +24,43 @@ function Register() {
             ...user,
             [e.target.name]: e.target.value
         });
+        setErrors(prev => ({
+            ...prev,
+            [e.target.name]: ""
+        }));
 
+    };
+
+    const validateForm = () => {
+        const nextErrors = {};
+
+        if (!user.fullName.trim()) {
+            nextErrors.fullName = "Full name is required.";
+        }
+
+        if (!user.email.trim()) {
+            nextErrors.email = "Email is required.";
+        }
+
+        if (!isPasswordValid(user.password)) {
+            nextErrors.password = "Password must satisfy all listed requirements.";
+        }
+
+        if (user.password !== user.confirmPassword) {
+            nextErrors.confirmPassword = "Confirm password must match.";
+        }
+
+        setErrors(nextErrors);
+        return Object.keys(nextErrors).length === 0;
     };
 
     const register = async (e) => {
 
         e.preventDefault();
+
+        if (!validateForm()) {
+            return;
+        }
 
         try {
 
@@ -39,11 +74,9 @@ function Register() {
         catch (err) {
 
             console.log(err);
-
-            alert(
-                err.response?.data ||
-                "Registration Failed"
-            );
+            setErrors({
+                server: err.response?.data || "Registration Failed"
+            });
 
         }
 
@@ -68,6 +101,7 @@ function Register() {
                     onChange={handleChange}
                     required
                 />
+                {errors.fullName && <p className="field-error">{errors.fullName}</p>}
 
                 <input
                     type="email"
@@ -77,6 +111,7 @@ function Register() {
                     onChange={handleChange}
                     required
                 />
+                {errors.email && <p className="field-error">{errors.email}</p>}
 
                 <input
                     type="password"
@@ -86,6 +121,25 @@ function Register() {
                     onChange={handleChange}
                     required
                 />
+                {errors.password && <p className="field-error">{errors.password}</p>}
+
+                <div className="password-hints">
+                    <p className={passwordChecks.minLength ? "valid" : ""}>Minimum 8 characters</p>
+                    <p className={passwordChecks.uppercase ? "valid" : ""}>At least one uppercase letter</p>
+                    <p className={passwordChecks.lowercase ? "valid" : ""}>At least one lowercase letter</p>
+                    <p className={passwordChecks.digit ? "valid" : ""}>At least one digit</p>
+                    <p className={passwordChecks.special ? "valid" : ""}>At least one special character</p>
+                </div>
+
+                <input
+                    type="password"
+                    name="confirmPassword"
+                    placeholder="Confirm Password"
+                    value={user.confirmPassword}
+                    onChange={handleChange}
+                    required
+                />
+                {errors.confirmPassword && <p className="field-error">{errors.confirmPassword}</p>}
 
                 <select
                     name="role"
@@ -106,6 +160,8 @@ function Register() {
                 <button type="submit">
                     Register
                 </button>
+
+                {errors.server && <p className="field-error">{errors.server}</p>}
 
                 <p>
 

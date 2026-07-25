@@ -9,6 +9,7 @@ import com.app.dto.StudentResponse;
 import com.app.service.StudentService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/student")
@@ -27,7 +28,7 @@ public class StudentController {
 
 	@Operation(summary = "Update student profile")
 	@PutMapping("/profile/{id}")
-	public StudentResponse updateStudent(@PathVariable Long id, @RequestBody StudentProfileRequest request) {
+	public StudentResponse updateStudent(@PathVariable Long id, @Valid @RequestBody StudentProfileRequest request) {
 
 		return studentService.updateProfile(id, request);
 	}

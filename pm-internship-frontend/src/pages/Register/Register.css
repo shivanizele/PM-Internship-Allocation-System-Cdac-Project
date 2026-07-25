@@ -82,3 +82,28 @@
     text-decoration:underline;
 
 }
+
+.field-error{
+    color:#dc2626;
+    font-size:14px;
+    margin:-10px 0 14px;
+}
+
+.password-hints{
+    background:#f8fafc;
+    border:1px solid #dbeafe;
+    border-radius:6px;
+    margin:-6px 0 18px;
+    padding:10px 12px;
+}
+
+.password-hints p{
+    margin:4px 0;
+    text-align:left;
+    color:#64748b;
+    font-size:13px;
+}
+
+.password-hints p.valid{
+    color:#15803d;
+}

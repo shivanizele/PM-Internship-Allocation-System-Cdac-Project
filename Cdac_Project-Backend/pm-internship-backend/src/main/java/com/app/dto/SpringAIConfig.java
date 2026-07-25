@@ -1,4 +1,4 @@
-package com.app.config;
+package com.app.dto;
 
 public class SpringAIConfig {
 

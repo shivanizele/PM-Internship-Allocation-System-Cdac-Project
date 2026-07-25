@@ -100,3 +100,55 @@
 .profile-info p{
     color:#555;
 }
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.form-section h3{
+    margin:8px 0 0;
+    color:#1e3a8a;
+}
+
+.field-error{
+    color:#dc2626;
+    font-size:14px;
+    margin:0;
+}
+
+.success-message{
+    color:#15803d;
+    font-size:14px;
+    margin:0;
+}
+
+.password-hints{
+    background:#f8fafc;
+    border:1px solid #dbeafe;
+    border-radius:8px;
+    padding:10px 12px;
+}
+
+.password-hints p{
+    margin:4px 0;
+    color:#64748b;
+    font-size:13px;
+}
+
+.password-hints p.valid{
+    color:#15803d;
+}
+
+.password-form{
+    margin-top:32px;
+    padding-top:24px;
+    border-top:1px solid #e5e7eb;
+}
+
+.resume-link{
+    color:#2563eb;
+    font-weight:600;
+    text-decoration:none;
+}
