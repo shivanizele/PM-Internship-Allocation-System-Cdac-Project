@@ -16,7 +16,7 @@ export default function Header() {
             <div className="gov-strip">
                 <div className="gov-left">
                     <img src="https://pminternship.mca.gov.in/assets/aug_2025_assets/indian_flag.svg" alt="India" />
-                    <span>भारत सरकार / Government Of India
+                    <span>
 
                     </span>
                 </div>
