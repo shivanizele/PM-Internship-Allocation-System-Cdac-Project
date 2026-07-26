@@ -37,8 +37,11 @@ public class StudentService {
 	private SkillRepository skillRepository;
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private AccessControlService accessControlService;
 
 	public StudentResponse getStudent(Long id) {
+		accessControlService.requireStudent(id);
 
 		Student student = studentRepository.findById(id).orElseThrow(() -> new RuntimeException("Student not found"));
 
@@ -51,6 +54,7 @@ public class StudentService {
 
 	public StudentResponse updateProfile(Long id, StudentProfileRequest request) {
 		try {
+			accessControlService.requireStudent(id);
 
 			Student student = studentRepository.findById(id)
 					.orElseThrow(() -> new RuntimeException("Student not found"));
@@ -108,6 +112,7 @@ public class StudentService {
 
 		Student student = studentRepository.findByUserId(userId)
 				.orElseThrow(() -> new RuntimeException("Student not found"));
+		accessControlService.requireStudent(student.getId());
 
 		return getStudent(student.getId());
 	}

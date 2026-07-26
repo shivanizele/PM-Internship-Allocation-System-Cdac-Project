@@ -99,8 +99,7 @@ public class AdminController {
     
     @PostMapping("/allocate")
     public String runAllocation() {
-
-        return allocationService.runAllocation();
+        return "Use GET /api/allocation/preview to review recommendations, then POST /api/allocation/confirm.";
 
     }
    

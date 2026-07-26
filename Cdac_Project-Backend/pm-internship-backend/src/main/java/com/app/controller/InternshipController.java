@@ -10,6 +10,7 @@ import com.app.dto.InternshipResponse;
 import com.app.service.InternshipService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/internships")
@@ -27,7 +28,7 @@ public class InternshipController {
 //    }
     @PostMapping
     public InternshipResponse createInternship(
-            @RequestBody InternshipRequest request,
+            @Valid @RequestBody InternshipRequest request,
             HttpServletRequest httpRequest) {
 
         return internshipService.createInternship(request, httpRequest);
@@ -49,7 +50,7 @@ public class InternshipController {
     @PutMapping("/{id}")
     public InternshipResponse updateInternship(
             @PathVariable Long id,
-            @RequestBody InternshipRequest request) {
+            @Valid @RequestBody InternshipRequest request) {
 
         return internshipService.updateInternship(id, request);
     }
