@@ -59,6 +59,9 @@ public class SecurityConfig {
                     .permitAll()
 
                     // Recommendation
+                    .requestMatchers("/api/ai/**")
+                    .hasAnyRole("STUDENT", "ADMIN")
+
                     .requestMatchers("/api/recommend/**")
                     .hasAnyRole("STUDENT", "ADMIN")
 

@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -24,7 +25,8 @@ public class ResumeService {
     @Autowired
     private StudentRepository studentRepository;
 
-    private final String UPLOAD_DIR = "uploads/";
+    @Value("${app.resume.upload-dir:uploads}")
+    private String uploadDir;
 
     // Upload Resume
     public String uploadResume(Long studentId, MultipartFile file) {
@@ -35,7 +37,7 @@ public class ResumeService {
                     .orElseThrow(() -> new RuntimeException("Student not found"));
 
             // Create uploads folder if not exists
-            Path uploadPath = Paths.get(UPLOAD_DIR);
+            Path uploadPath = Paths.get(uploadDir);
 
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
@@ -66,7 +68,7 @@ public class ResumeService {
 
         try {
 
-            Path path = Paths.get(UPLOAD_DIR).resolve(fileName);
+            Path path = Paths.get(uploadDir).resolve(fileName);
 
             Resource resource = new UrlResource(path.toUri());
 

@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.app.dto.MatchResponse;
+import com.app.dto.InternshipRecommendationDTO;
 import com.app.service.AIRecommendationService;
 
 @RestController
@@ -17,7 +17,7 @@ public class AIController {
     private AIRecommendationService aiService;
 
     @GetMapping("/recommend/{studentId}")
-    public List<MatchResponse> recommend(
+    public List<InternshipRecommendationDTO> recommend(
             @PathVariable Long studentId) {
 
         return aiService.recommendInternships(studentId);

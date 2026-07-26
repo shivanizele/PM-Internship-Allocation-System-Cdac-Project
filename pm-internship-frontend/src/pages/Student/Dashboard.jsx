@@ -13,7 +13,6 @@ function StudentDashboard() {
     const studentId = localStorage.getItem("studentId");
   //  const [profile, setProfile] = useState({});
     const [applications, setApplications] = useState([]);
-    const [recommendations, setRecommendations] = useState([]);
     const [internships, setInternships] = useState([]);
     const navigate = useNavigate();
     // const studentId = localStorage.getItem("studentId");
@@ -42,9 +41,6 @@ api.get(`/student/profile/${studentId}`)
         api.get(`/applications/student/${studentId}`)
             .then(res => setApplications(res.data));
 
-        api.get(`/recommend/${studentId}`)
-            .then(res => setRecommendations(res.data));
-
         api.get("/internships")
             .then(res => setInternships(res.data));
 
@@ -70,7 +66,7 @@ api.get(`/student/profile/${studentId}`)
 
                 <DashboardCard
                     title="AI Recommendations"
-                    value={recommendations.length}
+                    value="Top 5"
                     color="#16A34A"
                 />
 
@@ -80,6 +76,15 @@ api.get(`/student/profile/${studentId}`)
                     color="#F59E0B"
                 />
 
+            </div>
+
+            <div style={{ marginTop: "24px" }}>
+                <button
+                    className="btn btn-success"
+                    onClick={() => navigate("/student/recommendations")}
+                >
+                    Get AI Recommendations
+                </button>
             </div>
 
         </DashboardLayout>

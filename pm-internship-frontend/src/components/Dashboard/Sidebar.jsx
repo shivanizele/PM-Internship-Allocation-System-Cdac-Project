@@ -73,6 +73,10 @@ function Sidebar() {
                         <FaBriefcase /> Internships
                     </Link>
 
+                    <Link to="/student/recommendations">
+                        <FaBriefcase /> AI Recommendations
+                    </Link>
+
                     <Link to="/student/applications">
                         <FaClipboardList /> Applications
                     </Link>

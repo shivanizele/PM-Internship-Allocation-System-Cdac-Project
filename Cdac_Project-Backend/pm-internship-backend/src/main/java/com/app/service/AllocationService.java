@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.app.dto.AllocationResponse;
-import com.app.dto.MatchResponse;
+import com.app.dto.InternshipRecommendationDTO;
 import com.app.entity.Allocation;
 import com.app.entity.Application;
 import com.app.entity.Internship;
@@ -59,18 +59,18 @@ public class AllocationService {
 				continue;
 			}
 
-			List<MatchResponse> matches = aiService.recommendInternships(student.getId());
+			List<InternshipRecommendationDTO> matches = aiService.recommendInternships(student.getId());
 			System.out.println("Recommendations:");
 
-			matches.forEach(m -> System.out.println(m.getInternshipId() + " -> " + m.getMatchPercentage()));
+			matches.forEach(m -> System.out.println(m.getInternshipId() + " -> " + m.getMatchScore()));
 
-//			MatchResponse bestMatch = matches.stream().filter(m -> m.getMatchPercentage() >= 20).filter(
+//			InternshipRecommendationDTO bestMatch = matches.stream().filter(m -> m.getMatchScore() >= 20).filter(
 //					m -> applications.stream().anyMatch(a -> a.getInternship().getId().equals(m.getInternshipId())))
-//					.max(Comparator.comparing(MatchResponse::getMatchPercentage)).orElse(null);
+//					.max(Comparator.comparing(InternshipRecommendationDTO::getMatchScore)).orElse(null);
 			
-			MatchResponse bestMatch = matches.stream()
-			        .filter(m -> m.getMatchPercentage() >= 20)
-			        .max(Comparator.comparing(MatchResponse::getMatchPercentage))
+			InternshipRecommendationDTO bestMatch = matches.stream()
+			        .filter(m -> m.getMatchScore() >= 20)
+			        .max(Comparator.comparing(InternshipRecommendationDTO::getMatchScore))
 			        .orElse(null);
 
 			if (bestMatch == null) {
@@ -95,7 +95,7 @@ public class AllocationService {
 
 			allocation.setStudent(student);
 			allocation.setInternship(internship);
-			allocation.setMatchPercentage(bestMatch.getMatchPercentage());
+			allocation.setMatchPercentage(bestMatch.getMatchScore());
 			System.out.println("Allocation Saved");
 
 			allocationRepository.save(allocation);
