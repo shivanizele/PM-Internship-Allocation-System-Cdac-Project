@@ -2,6 +2,8 @@ package com.app.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +21,7 @@ public class ResumeAnalysisService {
 
     private final ChatClient chatClient;
     private final String apiKey;
+    private final Map<Integer, ResumeAnalysisResponse> analysisCache = new ConcurrentHashMap<>();
 
     public ResumeAnalysisService(ChatClient chatClient,
             @Value("${spring.ai.google.genai.api-key:}") String apiKey) {
@@ -37,6 +40,11 @@ public class ResumeAnalysisService {
         }
 
         String prompt = buildPrompt(truncate(resumeText, 15000));
+        int cacheKey = resumeText.hashCode();
+        ResumeAnalysisResponse cached = analysisCache.get(cacheKey);
+        if (cached != null) {
+            return cached;
+        }
 
         try {
             ResumeAnalysisResponse response = chatClient.prompt()
@@ -44,7 +52,9 @@ public class ResumeAnalysisService {
                     .call()
                     .entity(ResumeAnalysisResponse.class);
 
-            return sanitize(response);
+            ResumeAnalysisResponse sanitized = sanitize(response);
+            analysisCache.put(cacheKey, sanitized);
+            return sanitized;
         } catch (AIIntegrationException ex) {
             // Preserve validation errors produced by sanitize() instead of masking them
             // as a provider failure.

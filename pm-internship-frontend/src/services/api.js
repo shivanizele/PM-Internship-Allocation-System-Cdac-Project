@@ -15,3 +15,10 @@ api.interceptors.request.use(config => {
 });
 
 export default api;
+
+export async function openResume(fileName) {
+    const response = await api.get(`/resume/${encodeURIComponent(fileName)}`, { responseType: "blob" });
+    const url = URL.createObjectURL(new Blob([response.data], { type: "application/pdf" }));
+    window.open(url, "_blank", "noopener,noreferrer");
+    window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
+}

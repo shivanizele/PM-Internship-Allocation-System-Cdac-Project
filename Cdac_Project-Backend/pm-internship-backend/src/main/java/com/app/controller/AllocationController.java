@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.app.dto.AllocationResponse;
+import com.app.dto.AllocationPreviewResponse;
 import com.app.service.AllocationService;
 
 @RestController
@@ -18,8 +19,17 @@ public class AllocationController {
 
     @PostMapping("/run")
     public String runAllocation() {
+        return "Use GET /api/allocation/preview to review recommendations, then POST /api/allocation/confirm.";
+    }
 
-        return allocationService.runAllocation();
+    @GetMapping("/preview")
+    public List<AllocationPreviewResponse> preview() {
+        return allocationService.previewAllocation();
+    }
+
+    @PostMapping("/confirm")
+    public String confirm() {
+        return allocationService.confirmAllocation();
     }
 
     @GetMapping

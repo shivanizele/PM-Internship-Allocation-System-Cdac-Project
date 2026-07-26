@@ -14,12 +14,9 @@ import com.app.dto.InternshipResponse;
 import com.app.entity.Company;
 import com.app.entity.Internship;
 import com.app.entity.Skill;
-import com.app.entity.User;
 import com.app.repository.CompanyRepository;
 import com.app.repository.InternshipRepository;
 import com.app.repository.SkillRepository;
-import com.app.repository.UserRepository;
-import com.app.security.JwtUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -36,22 +33,12 @@ public class InternshipService {
 	private SkillRepository skillRepository;
 
 	@Autowired
-	private UserRepository userRepository;
-
-	@Autowired
-	private JwtUtil jwtUtil;
+	private AccessControlService accessControlService;
 
 //create internship 
 	public InternshipResponse createInternship(InternshipRequest request, HttpServletRequest httpRequest) {
 
-		String token = httpRequest.getHeader("Authorization").replace("Bearer ", "");
-
-		String email = jwtUtil.extractEmail(token);
-
-		User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
-
-		Company company = companyRepository.findByUserId(user.getId())
-				.orElseThrow(() -> new RuntimeException("Company not found"));
+		Company company = accessControlService.currentCompany();
 
 		Internship internship = new Internship();
 
@@ -94,6 +81,8 @@ public class InternshipService {
 		Internship internship = internshipRepository.findById(id)
 				.orElseThrow(() -> new RuntimeException("Internship not found"));
 
+		accessControlService.requireCompany(internship.getCompany().getId());
+
 		Set<String> skills = internship.getRequiredSkills().stream().map(Skill::getSkillName)
 				.collect(Collectors.toSet());
 
@@ -121,6 +110,8 @@ public class InternshipService {
 
 		Internship internship = internshipRepository.findById(id)
 				.orElseThrow(() -> new RuntimeException("Internship not found"));
+
+		accessControlService.requireCompany(internship.getCompany().getId());
 
 		internship.setTitle(request.getTitle());
 		internship.setDescription(request.getDescription());

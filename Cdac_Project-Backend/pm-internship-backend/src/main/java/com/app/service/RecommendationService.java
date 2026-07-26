@@ -86,6 +86,18 @@ public class RecommendationService {
                 .collect(Collectors.toList());
     }
 
+    public InternshipRecommendationDTO scoreStudentForInternship(Student student, Internship internship) {
+        String resumeText = resumeTextExtractorService.extractTextForStudent(student);
+        ResumeAnalysisResponse analysis = resumeAnalysisService.analyzeResume(resumeText);
+        Set<String> profileSkills = student.getSkills().stream()
+                .map(Skill::getSkillName)
+                .collect(Collectors.toCollection(LinkedHashSet::new));
+        Set<String> allStudentSkills = mergeStudentSkills(profileSkills, analysis);
+        Double effectiveCgpa = student.getCgpa() != null ? student.getCgpa() : analysis.getCgpa();
+        String preferredLocation = hasText(student.getLocation()) ? student.getLocation() : analysis.getPreferredLocation();
+        return buildRecommendation(internship, allStudentSkills, effectiveCgpa, preferredLocation, analysis);
+    }
+
     private InternshipRecommendationDTO buildRecommendation(Internship internship, Set<String> studentSkills,
             Double studentCgpa, String preferredLocation, ResumeAnalysisResponse analysis) {
 

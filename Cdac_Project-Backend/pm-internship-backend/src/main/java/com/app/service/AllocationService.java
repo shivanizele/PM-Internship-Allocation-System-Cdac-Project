@@ -2,137 +2,178 @@ package com.app.service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.app.dto.AllocationPreviewResponse;
 import com.app.dto.AllocationResponse;
+import com.app.dto.ApplicantRankingResponse;
 import com.app.dto.InternshipRecommendationDTO;
 import com.app.entity.Allocation;
 import com.app.entity.Application;
+import com.app.entity.ApplicationStatus;
 import com.app.entity.Internship;
-import com.app.entity.Student;
+import com.app.exception.ResourceNotFoundException;
 import com.app.repository.AllocationRepository;
 import com.app.repository.ApplicationRepository;
 import com.app.repository.InternshipRepository;
-import com.app.repository.StudentRepository;
 
 @Service
 public class AllocationService {
 
-	@Autowired
-	private AllocationRepository allocationRepository;
+    private final AllocationRepository allocationRepository;
+    private final ApplicationRepository applicationRepository;
+    private final InternshipRepository internshipRepository;
+    private final RecommendationService recommendationService;
+    private final EmailService emailService;
 
-	@Autowired
-	private ApplicationRepository applicationRepository;
+    public AllocationService(AllocationRepository allocationRepository, ApplicationRepository applicationRepository,
+            InternshipRepository internshipRepository, RecommendationService recommendationService,
+            EmailService emailService) {
+        this.allocationRepository = allocationRepository;
+        this.applicationRepository = applicationRepository;
+        this.internshipRepository = internshipRepository;
+        this.recommendationService = recommendationService;
+        this.emailService = emailService;
+    }
 
-	@Autowired
-	private StudentRepository studentRepository;
+    public List<AllocationPreviewResponse> previewAllocation() {
+        List<Candidate> candidates = applicationRepository.findAll().stream()
+                .filter(application -> application.getStatus() == ApplicationStatus.APPLIED
+                        || application.getStatus() == ApplicationStatus.SHORTLISTED)
+                .filter(application -> application.getResume() != null)
+                .filter(application -> !allocationRepository.existsByApplicationId(application.getId()))
+                .map(this::scoreCandidate)
+                .sorted(Comparator.comparing(Candidate::score).reversed()
+                        .thenComparing(candidate -> safeCgpa(candidate.application().getStudent().getCgpa()),
+                                Comparator.reverseOrder()))
+                .toList();
 
-	@Autowired
-	private InternshipRepository internshipRepository;
+        Set<Long> allocatedStudents = allocationRepository.findAll().stream()
+                .map(allocation -> allocation.getStudent().getId()).collect(Collectors.toSet());
+        Set<Long> selectedStudents = new HashSet<>(allocatedStudents);
+        Map<Long, Integer> remainingSeats = internshipRepository.findAll().stream()
+                .collect(Collectors.toMap(Internship::getId,
+                        internship -> Math.max(0, internship.getAvailableSeats() == null ? 0 : internship.getAvailableSeats())));
+        List<Candidate> selected = new ArrayList<>();
 
-	@Autowired
-	private AIRecommendationService aiService;
+        for (Candidate candidate : candidates) {
+            Long studentId = candidate.application().getStudent().getId();
+            Long internshipId = candidate.application().getInternship().getId();
+            if (!selectedStudents.contains(studentId) && remainingSeats.getOrDefault(internshipId, 0) > 0) {
+                selected.add(candidate);
+                selectedStudents.add(studentId);
+                remainingSeats.put(internshipId, remainingSeats.get(internshipId) - 1);
+            }
+        }
 
-	public String runAllocation() {
+        Map<Long, List<Candidate>> selectedByInternship = selected.stream()
+                .collect(Collectors.groupingBy(candidate -> candidate.application().getInternship().getId()));
+        return internshipRepository.findAll().stream()
+                .filter(internship -> applicationRepository.findByInternshipId(internship.getId()).stream()
+                        .anyMatch(application -> application.getStatus() == ApplicationStatus.APPLIED
+                                || application.getStatus() == ApplicationStatus.SHORTLISTED))
+                .map(internship -> new AllocationPreviewResponse(internship.getId(), internship.getTitle(),
+                        internship.getCompany().getCompanyName(),
+                        Math.max(0, internship.getAvailableSeats() == null ? 0 : internship.getAvailableSeats()),
+                        applicationRepository.findByInternshipId(internship.getId()).size(),
+                        selectedByInternship.getOrDefault(internship.getId(), List.of()).stream()
+                                .map(this::toRanking).collect(Collectors.toList())))
+                .collect(Collectors.toList());
+    }
 
-		List<Student> students = studentRepository.findAll();
+    @Transactional
+    public String confirmAllocation() {
+        List<Candidate> selected = selectedCandidates();
+        for (Candidate candidate : selected) {
+            Application application = candidate.application();
+            if (allocationRepository.existsByApplicationId(application.getId())) {
+                continue;
+            }
+            Internship internship = application.getInternship();
+            if (internship.getAvailableSeats() == null || internship.getAvailableSeats() <= 0) {
+                continue;
+            }
 
-		int allocatedCount = 0;
+            Allocation allocation = new Allocation();
+            allocation.setStudent(application.getStudent());
+            allocation.setInternship(internship);
+            allocation.setApplication(application);
+            allocation.setMatchPercentage(candidate.score());
+            allocationRepository.save(allocation);
 
-		for (Student student : students) {
+            internship.setAvailableSeats(internship.getAvailableSeats() - 1);
+            application.setStatus(ApplicationStatus.SELECTED);
+            applicationRepository.save(application);
+            internshipRepository.save(internship);
+            emailService.sendSelectionEmail(application);
+        }
+        return selected.size() + " allocation recommendation(s) confirmed";
+    }
 
-			if (allocationRepository.findByStudentId(student.getId()).isPresent()) {
-				continue;
-			}
+    public List<AllocationResponse> getAllAllocations() {
+        return allocationRepository.findAll().stream().map(allocation -> new AllocationResponse(allocation.getId(),
+                allocation.getStudent().getUser().getFullName(), allocation.getInternship().getTitle(),
+                allocation.getInternship().getCompany().getCompanyName(), allocation.getMatchPercentage(),
+                allocation.getAllocatedAt())).collect(Collectors.toList());
+    }
 
-			List<Application> applications = applicationRepository.findByStudentId(student.getId());
-			System.out.println("--------------------------------");
-			System.out.println("Student ID: " + student.getId());
-			System.out.println("Applications Count: " + applications.size());
+    public void deleteAllocation(Long id) {
+        Allocation allocation = allocationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Allocation not found"));
+        allocationRepository.delete(allocation);
+    }
 
-			applications.forEach(a -> System.out.println("Applied Internship: " + a.getInternship().getId()));
+    private List<Candidate> selectedCandidates() {
+        List<Candidate> allCandidates = applicationRepository.findAll().stream()
+                .filter(application -> application.getStatus() == ApplicationStatus.APPLIED
+                        || application.getStatus() == ApplicationStatus.SHORTLISTED)
+                .filter(application -> application.getResume() != null)
+                .filter(application -> !allocationRepository.existsByApplicationId(application.getId()))
+                .map(this::scoreCandidate)
+                .sorted(Comparator.comparing(Candidate::score).reversed()).toList();
+        Set<Long> usedStudents = allocationRepository.findAll().stream().map(a -> a.getStudent().getId())
+                .collect(Collectors.toSet());
+        Map<Long, Integer> remainingSeats = internshipRepository.findAll().stream().collect(Collectors.toMap(
+                Internship::getId, internship -> Math.max(0, internship.getAvailableSeats() == null ? 0 : internship.getAvailableSeats())));
+        List<Candidate> selected = new ArrayList<>();
+        for (Candidate candidate : allCandidates) {
+            Long studentId = candidate.application().getStudent().getId();
+            Long internshipId = candidate.application().getInternship().getId();
+            if (!usedStudents.contains(studentId) && remainingSeats.getOrDefault(internshipId, 0) > 0) {
+                selected.add(candidate);
+                usedStudents.add(studentId);
+                remainingSeats.put(internshipId, remainingSeats.get(internshipId) - 1);
+            }
+        }
+        return selected;
+    }
 
-			if (applications.isEmpty()) {
-				continue;
-			}
+    private Candidate scoreCandidate(Application application) {
+        InternshipRecommendationDTO recommendation = recommendationService
+                .scoreStudentForInternship(application.getStudent(), application.getInternship());
+        return new Candidate(application, recommendation);
+    }
 
-			List<InternshipRecommendationDTO> matches = aiService.recommendInternships(student.getId());
-			System.out.println("Recommendations:");
+    private ApplicantRankingResponse toRanking(Candidate candidate) {
+        Application application = candidate.application();
+        return new ApplicantRankingResponse(application.getId(), application.getStudent().getId(),
+                application.getStudent().getUser().getFullName(), application.getStudent().getUser().getEmail(),
+                application.getStudent().getCollegeName(), application.getStudent().getBranch(),
+                application.getStudent().getCgpa(), application.getStudent().getSkills().stream()
+                        .map(skill -> skill.getSkillName()).sorted().collect(Collectors.toList()),
+                application.getResume(), application.getStatus(), candidate.recommendation());
+    }
 
-			matches.forEach(m -> System.out.println(m.getInternshipId() + " -> " + m.getMatchScore()));
+    private Double safeCgpa(Double cgpa) { return cgpa == null ? 0.0 : cgpa; }
 
-//			InternshipRecommendationDTO bestMatch = matches.stream().filter(m -> m.getMatchScore() >= 20).filter(
-//					m -> applications.stream().anyMatch(a -> a.getInternship().getId().equals(m.getInternshipId())))
-//					.max(Comparator.comparing(InternshipRecommendationDTO::getMatchScore)).orElse(null);
-			
-			InternshipRecommendationDTO bestMatch = matches.stream()
-			        .filter(m -> m.getMatchScore() >= 20)
-			        .max(Comparator.comparing(InternshipRecommendationDTO::getMatchScore))
-			        .orElse(null);
-
-			if (bestMatch == null) {
-				System.out.println("Best Match = NULL");
-				continue;
-			}
-
-			Internship internship = internshipRepository.findById(bestMatch.getInternshipId()).orElseThrow();
-
-			// Check vacancy
-			if (internship.getAvailableSeats() <= 0) {
-				continue;
-			}
-
-			// Reduce available seats
-			internship.setAvailableSeats(internship.getAvailableSeats() - 1);
-
-			internshipRepository.save(internship);
-
-			// Create allocation
-			Allocation allocation = new Allocation();
-
-			allocation.setStudent(student);
-			allocation.setInternship(internship);
-			allocation.setMatchPercentage(bestMatch.getMatchScore());
-			System.out.println("Allocation Saved");
-
-			allocationRepository.save(allocation);
-
-			allocatedCount++;
-		}
-
-		return allocatedCount + " students allocated successfully";
-	}
-
-	public List<AllocationResponse> getAllAllocations() {
-
-		List<AllocationResponse> responses = new ArrayList<>();
-
-		for (Allocation a : allocationRepository.findAll()) {
-
-			responses.add(new AllocationResponse(a.getId(), a.getStudent().getUser().getFullName(),
-
-					a.getInternship().getTitle(),
-
-					a.getInternship().getCompany().getCompanyName(),
-
-					a.getMatchPercentage(),
-
-					a.getAllocatedAt()));
-		}
-
-		return responses;
-	}
-
-	public void deleteAllocation(Long id) {
-
-		if (!allocationRepository.existsById(id)) {
-			throw new RuntimeException("Allocation not found");
-		}
-
-		allocationRepository.deleteById(id);
-	}
-
+    private record Candidate(Application application, InternshipRecommendationDTO recommendation) {
+        private Double score() { return recommendation.getMatchScore(); }
+    }
 }

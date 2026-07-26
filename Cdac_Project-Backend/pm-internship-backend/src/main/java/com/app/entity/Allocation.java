@@ -20,6 +20,10 @@ public class Allocation {
     @JoinColumn(name = "internship_id", nullable = false)
     private Internship internship;
 
+    @OneToOne
+    @JoinColumn(name = "application_id", unique = true)
+    private Application application;
+
     @Column(name = "match_percentage")
     private Double matchPercentage;
 
@@ -65,6 +69,10 @@ public class Allocation {
     public void setInternship(Internship internship) {
         this.internship = internship;
     }
+
+    public Application getApplication() { return application; }
+
+    public void setApplication(Application application) { this.application = application; }
 
     public Double getMatchPercentage() {
         return matchPercentage;
