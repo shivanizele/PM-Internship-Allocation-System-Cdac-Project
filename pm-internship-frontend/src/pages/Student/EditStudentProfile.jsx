@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DashboardLayout from "../../components/Dashboard/DashboardLayout";
-import api from "../../services/api";
+// import api from "../../services/api";
 import { isPasswordValid, validatePassword } from "../../utils/passwordValidation";
 import { isStudentProfileComplete } from "../../utils/studentProfile";
 import "./EditStudentProfile.css";
+import api, { openResume } from "../../services/api";
 
 const initialStudentState = {
     collegeName: "",
@@ -407,14 +408,15 @@ function EditStudentProfile() {
                         <label>Current Resume</label>
                         {existingResume ? (
                             <div>
-                                <a
+                                {/* <a
                                     href={`http://localhost:8080/api/resume/${existingResume}`}
                                     target="_blank"
                                     rel="noreferrer"
                                     className="resume-link"
                                 >
                                     View Resume
-                                </a>
+                                </a> */}
+                                 <button className="resume-btn" onClick={() => openResume(student.resume).catch(() => console.log("Unable to open resume."))}>View Resume</button>
                             </div>
                         ) : (
                             <p>No Resume Uploaded</p>

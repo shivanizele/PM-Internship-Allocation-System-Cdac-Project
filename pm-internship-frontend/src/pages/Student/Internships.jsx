@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/Dashboard/DashboardLayout";
-import api from "../../services/api";
+// import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
 import { isStudentProfileComplete } from "../../utils/studentProfile";
 import "./Internships.css";
+import api, { openResume } from "../../services/api";
 
 function Internships() {
 
@@ -242,21 +243,8 @@ function Internships() {
 
                                 ?
 
-                                <a
+                    <button className="resume-btn" onClick={() => openResume(student.resume).catch(() => console.log("Unable to open resume."))}>View Resume</button>
 
-                                    href={`http://localhost:8080/api/resume/${student.resume}`}
-
-                                    target="_blank"
-
-                                    rel="noreferrer"
-
-                                    className="resume-link"
-
-                                >
-
-                                    📄 View Resume
-
-                                </a>
 
                                 :
 

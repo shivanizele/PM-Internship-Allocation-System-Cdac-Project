@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/Dashboard/DashboardLayout";
-import api from "../../services/api";
+// import api from "../../services/api";
 import "./Students.css";
+import api, { openResume } from "../../services/api";
 
 function Students() {
 
@@ -81,14 +82,14 @@ function Students() {
 
                                   {student.resume ? (
 
-                                  <a
-                                   href={`http://localhost:8080/api/resume/${student.resume}`}
-                                   target="_blank"
-                                   rel="noreferrer"
-                                   className="resume-btn">
-                                   View Resume
-                                  </a>
-
+                                //   <a
+                                //    href={`http://localhost:8080/api/resume/${student.resume}`}
+                                //    target="_blank"
+                                //    rel="noreferrer"
+                                //    className="resume-btn" onClick={() => openResume(student.resume).catch(() => console.log("Unable to open resume."))}>
+                                //    View Resume
+                                //   </a>
+                                <button className="resume-btn" onClick={() => openResume(student.resume).catch(() => console.log("Unable to open resume."))}>View Resume</button>
                                 ) : (
 
                                <span>No Resume</span>

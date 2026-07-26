@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/Dashboard/DashboardLayout";
-import api from "../../services/api";
+import api, { openResume } from "../../services/api";
 import "./StudentResume.css";
 
 function StudentResume() {
@@ -73,15 +73,15 @@ function StudentResume() {
 
                         <h3>Current Resume</h3>
 
-                        <a
+                        {/* <a
                             href={`http://localhost:8080/api/resume/${student.resume}`}
                             target="_blank"
                             rel="noreferrer"
                             className="view-btn"
                         >
                             📄 View Resume
-                        </a>
-
+                        </a> */}
+<button className="resume-btn" onClick={() => openResume(student.resume).catch(() => console.log("Unable to open resume."))}>View Resume</button>
                     </div>
 
                     :

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DashboardLayout from "../../components/Dashboard/DashboardLayout";
-import api from "../../services/api";
+import api, { openResume } from "../../services/api";
 import "./StudentProfile.css";
 
 function StudentProfile() {
@@ -130,14 +130,15 @@ function StudentProfile() {
         {
             student.resume ?
 
-            <a
-                href={`http://localhost:8080/api/resume/${student.resume}`}
-                target="_blank"
-                rel="noreferrer"
-                className="resume-link"
-            >
-                📄 View Resume
-            </a>
+            // <a
+            //     href={`http://localhost:8080/api/resume/${student.resume}`}
+            //     target="_blank"
+            //     rel="noreferrer"
+            //     className="resume-link"
+            // >
+            //     📄 View Resume
+            // </a>
+            <button className="resume-btn" onClick={() => openResume(student.resume).catch(() => console.log("Unable to open resume."))}>View Resume</button>
 
             :
 
