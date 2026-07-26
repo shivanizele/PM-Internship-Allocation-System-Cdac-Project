@@ -32,15 +32,17 @@ public class AllocationService {
     private final InternshipRepository internshipRepository;
     private final RecommendationService recommendationService;
     private final EmailService emailService;
+    private final AccessControlService accessControlService;
 
     public AllocationService(AllocationRepository allocationRepository, ApplicationRepository applicationRepository,
             InternshipRepository internshipRepository, RecommendationService recommendationService,
-            EmailService emailService) {
+            EmailService emailService, AccessControlService accessControlService) {
         this.allocationRepository = allocationRepository;
         this.applicationRepository = applicationRepository;
         this.internshipRepository = internshipRepository;
         this.recommendationService = recommendationService;
         this.emailService = emailService;
+        this.accessControlService = accessControlService;
     }
 
     public List<AllocationPreviewResponse> previewAllocation() {
@@ -124,6 +126,20 @@ public class AllocationService {
                 allocation.getAllocatedAt())).collect(Collectors.toList());
     }
 
+    public List<AllocationResponse> getStudentAllocations(Long studentId) {
+        accessControlService.requireStudent(studentId);
+        return allocationRepository.findAll().stream()
+                .filter(allocation -> allocation.getStudent().getId().equals(studentId))
+                .map(this::toResponse).collect(Collectors.toList());
+    }
+
+    public List<AllocationResponse> getCompanyAllocations(Long companyId) {
+        accessControlService.requireCompany(companyId);
+        return allocationRepository.findAll().stream()
+                .filter(allocation -> allocation.getInternship().getCompany().getId().equals(companyId))
+                .map(this::toResponse).collect(Collectors.toList());
+    }
+
     public void deleteAllocation(Long id) {
         Allocation allocation = allocationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Allocation not found"));
@@ -172,6 +188,12 @@ public class AllocationService {
     }
 
     private Double safeCgpa(Double cgpa) { return cgpa == null ? 0.0 : cgpa; }
+
+    private AllocationResponse toResponse(Allocation allocation) {
+        return new AllocationResponse(allocation.getId(), allocation.getStudent().getUser().getFullName(),
+                allocation.getInternship().getTitle(), allocation.getInternship().getCompany().getCompanyName(),
+                allocation.getMatchPercentage(), allocation.getAllocatedAt());
+    }
 
     private record Candidate(Application application, InternshipRecommendationDTO recommendation) {
         private Double score() { return recommendation.getMatchScore(); }

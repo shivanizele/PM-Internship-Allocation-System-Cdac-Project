@@ -37,4 +37,14 @@ public class AllocationController {
 
         return allocationService.getAllAllocations();
     }
+
+    @GetMapping("/student/{studentId}")
+    public List<AllocationResponse> getStudentAllocations(@PathVariable Long studentId) {
+        return allocationService.getStudentAllocations(studentId);
+    }
+
+    @GetMapping("/company/{companyId}")
+    public List<AllocationResponse> getCompanyAllocations(@PathVariable Long companyId) {
+        return allocationService.getCompanyAllocations(companyId);
+    }
 }

@@ -88,6 +88,12 @@ public class SecurityConfig {
                     .requestMatchers("/api/test/**").permitAll()
 
                     // Allocation
+                    .requestMatchers("/api/allocation/student/**")
+                    .hasAnyRole("STUDENT", "ADMIN")
+
+                    .requestMatchers("/api/allocation/company/**")
+                    .hasAnyRole("COMPANY", "ADMIN")
+
                     .requestMatchers("/api/allocation/**")
                     .hasRole("ADMIN")
                     
