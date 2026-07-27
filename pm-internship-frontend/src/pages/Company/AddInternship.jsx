@@ -21,15 +21,32 @@ function AddInternship() {
 
     });
 
+    const [errors, setErrors] = useState({
+        minimumCgpa: ""
+    });
+
     const handleChange = (e) => {
+        const { name, value } = e.target;
 
         setInternship({
             ...internship,
-            [e.target.name]: e.target.value
+            [name]: value
         });
 
+        if (name === "minimumCgpa") {
+            if (Number(value) > 10) {
+                setErrors({
+                    ...errors,
+                    minimumCgpa: "CGPA should be below or equal to 10"
+                });
+            } else {
+                setErrors({
+                    ...errors,
+                    minimumCgpa: ""
+                });
+            }
+        }
     };
-
     const saveInternship = async (e) => {
 
         e.preventDefault();
@@ -106,28 +123,44 @@ function AddInternship() {
                     type="number"
                     name="stipend"
                     placeholder="Stipend"
+                    min="1"
                     onChange={handleChange}
                 />
 
                 <input
                     type="number"
                     name="durationMonths"
-                    placeholder="Duration"
+                    placeholder="Duration(In Months)"
+                    min="1"
                     onChange={handleChange}
                 />
 
                 <input
                     type="number"
                     step="0.1"
+                    min="0"
+                    max="10"
                     name="minimumCgpa"
                     placeholder="Minimum CGPA"
+                    onKeyDown={(e) => {
+                        if (e.key === "-" || e.key === "e") {
+                            e.preventDefault();
+                        }
+                    }}
                     onChange={handleChange}
                 />
+
+                {errors.minimumCgpa && (
+                    <p style={{ color: "red" }}>
+                        {errors.minimumCgpa}
+                    </p>
+                )}
 
                 <input
                     type="number"
                     name="availableSeats"
                     placeholder="Available Seats"
+                    min="1"
                     onChange={handleChange}
                 />
 

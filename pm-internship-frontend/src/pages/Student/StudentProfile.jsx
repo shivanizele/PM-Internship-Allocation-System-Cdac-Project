@@ -54,8 +54,20 @@ function StudentProfile() {
 
                         <tr>
                             <td>CGPA</td>
-                            <td>{student.cgpa}</td>
+                            <td>
+                                {student.cgpa !== null &&
+                                    student.cgpa !== undefined &&
+                                    student.cgpa >= 0 &&
+                                    student.cgpa <= 10 ? (
+                                    student.cgpa
+                                ) : (
+                                    <span className="invalid-cgpa">
+                                        CGPA must be between 0 and 10
+                                    </span>
+                                )}
+                            </td>
                         </tr>
+
 
                         <tr>
                             <td>Location</td>
@@ -66,18 +78,18 @@ function StudentProfile() {
                             <td>Profile Status</td>
                             <td>{student.profileComplete ? "Complete" : "Incomplete"}</td>
                         </tr>
-                        
 
-<tr>
-    <td>Skills</td>
-    <td>
-        {student.skills?.map((skill, index) => (
-            <span key={index} className="skill-chip">
-                {skill}
-            </span>
-        ))}
-    </td>
-</tr>
+
+                        <tr>
+                            <td>Skills</td>
+                            <td>
+                                {student.skills?.map((skill, index) => (
+                                    <span key={index} className="skill-chip">
+                                        {skill}
+                                    </span>
+                                ))}
+                            </td>
+                        </tr>
 
                         <tr>
                             <td>Highest Qualification</td>
@@ -124,30 +136,30 @@ function StudentProfile() {
                             <td>{student.qualification?.certifications || "-"}</td>
                         </tr>
 
-<tr>
-    <td>Resume</td>
-    <td>
-        {
-            student.resume ?
+                        <tr>
+                            <td>Resume</td>
+                            <td>
+                                {
+                                    student.resume ?
 
-            // <a
-            //     href={`http://localhost:8080/api/resume/${student.resume}`}
-            //     target="_blank"
-            //     rel="noreferrer"
-            //     className="resume-link"
-            // >
-            //     📄 View Resume
-            // </a>
-            <button className="resume-btn" onClick={() => openResume(student.resume).catch(() => console.log("Unable to open resume."))}>View Resume</button>
+                                        // <a
+                                        //     href={`http://localhost:8080/api/resume/${student.resume}`}
+                                        //     target="_blank"
+                                        //     rel="noreferrer"
+                                        //     className="resume-link"
+                                        // >
+                                        //     📄 View Resume
+                                        // </a>
+                                        <button className="resume-btn" onClick={() => openResume(student.resume).catch(() => console.log("Unable to open resume."))}>View Resume</button>
 
-            :
+                                        :
 
-            <span className="no-resume">
-                No Resume Uploaded
-            </span>
-        }
-    </td>
-</tr>
+                                        <span className="no-resume">
+                                            No Resume Uploaded
+                                        </span>
+                                }
+                            </td>
+                        </tr>
 
                     </tbody>
 
