@@ -81,6 +81,38 @@ function EditStudentProfile() {
     const handleChange = (e) => {
         const { name, value } = e.target;
 
+        // CGPA validation
+        if (name === "cgpa") {
+            // Allow empty value while typing
+            if (value === "") {
+                setStudent(prev => ({
+                    ...prev,
+                    cgpa: ""
+                }));
+
+                setErrors(prev => ({
+                    ...prev,
+                    cgpa: "",
+                    server: ""
+                }));
+
+                return;
+            }
+
+            const cgpaValue = Number(value);
+
+            // Do not allow negative or greater than 10
+            if (cgpaValue < 0 || cgpaValue > 10) {
+                setErrors(prev => ({
+                    ...prev,
+                    cgpa: "CGPA must be between 0 and 10.",
+                    server: ""
+                }));
+
+                return;
+            }
+        }
+
         setStudent(prev => ({
             ...prev,
             [name]: value
@@ -94,22 +126,55 @@ function EditStudentProfile() {
     };
 
     const handleQualificationChange = (e) => {
-        const { name, value } = e.target;
+    const { name, value } = e.target;
 
-        setStudent(prev => ({
-            ...prev,
-            qualification: {
-                ...prev.qualification,
-                [name]: value
+    // Validate 10th percentage
+    if (name === "tenthPercentage") {
+        if (value !== "") {
+            const percentage = Number(value);
+
+            if (percentage < 0 || percentage > 100) {
+                setErrors(prev => ({
+                    ...prev,
+                    tenthPercentage: "10th percentage must be between 0 and 100.",
+                    server: ""
+                }));
+                return;
             }
-        }));
+        }
+    }
 
-        setErrors(prev => ({
-            ...prev,
-            [name]: "",
-            server: ""
-        }));
-    };
+    // Validate 12th / Diploma percentage
+    if (name === "twelfthOrDiplomaPercentage") {
+        if (value !== "") {
+            const percentage = Number(value);
+
+            if (percentage < 0 || percentage > 100) {
+                setErrors(prev => ({
+                    ...prev,
+                    twelfthOrDiplomaPercentage:
+                        "12th/Diploma percentage must be between 0 and 100.",
+                    server: ""
+                }));
+                return;
+            }
+        }
+    }
+
+    setStudent(prev => ({
+        ...prev,
+        qualification: {
+            ...prev.qualification,
+            [name]: value
+        }
+    }));
+
+    setErrors(prev => ({
+        ...prev,
+        [name]: "",
+        server: ""
+    }));
+};
 
     const handlePasswordChange = (e) => {
         const { name, value } = e.target;
@@ -151,8 +216,28 @@ function EditStudentProfile() {
         if (!student.qualification.collegeOrUniversity.trim()) nextErrors.collegeOrUniversity = "College/University is required.";
         if (!String(student.qualification.passingYear).trim()) nextErrors.passingYear = "Passing year is required.";
         if (!student.qualification.percentageOrCgpa.trim()) nextErrors.percentageOrCgpa = "Percentage/CGPA is required.";
-        if (!student.qualification.tenthPercentage.trim()) nextErrors.tenthPercentage = "10th percentage is required.";
-        if (!student.qualification.twelfthOrDiplomaPercentage.trim()) nextErrors.twelfthOrDiplomaPercentage = "12th/Diploma percentage is required.";
+        if (!student.qualification.tenthPercentage.trim()) {
+            nextErrors.tenthPercentage = "10th percentage is required.";
+        } else {
+            const tenthPercentage = Number(student.qualification.tenthPercentage);
+
+            if (tenthPercentage < 0 || tenthPercentage > 100) {
+                nextErrors.tenthPercentage =
+                    "10th percentage must be between 0 and 100.";
+            }
+        }
+        if (!student.qualification.twelfthOrDiplomaPercentage.trim()) {
+            nextErrors.twelfthOrDiplomaPercentage =
+                "12th/Diploma percentage is required.";
+        } else {
+            const twelfthPercentage =
+                Number(student.qualification.twelfthOrDiplomaPercentage);
+
+            if (twelfthPercentage < 0 || twelfthPercentage > 100) {
+                nextErrors.twelfthOrDiplomaPercentage =
+                    "12th/Diploma percentage must be between 0 and 100.";
+            }
+        }
 
         setErrors(prev => ({
             ...prev,
@@ -285,7 +370,15 @@ function EditStudentProfile() {
 
                     <div className="form-group">
                         <label>CGPA</label>
-                        <input type="number" step="0.01" name="cgpa" value={student.cgpa} onChange={handleChange} />
+                        <input
+                            type="number"
+                            name="cgpa"
+                            min="0"
+                            max="10"
+                            step="0.01"
+                            value={student.cgpa}
+                            onChange={handleChange}
+                        />
                         {errors.cgpa && <p className="field-error">{errors.cgpa}</p>}
                     </div>
 
@@ -351,13 +444,29 @@ function EditStudentProfile() {
 
                     <div className="form-group">
                         <label>Passing Year</label>
-                        <input
-                            type="number"
+
+                        <select
                             name="passingYear"
                             value={student.qualification.passingYear}
                             onChange={handleQualificationChange}
-                        />
-                        {errors.passingYear && <p className="field-error">{errors.passingYear}</p>}
+                        >
+                            <option value="">Select Year</option>
+
+                            {Array.from(
+                                { length: new Date().getFullYear() - 1990 + 1 },
+                                (_, index) => new Date().getFullYear() - index
+                            ).map(year => (
+                                <option key={year} value={year}>
+                                    {year}
+                                </option>
+                            ))}
+                        </select>
+
+                        {errors.passingYear && (
+                            <p className="field-error">
+                                {errors.passingYear}
+                            </p>
+                        )}
                     </div>
 
                     <div className="form-group">
@@ -375,23 +484,33 @@ function EditStudentProfile() {
                     <div className="form-group">
                         <label>10th Percentage</label>
                         <input
-                            type="text"
+                            type="number"
                             name="tenthPercentage"
+                            min="0"
+                            max="100"
+                            step="0.01"
                             value={student.qualification.tenthPercentage}
                             onChange={handleQualificationChange}
                         />
-                        {errors.tenthPercentage && <p className="field-error">{errors.tenthPercentage}</p>}
+                        {errors.tenthPercentage && (
+                            <p className="field-error">{errors.tenthPercentage}</p>
+                        )}
                     </div>
 
                     <div className="form-group">
                         <label>12th Percentage / Diploma Percentage</label>
                         <input
-                            type="text"
+                            type="number"
                             name="twelfthOrDiplomaPercentage"
+                            min="0"
+                            max="100"
+                            step="0.01"
                             value={student.qualification.twelfthOrDiplomaPercentage}
                             onChange={handleQualificationChange}
                         />
-                        {errors.twelfthOrDiplomaPercentage && <p className="field-error">{errors.twelfthOrDiplomaPercentage}</p>}
+                        {errors.twelfthOrDiplomaPercentage && (
+                            <p className="field-error">{errors.twelfthOrDiplomaPercentage}</p>
+                        )}
                     </div>
 
                     <div className="form-group">
@@ -416,7 +535,7 @@ function EditStudentProfile() {
                                 >
                                     View Resume
                                 </a> */}
-                                 <button className="resume-btn" onClick={() => openResume(student.resume).catch(() => console.log("Unable to open resume."))}>View Resume</button>
+                                <button className="resume-btn" onClick={() => openResume(student.resume).catch(() => console.log("Unable to open resume."))}>View Resume</button>
                             </div>
                         ) : (
                             <p>No Resume Uploaded</p>

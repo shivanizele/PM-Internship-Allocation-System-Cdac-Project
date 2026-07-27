@@ -1,11 +1,13 @@
 import "./Topbar.css";
 import { FaUserCircle, FaHome } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 function Topbar() {
 
-    const email = localStorage.getItem("email");
+    const fullName = localStorage.getItem("fullName");
     const role = localStorage.getItem("role");
+    const [showMenu, setShowMenu] = useState(false);
 
     const navigate = useNavigate();
 
@@ -37,12 +39,26 @@ function Topbar() {
 
             <div className="topbar-user">
 
-                <FaUserCircle size={28} />
+    <div
+        className="user-info"
+        onClick={() => setShowMenu(!showMenu)}
+    >
+        <FaUserCircle size={28} />
+        <span>{fullName}</span>
+    </div>
 
-                <span>Welcome, {email}</span>
+    {showMenu && (
+        <div className="user-dropdown">
+            <button
+                className="dropdown-btn"
+                onClick={goHome}
+            >
+                Logout
+            </button>
+        </div>
+    )}
 
-            </div>
-
+</div>
         </div>
 
     );
