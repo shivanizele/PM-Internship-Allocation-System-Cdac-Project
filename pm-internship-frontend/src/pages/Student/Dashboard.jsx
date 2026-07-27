@@ -80,7 +80,7 @@ api.get(`/student/profile/${studentId}`)
 
             <div style={{ marginTop: "24px" }}>
                 <button
-                    className="btn btn-success"
+                    className="btn btn-primary"
                     onClick={() => navigate("/student/recommendations")}
                 >
                     Get AI Recommendations
