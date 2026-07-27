@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/Dashboard/DashboardLayout";
 import DashboardCard from "../../components/DashboardCard/DashboardCard";
@@ -37,7 +36,21 @@ function AdminDashboard() {
 
         <DashboardLayout>
 
-            <h1>Admin Dashboard</h1>
+            <div className="dashboard-header">
+
+                <div>
+
+                    <h1>👨‍💼 Admin Dashboard</h1>
+
+                    <p>
+                        Welcome to the PM Internship Allocation System.
+                        Monitor internship statistics, manage allocations and
+                        run the AI Recommendation Engine.
+                    </p>
+
+                </div>
+
+            </div>
 
             <div className="dashboard-grid">
 
@@ -64,21 +77,36 @@ function AdminDashboard() {
                     value={dashboard.totalAllocations}
                     color="#DC2626"
                 />
+
                 <DashboardCard
-                title="Available Seats"
-                value={dashboard.availableSeats || 0}
-                color="#8B5CF6"/>
+                    title="Available Seats"
+                    value={dashboard.availableSeats || 0}
+                    color="#8B5CF6"
+                />
 
             </div>
 
-            <br />
+            <div className="allocation-box">
 
-            <button
-                className="allocate-btn"
-                onClick={runAllocation}
-            >
-                Run AI Allocation
-            </button>
+                <h2>🤖 AI Internship Allocation</h2>
+
+                <p>
+
+                    Run the Artificial Intelligence recommendation engine to
+                    automatically allocate students to the most suitable
+                    internships based on skills, qualifications, preferences,
+                    and seat availability.
+
+                </p>
+
+                <button
+                    className="allocate-btn"
+                    onClick={runAllocation}
+                >
+                    🚀 Run AI Allocation
+                </button>
+
+            </div>
 
         </DashboardLayout>
 
@@ -87,4 +115,3 @@ function AdminDashboard() {
 }
 
 export default AdminDashboard;
-

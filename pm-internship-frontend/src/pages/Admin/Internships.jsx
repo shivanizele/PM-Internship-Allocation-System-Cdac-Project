@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { FaSearch, FaBriefcase } from "react-icons/fa";
 import DashboardLayout from "../../components/Dashboard/DashboardLayout";
 import api from "../../services/api";
 import "./Internships.css";
@@ -22,7 +23,7 @@ function Internships() {
 
     const deleteInternship = (id) => {
 
-        if (!window.confirm("Delete this internship?"))
+        if (!window.confirm("Are you sure you want to delete this internship?"))
             return;
 
         api.delete(`/admin/internships/${id}`)
@@ -31,74 +32,140 @@ function Internships() {
 
     };
 
+    const filteredInternships = internships.filter(internship =>
+        internship.title.toLowerCase().includes(search.toLowerCase())
+    );
+
     return (
 
         <DashboardLayout>
 
-            <h1>Internships</h1>
+            <div className="internships-page">
 
-            <input
-                className="search-box"
-                placeholder="Search Internship..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-            />
+                {/* Header */}
 
-            <table className="student-table">
+                <div className="internships-header">
 
-                <thead>
+                    <div>
 
-                    <tr>
+                        <h1>💼 Internship Management</h1>
 
-                        <th>Title</th>
-                        <th>Company</th>
-                        <th>Location</th>
-                        <th>Stipend</th>
-                        <th>CGPA</th>
-                        <th>Seats</th>
-                        <th>Action</th>
+                        <p>
+                            Manage internship opportunities posted by companies
+                            under the PM Internship Allocation System.
+                        </p>
 
-                    </tr>
+                    </div>
 
-                </thead>
+                    <div className="internship-count">
 
-                <tbody>
+                        <FaBriefcase />
 
-                    {
-                        internships
-                            .filter(i =>
-                                i.title.toLowerCase().includes(search.toLowerCase())
-                            )
-                            .map(i => (
+                        <div>
 
-                                <tr key={i.id}>
+                            <h2>{internships.length}</h2>
 
-                                    <td>{i.title}</td>
-                                    <td>{i.companyName}</td>
-                                    <td>{i.location}</td>
-                                    <td>₹{i.stipend}</td>
-                                    <td>{i.minimumCgpa}</td>
-                                    <td>{i.availableSeats}</td>
+                            <span>Total Internships</span>
 
-                                    <td>
+                        </div>
 
-                                        <button
-                                            className="delete-btn"
-                                            onClick={() => deleteInternship(i.id)}
-                                        >
-                                            Delete
-                                        </button>
+                    </div>
+
+                </div>
+
+                {/* Search */}
+
+                <div className="search-container">
+
+                   
+
+                    <input
+                        className="search-box"
+                        placeholder="Search internship..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                    />
+
+                </div>
+
+                {/* Table */}
+
+                <div className="table-container">
+
+                    <table className="internship-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Title</th>
+                                <th>Company</th>
+                                <th>Location</th>
+                                <th>Stipend</th>
+                                <th>Minimum CGPA</th>
+                                <th>Available Seats</th>
+                                <th>Action</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            {filteredInternships.length > 0 ? (
+
+                                filteredInternships.map(internship => (
+
+                                    <tr key={internship.id}>
+
+                                        <td>{internship.title}</td>
+
+                                        <td>{internship.companyName}</td>
+
+                                        <td>{internship.location}</td>
+
+                                        <td>₹ {internship.stipend}</td>
+
+                                        <td>{internship.minimumCgpa}</td>
+
+                                        <td>{internship.availableSeats}</td>
+
+                                        <td>
+
+                                            <button
+                                                className="delete-btn"
+                                                onClick={() => deleteInternship(internship.id)}
+                                            >
+                                                🗑 Delete
+                                            </button>
+
+                                        </td>
+
+                                    </tr>
+
+                                ))
+
+                            ) : (
+
+                                <tr>
+
+                                    <td colSpan="7" className="empty-data">
+
+                                        No internships found.
 
                                     </td>
 
                                 </tr>
 
-                            ))
-                    }
+                            )}
 
-                </tbody>
+                        </tbody>
 
-            </table>
+                    </table>
+
+                </div>
+
+            </div>
 
         </DashboardLayout>
 

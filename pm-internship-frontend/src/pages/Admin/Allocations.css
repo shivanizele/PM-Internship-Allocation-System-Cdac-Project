@@ -1,38 +1,352 @@
-.search-box{
-    width:300px;
-    padding:10px;
-    margin:20px 0;
-    border:1px solid #ccc;
-    border-radius:6px;
+/* ===========================
+   Allocation Page
+=========================== */
+
+.allocations-page{
+
+    animation:fadeIn .5s ease;
+
 }
 
-.student-table{
-    width:100%;
-    border-collapse:collapse;
-    background:#fff;
-}
+/* Header */
 
-.student-table th,
-.student-table td{
-    border:1px solid #ddd;
-    padding:12px;
-    text-align:left;
-}
+.allocations-header{
 
-.student-table th{
-    background:#2563EB;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    flex-wrap:wrap;
+
+    gap:20px;
+
+    padding:30px;
+
+    border-radius:20px;
+
+    margin-bottom:30px;
+
+    background:linear-gradient(135deg,#0B3D91,#0056D2,#007BFF);
+
     color:white;
+
+    box-shadow:0 12px 30px rgba(0,0,0,.15);
+
 }
 
-.delete-btn{
-    background:#dc2626;
-    color:white;
+.allocations-header h1{
+
+    font-size:34px;
+
+    margin-bottom:8px;
+
+}
+
+.allocations-header p{
+
+    opacity:.9;
+
+}
+
+/* Counter */
+
+.allocation-count{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    background:rgba(255,255,255,.18);
+
+    padding:18px 25px;
+
+    border-radius:15px;
+
+}
+
+.allocation-count svg{
+
+    font-size:42px;
+
+}
+
+.allocation-count h2{
+
+    margin:0;
+
+}
+
+.allocation-count span{
+
+    font-size:13px;
+
+}
+
+/* Buttons */
+
+.action-buttons{
+
+    display:flex;
+
+    gap:15px;
+
+    flex-wrap:wrap;
+
+    margin-bottom:25px;
+
+}
+
+.ai-btn{
+
     border:none;
-    padding:8px 16px;
-    border-radius:6px;
+
+    background:linear-gradient(135deg,#0052cc,#007BFF);
+
+    color:white;
+
+    padding:14px 28px;
+
+    border-radius:12px;
+
     cursor:pointer;
+
+    font-weight:600;
+
+    transition:.3s;
+
 }
 
-.delete-btn:hover{
-    background:#b91c1c;
+.ai-btn:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:0 10px 25px rgba(0,123,255,.35);
+
+}
+
+.confirm-btn{
+
+    border:none;
+
+    background:linear-gradient(135deg,#16A34A,#22C55E);
+
+    color:white;
+
+    padding:14px 28px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.confirm-btn:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:0 10px 25px rgba(34,197,94,.35);
+
+}
+
+/* Error */
+
+.error-box{
+
+    background:#FEE2E2;
+
+    color:#B91C1C;
+
+    padding:15px;
+
+    border-radius:10px;
+
+    margin-bottom:20px;
+
+}
+
+/* Preview Card */
+
+.preview-card{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:25px;
+
+    margin-bottom:20px;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+    transition:.3s;
+
+}
+
+.preview-card:hover{
+
+    transform:translateY(-5px);
+
+}
+
+.preview-card h3{
+
+    color:#0056D2;
+
+    margin-bottom:10px;
+
+}
+
+.preview-card p{
+
+    color:#555;
+
+    margin-bottom:15px;
+
+}
+
+.preview-card ol{
+
+    padding-left:20px;
+
+}
+
+.preview-card li{
+
+    margin-bottom:8px;
+
+}
+
+/* Table */
+
+.table-container{
+
+    background:white;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+    margin-top:25px;
+
+}
+
+.allocation-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+.allocation-table thead{
+
+    background:linear-gradient(135deg,#0052cc,#007BFF);
+
+    color:white;
+
+}
+
+.allocation-table th{
+
+    padding:18px;
+
+    text-align:left;
+
+}
+
+.allocation-table td{
+
+    padding:16px;
+
+    border-bottom:1px solid #eee;
+
+}
+
+.allocation-table tbody tr{
+
+    transition:.25s;
+
+}
+
+.allocation-table tbody tr:hover{
+
+    background:#F5F9FF;
+
+}
+
+/* Badge */
+
+.match-badge{
+
+    background:#DBEAFE;
+
+    color:#1D4ED8;
+
+    padding:6px 12px;
+
+    border-radius:20px;
+
+    font-weight:600;
+
+}
+
+/* Responsive */
+
+@media(max-width:992px){
+
+.allocations-header{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+}
+
+.table-container{
+
+    overflow-x:auto;
+
+}
+
+.action-buttons{
+
+    width:100%;
+
+}
+
+.ai-btn,
+.confirm-btn{
+
+    flex:1;
+
+}
+
+}
+
+/* Animation */
+
+@keyframes fadeIn{
+
+from{
+
+opacity:0;
+transform:translateY(20px);
+
+}
+
+to{
+
+opacity:1;
+transform:translateY(0);
+
+}
+
 }

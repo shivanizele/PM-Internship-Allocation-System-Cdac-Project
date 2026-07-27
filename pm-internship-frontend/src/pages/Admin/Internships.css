@@ -1,47 +1,283 @@
+/* ===========================
+   Internships Page
+=========================== */
 
-.internship-table{
-    width:100%;
-    border-collapse:collapse;
-    margin-top:25px;
-    background:white;
-    border-radius:10px;
-    overflow:hidden;
-    box-shadow:0 5px 15px rgba(0,0,0,.08);
+.internships-page{
+
+    animation:fadeIn .5s ease;
+
 }
 
-.internship-table th,
-.internship-table td{
-    padding:15px;
-    border-bottom:1px solid #eee;
-    text-align:left;
-}
+/* Header */
 
-.internship-table th{
-    background:#2563EB;
+.internships-header{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:30px;
+
+    border-radius:20px;
+
+    margin-bottom:30px;
+
+    background:linear-gradient(135deg,#0B3D91,#0056D2,#007BFF);
+
     color:white;
+
+    box-shadow:0 12px 30px rgba(0,0,0,.12);
+
 }
 
-.internship-table tr:hover{
-    background:#f8f9fa;
+.internships-header h1{
+
+    margin:0;
+
+    font-size:34px;
+
+}
+
+.internships-header p{
+
+    margin-top:10px;
+
+    max-width:600px;
+
+    opacity:.9;
+
+}
+
+/* Count Card */
+
+.internship-count{
+
+    display:flex;
+    align-items:center;
+    gap:15px;
+
+    background:rgba(255,255,255,.15);
+
+    padding:18px 25px;
+
+    border-radius:15px;
+
+}
+
+.internship-count svg{
+
+    font-size:40px;
+
+}
+
+.internship-count h2{
+
+    margin:0;
+
+}
+
+.internship-count span{
+
+    font-size:13px;
+
+}
+
+/* Search */
+
+.search-container{
+
+    position:relative;
+
+    margin-bottom:25px;
+
+}
+
+.search-icon{
+
+    position:absolute;
+
+    left:18px;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    color:#777;
+
 }
 
 .search-box{
-    width:320px;
-    padding:10px;
-    margin:20px 0;
-    border:1px solid #ddd;
-    border-radius:8px;
+
+    width:100%;
+
+    padding:15px 20px 15px 50px;
+
+    border:none;
+
+    outline:none;
+
+    border-radius:14px;
+
+    font-size:16px;
+
+    background:white;
+
+    box-shadow:0 8px 18px rgba(0,0,0,.08);
+
 }
 
-.delete-btn{
-    background:#dc3545;
+.search-box:focus{
+
+    box-shadow:0 0 0 4px rgba(37,99,235,.2);
+
+}
+
+/* Table */
+
+.table-container{
+
+    background:white;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+}
+
+.internship-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+.internship-table thead{
+
+    background:linear-gradient(135deg,#0052cc,#007bff);
+
     color:white;
+
+}
+
+.internship-table th{
+
+    padding:18px;
+
+    text-align:left;
+
+    font-weight:600;
+
+}
+
+.internship-table td{
+
+    padding:16px;
+
+    border-bottom:1px solid #eee;
+
+}
+
+.internship-table tbody tr{
+
+    transition:.25s;
+
+}
+
+.internship-table tbody tr:hover{
+
+    background:#f5f9ff;
+
+}
+
+/* Delete Button */
+
+.delete-btn{
+
     border:none;
-    padding:8px 15px;
-    border-radius:6px;
+
     cursor:pointer;
+
+    padding:10px 18px;
+
+    border-radius:10px;
+
+    background:#DC2626;
+
+    color:white;
+
+    font-weight:600;
+
+    transition:.3s;
+
 }
 
 .delete-btn:hover{
-    background:#bb2d3b;
+
+    background:#B91C1C;
+
+    transform:translateY(-2px);
+
+}
+
+/* Empty Data */
+
+.empty-data{
+
+    text-align:center;
+
+    padding:30px;
+
+    color:#888;
+
+}
+
+/* Responsive */
+
+@media(max-width:992px){
+
+.table-container{
+
+    overflow-x:auto;
+
+}
+
+.internships-header{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    gap:20px;
+
+}
+
+.internship-count{
+
+    width:100%;
+
+    justify-content:center;
+
+}
+
+}
+
+@keyframes fadeIn{
+
+from{
+
+    opacity:0;
+    transform:translateY(20px);
+
+}
+
+to{
+
+    opacity:1;
+    transform:translateY(0);
+
+}
+
 }

@@ -1,133 +1,164 @@
 import "./Sidebar.css";
+import logo from "../../assets/images/mainlogo.jpeg";
 import {
-    FaHome,
-    FaUserGraduate,
-    FaBuilding,
-    FaBriefcase,
-    FaClipboardList,
-    FaSignOutAlt
+  FaHome,
+  FaUserGraduate,
+  FaBuilding,
+  FaBriefcase,
+  FaClipboardList,
+  FaSignOutAlt,
+  FaRobot,
+  FaFileAlt,
+  FaPlusCircle
 } from "react-icons/fa";
 
-import { Link } from "react-router-dom";
-
+import { NavLink } from "react-router-dom";
 
 function Sidebar() {
 
-    const role = localStorage.getItem("role");
+  const role = localStorage.getItem("role");
 
-    return (
+  const logout = () => {
+    localStorage.clear();
+    window.location.href = "/login";
+  };
 
-        <div className="sidebar">
+  return (
 
-            {/* import { Link } from "react-router-dom"; */}
-            <Link to="/" className="sidebar-logo">
-             <h2>AI Internship</h2>
-             </Link>
+    <div className="sidebar">
 
-            {role === "ADMIN" && (
+      {/* Logo */}
 
-                <>
+      <NavLink to="/" className="sidebar-logo">
 
-                    <Link to="/admin"><FaHome /> Dashboard</Link>
+    <img
+        src={logo}
+        alt="InternConnect Logo"
+        className="sidebar-logo-img"
+    />
 
-                    <Link to="/admin/students">
-                        <FaUserGraduate /> Students
-                    </Link>
+    <div className="logo-text">
+        <h2>InternConnect</h2>
+        <p>AI Internship Allocation</p>
+    </div>
 
-                    <Link to="/admin/companies">
-                        <FaBuilding /> Companies
-                    </Link>
+</NavLink>
 
-                    <Link to="/admin/internships">
-                        <FaBriefcase /> Internships
-                    </Link>
+      {/* ================= ADMIN ================= */}
 
-                    <Link to="/admin/allocations">
-                        <FaClipboardList /> Allocations
-                    </Link>
-                    
-                    {/* <Link to="/company/internships">
-                       My Internships</Link>
-                       <Link to="/company/add-internship">Add Internship</Link>
-                    <Link to="/student/resume">
-                     Resume
-                    </Link> */}
+      {role === "ADMIN" && (
 
-                </>
+        <div className="menu">
 
-            )}
+          <NavLink to="/admin">
+            <FaHome />
+            <span>Dashboard</span>
+          </NavLink>
 
-            {role === "STUDENT" && (
+          <NavLink to="/admin/students">
+            <FaUserGraduate />
+            <span>Students</span>
+          </NavLink>
 
-                <>
+          <NavLink to="/admin/companies">
+            <FaBuilding />
+            <span>Companies</span>
+          </NavLink>
 
-                    <Link to="/student">
-                        <FaHome /> Dashboard
-                    </Link>
+          <NavLink to="/admin/internships">
+            <FaBriefcase />
+            <span>Internships</span>
+          </NavLink>
 
-                    <Link to="/student/profile">
-                        <FaUserGraduate /> Profile
-                    </Link>
-
-                    <Link to="/student/internships">
-                        <FaBriefcase /> Internships
-                    </Link>
-
-                    <Link to="/student/recommendations">
-                        <FaBriefcase /> AI Recommendations
-                    </Link>
-
-                    <Link to="/student/applications">
-                        <FaClipboardList /> Applications
-                    </Link>
-                    <Link to="/student/resume">
-                    📄 Resume
-                    </Link>
-
-                </>
-
-            )}
-
-            {role === "COMPANY" && (
-
-                <>
-
-                    <Link to="/company">
-                        <FaHome /> Dashboard
-                    </Link>
-
-                    <Link to="/company/profile">
-                        <FaBuilding /> Profile
-                    </Link>
-
-                    <Link to="/company/internships">
-                        <FaBriefcase /> Internships
-                    </Link>
-                     <Link to="/company/add-internship">
-            <FaBriefcase /> Add Internship
-        </Link>
-
-                </>
-
-            )}
-
-            <button
-                className="logout-btn"
-                onClick={() => {
-
-                    localStorage.clear();
-                    window.location = "/login";
-
-                }}
-            >
-                <FaSignOutAlt />
-                Logout
-
-            </button>
+          <NavLink to="/admin/allocations">
+            <FaClipboardList />
+            <span>Allocations</span>
+          </NavLink>
 
         </div>
 
-    );
+      )}
+
+      {/* ================= STUDENT ================= */}
+
+      {role === "STUDENT" && (
+
+        <div className="menu">
+
+          <NavLink to="/student">
+            <FaHome />
+            <span>Dashboard</span>
+          </NavLink>
+
+          <NavLink to="/student/profile">
+            <FaUserGraduate />
+            <span>Profile</span>
+          </NavLink>
+
+          <NavLink to="/student/internships">
+            <FaBriefcase />
+            <span>Internships</span>
+          </NavLink>
+
+          <NavLink to="/student/recommendations">
+            <FaRobot />
+            <span>AI Recommendations</span>
+          </NavLink>
+
+          <NavLink to="/student/applications">
+            <FaClipboardList />
+            <span>Applications</span>
+          </NavLink>
+
+          <NavLink to="/student/resume">
+            <FaFileAlt />
+            <span>Resume</span>
+          </NavLink>
+
+        </div>
+
+      )}
+
+      {/* ================= COMPANY ================= */}
+
+      {role === "COMPANY" && (
+
+        <div className="menu">
+
+          <NavLink to="/company">
+            <FaHome />
+            <span>Dashboard</span>
+          </NavLink>
+
+          <NavLink to="/company/profile">
+            <FaBuilding />
+            <span>Profile</span>
+          </NavLink>
+
+          <NavLink to="/company/internships">
+            <FaBriefcase />
+            <span>Internships</span>
+          </NavLink>
+
+          <NavLink to="/company/add-internship">
+            <FaPlusCircle />
+            <span>Add Internship</span>
+          </NavLink>
+
+        </div>
+
+      )}
+
+      {/* Logout */}
+
+      <button className="logout-btn" onClick={logout}>
+        <FaSignOutAlt />
+        <span>Logout</span>
+      </button>
+
+    </div>
+
+  );
 
 }
 

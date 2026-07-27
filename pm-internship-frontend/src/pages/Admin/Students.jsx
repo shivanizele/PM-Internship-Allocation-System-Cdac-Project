@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
+import { FaSearch, FaUsers } from "react-icons/fa";
 import DashboardLayout from "../../components/Dashboard/DashboardLayout";
-// import api from "../../services/api";
 import "./Students.css";
 import api, { openResume } from "../../services/api";
 
@@ -21,106 +21,182 @@ function Students() {
 
     const deleteStudent = (id) => {
 
-        if (!window.confirm("Delete this student?"))
+        if (!window.confirm("Are you sure you want to delete this student?"))
             return;
 
         api.delete(`/admin/students/${id}`)
-            .then(() => loadStudents());
+            .then(() => loadStudents())
+            .catch(err => console.log(err));
     };
+
+    const filteredStudents = students.filter(student =>
+        student.fullName.toLowerCase().includes(search.toLowerCase())
+    );
 
     return (
 
         <DashboardLayout>
 
-            <h1>Students</h1>
+            <div className="students-page">
 
-            <input
-                className="search-box"
-                placeholder="Search Student..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-            />
+                {/* Header */}
 
-            <table className="student-table">
+                <div className="students-header">
 
-                <thead>
+                    <div>
 
-                    <tr>
+                        <h1>🎓 Student Management</h1>
 
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>College</th>
-                        <th>Branch</th>
-                        <th>CGPA</th>
-                        <th>Location</th>
-                        <th>Resume</th>
-                        <th>Action</th>
+                        <p>
+                            Manage all registered students, view resumes,
+                            and maintain student records in the
+                            PM Internship Allocation System.
+                        </p>
 
-                    </tr>
+                    </div>
 
-                </thead>
+                    <div className="student-count">
 
-                <tbody>
+                        <FaUsers />
 
-                    {
-                        students
-                            .filter(s =>
-                                s.fullName.toLowerCase().includes(search.toLowerCase())
-                            )
-                            .map(student => (
+                        <div>
 
-                                <tr key={student.id}>
+                            <h2>{students.length}</h2>
 
-                                    <td>{student.fullName}</td>
-                                    <td>{student.email}</td>
-                                    <td>{student.collegeName}</td>
-                                    <td>{student.branch}</td>
-                                    <td>{student.cgpa}</td>
-                                    <td>{student.location}</td>
+                            <span>Total Students</span>
 
-                                    <td>
+                        </div>
 
-                                  {student.resume ? (
+                    </div>
 
-                                //   <a
-                                //    href={`http://localhost:8080/api/resume/${student.resume}`}
-                                //    target="_blank"
-                                //    rel="noreferrer"
-                                //    className="resume-btn" onClick={() => openResume(student.resume).catch(() => console.log("Unable to open resume."))}>
-                                //    View Resume
-                                //   </a>
-                                <button className="resume-btn" onClick={() => openResume(student.resume).catch(() => console.log("Unable to open resume."))}>View Resume</button>
-                                ) : (
+                </div>
 
-                               <span>No Resume</span>
+                {/* Search */}
 
-                               )}
+                <div className="search-container">
 
-                            </td>
+                    
 
-<td>
+                    <input
+                        type="text"
+                        className="search-box"
+                        placeholder="Search student by name..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                    />
 
-    <button
-        className="delete-btn"
-        onClick={() => deleteStudent(student.id)}
-    >
-        Delete
-    </button>
+                </div>
 
-</td>
+                {/* Table */}
+
+                <div className="table-container">
+
+                    <table className="student-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>College</th>
+                                <th>Branch</th>
+                                <th>CGPA</th>
+                                <th>Location</th>
+                                <th>Resume</th>
+                                <th>Action</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            {filteredStudents.length > 0 ? (
+
+                                filteredStudents.map(student => (
+
+                                    <tr key={student.id}>
+
+                                        <td>{student.fullName}</td>
+
+                                        <td>{student.email}</td>
+
+                                        <td>{student.collegeName}</td>
+
+                                        <td>{student.branch}</td>
+
+                                        <td>{student.cgpa}</td>
+
+                                        <td>{student.location}</td>
+
+                                        <td>
+
+                                            {student.resume ? (
+
+                                                <button
+                                                    className="resume-btn"
+                                                    onClick={() =>
+                                                        openResume(student.resume)
+                                                            .catch(() =>
+                                                                alert("Unable to open resume.")
+                                                            )
+                                                    }
+                                                >
+                                                    📄 View Resume
+                                                </button>
+
+                                            ) : (
+
+                                                <span className="no-resume">
+                                                    No Resume
+                                                </span>
+
+                                            )}
+
+                                        </td>
+
+                                        <td>
+
+                                            <button
+                                                className="delete-btn"
+                                                onClick={() => deleteStudent(student.id)}
+                                            >
+                                                🗑 Delete
+                                            </button>
+
+                                        </td>
+
+                                    </tr>
+
+                                ))
+
+                            ) : (
+
+                                <tr>
+
+                                    <td colSpan="8" className="empty-data">
+
+                                        No students found.
+
+                                    </td>
 
                                 </tr>
 
-                            ))
-                    }
+                            )}
 
-                </tbody>
+                        </tbody>
 
-            </table>
+                    </table>
+
+                </div>
+
+            </div>
 
         </DashboardLayout>
 
     );
+
 }
 
 export default Students;

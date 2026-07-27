@@ -1,21 +1,151 @@
+.dashboard-header{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:35px;
+
+    margin-bottom:35px;
+
+    border-radius:22px;
+
+    background:linear-gradient(135deg,#0B3D91,#0056D2,#007BFF);
+
+    color:white;
+
+    box-shadow:0 15px 35px rgba(0,0,0,.15);
+
+}
+
+.dashboard-header h1{
+
+    font-size:34px;
+
+    margin-bottom:12px;
+
+}
+
+.dashboard-header p{
+
+    width:70%;
+
+    line-height:1.8;
+
+    font-size:16px;
+
+    opacity:.95;
+
+}
+
+/* Cards */
+
+.dashboard-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+
+    gap:25px;
+
+}
+
+/* AI Box */
+
+.allocation-box{
+
+    margin-top:45px;
+
+    background:white;
+
+    padding:35px;
+
+    border-radius:20px;
+
+    text-align:center;
+
+    box-shadow:0 12px 30px rgba(0,0,0,.08);
+
+}
+
+.allocation-box h2{
+
+    color:#0B3D91;
+
+    margin-bottom:15px;
+
+}
+
+.allocation-box p{
+
+    color:#666;
+
+    line-height:1.8;
+
+    width:80%;
+
+    margin:auto;
+
+}
+
+/* Button */
 
 .allocate-btn{
 
-    padding:15px 35px;
-    background:#2563EB;
-    color:white;
+    margin-top:30px;
+
     border:none;
-    border-radius:8px;
+
+    outline:none;
+
     cursor:pointer;
+
+    background:linear-gradient(135deg,#0052cc,#007bff);
+
+    color:white;
+
+    padding:16px 45px;
+
+    border-radius:50px;
+
     font-size:18px;
+
+    font-weight:600;
+
     transition:.3s;
+
+    box-shadow:0 10px 25px rgba(0,82,204,.25);
 
 }
 
 .allocate-btn:hover{
 
-    background:#1D4ED8;
+    transform:translateY(-5px);
+
+    box-shadow:0 18px 35px rgba(0,82,204,.35);
 
 }
 
+/* Mobile */
 
+@media(max-width:768px){
+
+.dashboard-header{
+
+    padding:25px;
+
+}
+
+.dashboard-header p{
+
+    width:100%;
+
+}
+
+.allocation-box p{
+
+    width:100%;
+
+}
+
+}
