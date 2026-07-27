@@ -1,16 +1,22 @@
 package com.app.service;
 
 import java.util.List;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.app.dto.ApplicationRequest;
 import com.app.dto.ApplicationResponse;
+import com.app.dto.ApplicantRankingResponse;
+import com.app.dto.InternshipRecommendationDTO;
 import com.app.entity.Application;
 import com.app.entity.ApplicationStatus;
 import com.app.entity.Internship;
 import com.app.entity.Student;
+import com.app.exception.ConflictException;
+import com.app.exception.ResourceNotFoundException;
 import com.app.repository.ApplicationRepository;
 import com.app.repository.InternshipRepository;
 import com.app.repository.StudentRepository;
@@ -27,17 +33,33 @@ public class ApplicationService {
     @Autowired
     private InternshipRepository internshipRepository;
 
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private AccessControlService accessControlService;
+
+    @Autowired
+    private RecommendationService recommendationService;
+
     // Apply Internship
     public ApplicationResponse apply(ApplicationRequest request) {
 
-        Student student = studentRepository.findById(request.getStudentId())
-                .orElseThrow(() -> new RuntimeException("Student not found"));
+        Student student = accessControlService.currentStudent();
+        if (request.getStudentId() != null && !request.getStudentId().equals(student.getId())) {
+            throw new org.springframework.security.access.AccessDeniedException(
+                    "You can only apply using your own student profile");
+        }
 
         Internship internship = internshipRepository.findById(request.getInternshipId())
-                .orElseThrow(() -> new RuntimeException("Internship not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Internship not found"));
+
+        if (internship.getAvailableSeats() == null || internship.getAvailableSeats() <= 0) {
+            throw new ConflictException("This internship has no available seats");
+        }
 
         if (applicationRepository.existsByStudentAndInternship(student, internship)) {
-            throw new RuntimeException("You have already applied for this internship");
+            throw new ConflictException("You have already applied for this internship");
         }
 
         Application application = new Application();
@@ -79,6 +101,8 @@ public class ApplicationService {
     // Company Applications
     public List<ApplicationResponse> getCompanyApplications(Long companyId) {
 
+        accessControlService.requireCompany(companyId);
+
         return applicationRepository
                 .findByInternshipCompanyId(companyId)
                 .stream()
@@ -88,6 +112,8 @@ public class ApplicationService {
 
     // Applications by Company
     public List<ApplicationResponse> getApplicationsByCompany(Long companyId) {
+
+        accessControlService.requireCompany(companyId);
 
         return applicationRepository
                 .findByInternshipCompanyId(companyId)
@@ -99,6 +125,10 @@ public class ApplicationService {
     // Applications by Internship
     public List<ApplicationResponse> getApplicationsByInternship(Long internshipId) {
 
+        Internship internship = internshipRepository.findById(internshipId)
+                .orElseThrow(() -> new ResourceNotFoundException("Internship not found"));
+        accessControlService.requireCompany(internship.getCompany().getId());
+
         return applicationRepository
                 .findByInternshipId(internshipId)
                 .stream()
@@ -106,8 +136,23 @@ public class ApplicationService {
                 .toList();
     }
 
+    public List<ApplicantRankingResponse> getRankedApplicants(Long internshipId) {
+        Internship internship = internshipRepository.findById(internshipId)
+                .orElseThrow(() -> new ResourceNotFoundException("Internship not found"));
+        accessControlService.requireCompany(internship.getCompany().getId());
+
+        return applicationRepository.findByInternshipId(internshipId).stream()
+                .filter(application -> application.getStudent().getResume() != null)
+                .map(application -> toRanking(application, recommendationService
+                        .scoreStudentForInternship(application.getStudent(), internship)))
+                .sorted(Comparator.comparing(ApplicantRankingResponse::getMatchScore).reversed())
+                .collect(Collectors.toList());
+    }
+
     // Student Applications
     public List<ApplicationResponse> getStudentApplications(Long studentId) {
+
+        accessControlService.requireStudent(studentId);
 
         return applicationRepository
                 .findByStudentId(studentId)
@@ -118,6 +163,8 @@ public class ApplicationService {
 
     // Duplicate API (if used)
     public List<ApplicationResponse> getApplicationsByStudent(Long studentId) {
+
+        accessControlService.requireStudent(studentId);
 
         return applicationRepository
                 .findByStudentId(studentId)
@@ -130,7 +177,9 @@ public class ApplicationService {
     public String updateApplicationStatus(Long applicationId, ApplicationStatus status) {
 
         Application application = applicationRepository.findById(applicationId)
-                .orElseThrow(() -> new RuntimeException("Application not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Application not found"));
+
+        accessControlService.requireCompany(application.getInternship().getCompany().getId());
 
         application.setStatus(status);
 
@@ -143,33 +192,38 @@ public class ApplicationService {
     public String updateStatus(Long applicationId, String status) {
 
         Application application = applicationRepository.findById(applicationId)
-                .orElseThrow(() -> new RuntimeException("Application not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Application not found"));
 
-        if (application.getStatus() == ApplicationStatus.SELECTED) {
-            return "Already Selected";
+        accessControlService.requireCompany(application.getInternship().getCompany().getId());
+
+        ApplicationStatus currentStatus = application.getStatus();
+        ApplicationStatus newStatus = ApplicationStatus.valueOf(status.toUpperCase());
+
+        if (currentStatus == newStatus) {
+            return "Application status is already " + newStatus.name();
         }
 
-        ApplicationStatus newStatus = ApplicationStatus.valueOf(status);
+        if (newStatus == ApplicationStatus.SELECTED) {
+            throw new ConflictException("Final selection is managed through admin allocation confirmation");
+        }
 
         application.setStatus(newStatus);
 
-        if (newStatus == ApplicationStatus.SELECTED) {
-
-            Internship internship = application.getInternship();
-
-            if (internship.getAvailableSeats() == 0) {
-                throw new RuntimeException("No seats available");
-            }
-
-            internship.setAvailableSeats(
-                    internship.getAvailableSeats() - 1);
-
-            internshipRepository.save(internship);
-        }
-
         applicationRepository.save(application);
 
+        if (newStatus == ApplicationStatus.REJECTED) {
+            emailService.sendRejectionEmail(application);
+        }
+
         return "Updated Successfully";
+    }
+
+    private ApplicantRankingResponse toRanking(Application application, InternshipRecommendationDTO recommendation) {
+        Student student = application.getStudent();
+        return new ApplicantRankingResponse(application.getId(), student.getId(), student.getUser().getFullName(),
+                student.getUser().getEmail(), student.getCollegeName(), student.getBranch(), student.getCgpa(),
+                student.getSkills().stream().map(skill -> skill.getSkillName()).sorted().collect(Collectors.toList()),
+                application.getResume(), application.getStatus(), recommendation);
     }
 
 }

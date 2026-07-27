@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.app.dto.ApplicationRequest;
 import com.app.dto.ApplicationResponse;
+import com.app.dto.ApplicantRankingResponse;
 import com.app.dto.UpdateApplicationStatusRequest;
 import com.app.service.ApplicationService;
 
@@ -48,6 +49,11 @@ public class ApplicationController {
 	        @PathVariable Long id) {
 
 	    return applicationService.getApplicationsByInternship(id);
+	}
+
+	@GetMapping("/internship/{id}/ranking")
+	public List<ApplicantRankingResponse> getRankedApplicants(@PathVariable Long id) {
+	    return applicationService.getRankedApplicants(id);
 	}
 	
 	

@@ -51,14 +51,18 @@ public class SecurityConfig {
                     // Public APIs
                     .requestMatchers(
                             "/api/auth/**",
-                            "/api/resume/**",
-                            "/api/student/**",
                             "/swagger-ui/**",
                             "/swagger-ui.html",
                             "/v3/api-docs/**")
                     .permitAll()
 
+                    .requestMatchers("/api/resume/**", "/api/student/**")
+                    .hasAnyRole("STUDENT", "COMPANY", "ADMIN")
+
                     // Recommendation
+                    .requestMatchers("/api/ai/**")
+                    .hasAnyRole("STUDENT", "ADMIN")
+
                     .requestMatchers("/api/recommend/**")
                     .hasAnyRole("STUDENT", "ADMIN")
 
@@ -80,10 +84,13 @@ public class SecurityConfig {
                     // Admin
                     .requestMatchers("/api/admin/**")
                     .hasRole("ADMIN")
+                    
+                    .requestMatchers("/api/test/**").permitAll()
 
                     // Allocation
                     .requestMatchers("/api/allocation/**")
                     .hasRole("ADMIN")
+                    
 
                     .anyRequest()
                     .authenticated()

@@ -13,6 +13,7 @@ import MyApplications from "./pages/Student/MyApplications";
 import StudentProfile from "./pages/Student/StudentProfile";
 import EditStudentProfile from "./pages/Student/EditStudentProfile";
 import StudentResume from "./pages/Student/StudentResume";
+import Recommendations from "./pages/Student/Recommendations";
 
 // ================= COMPANY =================
 import CompanyDashboard from "./pages/Company/Dashboard";
@@ -107,6 +108,15 @@ function App() {
                     element={
                         <ProtectedRoute allowedRole="STUDENT">
                             <StudentResume />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/student/recommendations"
+                    element={
+                        <ProtectedRoute allowedRole="STUDENT">
+                            <Recommendations />
                         </ProtectedRoute>
                     }
                 />

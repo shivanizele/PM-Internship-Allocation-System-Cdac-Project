@@ -27,6 +27,8 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
 	long countByCompanyId(Long companyId);
 	
 	List<Application> findByInternship_Company_Id(Long companyId);
+
+	boolean existsByResumeAndInternshipCompanyId(String resume, Long companyId);
 	
 	@Transactional
 	@Modifying

@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/Dashboard/DashboardLayout";
-import api from "../../services/api";
+// import api from "../../services/api";
+import { useNavigate } from "react-router-dom";
+import { isStudentProfileComplete } from "../../utils/studentProfile";
 import "./Internships.css";
+import api, { openResume } from "../../services/api";
 
 function Internships() {
 
@@ -11,6 +14,7 @@ function Internships() {
     const [selectedInternship, setSelectedInternship] = useState(null);
     const [resume, setResume] = useState(null);
     const [appliedInternships, setAppliedInternships] = useState([]);
+    const navigate = useNavigate();
 
     const studentId = localStorage.getItem("studentId");
 
@@ -35,7 +39,14 @@ function Internships() {
     const loadStudent = () => {
 
         api.get(`/student/profile/${studentId}`)
-            .then(res => setStudent(res.data))
+            .then(res => {
+                setStudent(res.data);
+
+                if (!isStudentProfileComplete(res.data)) {
+                    alert("Please complete your profile before applying for internships.");
+                    navigate("/student/profile/edit");
+                }
+            })
             .catch(err => console.log(err));
 
     };
@@ -55,6 +66,12 @@ function Internships() {
     };
 
     const openApplyModal = (internshipId) => {
+
+        if (!isStudentProfileComplete(student)) {
+            alert("Please complete your profile before applying for internships.");
+            navigate("/student/profile/edit");
+            return;
+        }
 
         setSelectedInternship(internshipId);
         setResume(null);
@@ -226,21 +243,8 @@ function Internships() {
 
                                 ?
 
-                                <a
+                    <button className="resume-btn" onClick={() => openResume(student.resume).catch(() => console.log("Unable to open resume."))}>View Resume</button>
 
-                                    href={`http://localhost:8080/api/resume/${student.resume}`}
-
-                                    target="_blank"
-
-                                    rel="noreferrer"
-
-                                    className="resume-link"
-
-                                >
-
-                                    📄 View Resume
-
-                                </a>
 
                                 :
 

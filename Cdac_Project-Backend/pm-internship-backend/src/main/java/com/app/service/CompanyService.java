@@ -36,9 +36,12 @@ public class CompanyService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private AccessControlService accessControlService;
 
 	// get company
 	public CompanyResponse getCompany(Long id) {
+		accessControlService.requireCompany(id);
 
 		Company company = companyRepository.findById(id).orElseThrow(() -> new RuntimeException("Company not found"));
 
@@ -49,6 +52,7 @@ public class CompanyService {
 	// update comany
 
 	public CompanyResponse updateCompany(Long id, CompanyProfileRequest request) {
+		accessControlService.requireCompany(id);
 
 		Company company = companyRepository.findById(id).orElseThrow(() -> new RuntimeException("Company not found"));
 
@@ -64,6 +68,7 @@ public class CompanyService {
 
 	// getcompany internships
 	public List<InternshipResponse> getCompanyInternships(Long companyId) {
+		accessControlService.requireCompany(companyId);
 
 		List<Internship> internships = internshipRepository.findByCompanyId(companyId);
 
@@ -82,6 +87,7 @@ public class CompanyService {
 
 		Company company = companyRepository.findByUserId(userId)
 				.orElseThrow(() -> new RuntimeException("Company not found"));
+		accessControlService.requireCompany(company.getId());
 
 		return getCompany(company.getId());
 	}
@@ -128,6 +134,7 @@ public class CompanyService {
 	}
 
 	public CompanyDashboardResponse getDashboard(Long companyId) {
+		accessControlService.requireCompany(companyId);
 
 	    long internships =
 	            internshipRepository.countByCompanyId(companyId);

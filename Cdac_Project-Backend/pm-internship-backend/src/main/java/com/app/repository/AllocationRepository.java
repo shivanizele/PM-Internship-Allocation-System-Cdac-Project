@@ -14,6 +14,8 @@ public interface AllocationRepository
     Optional<Allocation> findByStudentId(Long studentId);
 
     List<Allocation> findByInternshipId(Long internshipId);
+
+    boolean existsByApplicationId(Long applicationId);
     
     @Query("""
     SELECT COUNT(a)

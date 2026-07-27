@@ -2,13 +2,22 @@ package com.app.dto;
 
 import java.util.Set;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+
 public class StudentProfileRequest {
 
 	private String collegeName;
 	private String branch;
+
+    @DecimalMin(value = "0.0", inclusive = false, message = "CGPA must be greater than 0")
+    @DecimalMax(value = "10.0", inclusive = true, message = "CGPA must be at most 10")
 	private Double cgpa;
 	private String location;
 	private Set<String> skills;
+    @Valid
+    private QualificationRequest qualification;
 
 	public StudentProfileRequest() {
 	}
@@ -52,4 +61,12 @@ public class StudentProfileRequest {
 	public void setSkills(Set<String> skills) {
 		this.skills = skills;
 	}
+
+    public QualificationRequest getQualification() {
+        return qualification;
+    }
+
+    public void setQualification(QualificationRequest qualification) {
+        this.qualification = qualification;
+    }
 }

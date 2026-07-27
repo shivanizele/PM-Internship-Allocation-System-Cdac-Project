@@ -1,12 +1,30 @@
 package com.app.dto;
 
 import com.app.entity.Role;
+import com.app.validation.ValidPassword;
+
+import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class RegisterRequest {
 
+    @NotBlank(message = "Full name is required")
     private String fullName;
+
+    @NotBlank(message = "Email is required")
+    @Email(message = "Enter a valid email address")
     private String email;
+
+    @NotBlank(message = "Password is required")
+    @ValidPassword
     private String password;
+
+    @NotBlank(message = "Confirm password is required")
+    private String confirmPassword;
+
+    @NotNull(message = "Role is required")
     private Role role;
     private String collegeName;
     private String branch;
@@ -43,6 +61,14 @@ public class RegisterRequest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
     public Role getRole() {
@@ -116,5 +142,13 @@ public class RegisterRequest {
 	public void setWebsite(String website) {
 		this.website = website;
 	}
+
+    @AssertTrue(message = "Confirm password must match password")
+    public boolean isPasswordConfirmed() {
+        if (password == null || confirmPassword == null) {
+            return false;
+        }
+        return password.equals(confirmPassword);
+    }
     
 }

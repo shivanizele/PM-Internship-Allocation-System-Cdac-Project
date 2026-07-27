@@ -13,6 +13,7 @@ public interface StudentRepository
 
     Optional<Student> findByUser(User user);
     Optional<Student> findByUserId(Long userId);
+    Optional<Student> findByResume(String resume);
     
 
 }
