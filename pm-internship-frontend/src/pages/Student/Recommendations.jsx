@@ -104,7 +104,7 @@ function Recommendations() {
                 </div>
 
                 <button
-                    className="btn btn-success"
+                    className="btn btn-primary"
                     onClick={fetchRecommendations}
                     disabled={loading}
                 >

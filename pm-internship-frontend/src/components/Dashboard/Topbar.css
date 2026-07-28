@@ -46,13 +46,11 @@
 }
 
 .topbar-user{
-
-    display:flex;
-    align-items:center;
-    gap:10px;
-
-    font-weight:600;
-
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
 }
 .home-btn{
 
@@ -75,8 +73,48 @@
 
 }
 
-.home-btn:hover{
+.dropdown-btn:hover{
+    background: #f3f4f6;
+}
 
-    background:#1d4ed8;
+.topbar-user{
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 
+.user-name{
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.user-dropdown{
+    position: absolute;
+    top: 45px;
+    right: 0;
+    width: 120px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.15);
+    overflow: hidden;
+    z-index: 1000;
+}
+
+.dropdown-btn{
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background: white;
+    cursor: pointer;
+    text-align: left;
+    font-weight: 600;
+}
+
+.user-info{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
 }

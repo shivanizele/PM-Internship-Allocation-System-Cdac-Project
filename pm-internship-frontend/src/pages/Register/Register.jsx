@@ -40,6 +40,12 @@ function Register() {
 
         if (!user.email.trim()) {
             nextErrors.email = "Email is required.";
+        } else {
+            const emailPattern = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
+            if (!emailPattern.test(user.email)) {
+                nextErrors.email = "Please enter a valid email address.";
+            }
         }
 
         if (!isPasswordValid(user.password)) {
