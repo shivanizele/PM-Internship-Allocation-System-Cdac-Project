@@ -88,102 +88,215 @@ function Register() {
 
     };
 
-    return (
+   return (
 
-        <div className="register-container">
+    <div className="register-page">
 
-            <form
-                className="register-form"
-                onSubmit={register}
-            >
+        <div className="background-shape shape1"></div>
+        <div className="background-shape shape2"></div>
 
-                <h2>Create Account</h2>
+        <div className="register-card">
 
-                <input
-                    type="text"
-                    name="fullName"
-                    placeholder="Full Name"
-                    value={user.fullName}
-                    onChange={handleChange}
-                    required
-                />
-                {errors.fullName && <p className="field-error">{errors.fullName}</p>}
+            <div className="register-left">
 
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    value={user.email}
-                    onChange={handleChange}
-                    required
-                />
-                {errors.email && <p className="field-error">{errors.email}</p>}
+                <h1>InternConnect</h1>
 
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    value={user.password}
-                    onChange={handleChange}
-                    required
-                />
-                {errors.password && <p className="field-error">{errors.password}</p>}
-
-                <div className="password-hints">
-                    <p className={passwordChecks.minLength ? "valid" : ""}>Minimum 8 characters</p>
-                    <p className={passwordChecks.uppercase ? "valid" : ""}>At least one uppercase letter</p>
-                    <p className={passwordChecks.lowercase ? "valid" : ""}>At least one lowercase letter</p>
-                    <p className={passwordChecks.digit ? "valid" : ""}>At least one digit</p>
-                    <p className={passwordChecks.special ? "valid" : ""}>At least one special character</p>
-                </div>
-
-                <input
-                    type="password"
-                    name="confirmPassword"
-                    placeholder="Confirm Password"
-                    value={user.confirmPassword}
-                    onChange={handleChange}
-                    required
-                />
-                {errors.confirmPassword && <p className="field-error">{errors.confirmPassword}</p>}
-
-                <select
-                    name="role"
-                    value={user.role}
-                    onChange={handleChange}
-                >
-
-                    <option value="STUDENT">
-                        Student
-                    </option>
-
-                    <option value="COMPANY">
-                        Company
-                    </option>
-
-                </select>
-
-                <button type="submit">
-                    Register
-                </button>
-
-                {errors.server && <p className="field-error">{errors.server}</p>}
+                <h3>Create Your Account</h3>
 
                 <p>
-
-                    Already have an account?
-
-                    <Link to="/login">
-                        Login
-                    </Link>
-
+                    Join InternConnect to explore internships,
+                    manage applications and connect with top companies.
                 </p>
 
-            </form>
+                <div className="register-features">
+
+                    <div className="feature">
+                        🎓 Student & Company Registration
+                    </div>
+
+                    <div className="feature">
+                        🤖 AI Based Internship Matching
+                    </div>
+
+                    <div className="feature">
+                        🚀 Fast & Secure Platform
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div className="register-right">
+
+                <form
+                    className="register-form"
+                    onSubmit={register}
+                >
+
+                    <h2>Create Account</h2>
+
+                    <p className="subtitle">
+                        Register to continue
+                    </p>
+
+                    <div className="input-group">
+
+                        <label>Full Name</label>
+
+                        <input
+                            type="text"
+                            name="fullName"
+                            placeholder="Enter Full Name"
+                            value={user.fullName}
+                            onChange={handleChange}
+                        />
+
+                        {errors.fullName &&
+                            <p className="field-error">
+                                {errors.fullName}
+                            </p>
+                        }
+
+                    </div>
+
+                    <div className="input-group">
+
+                        <label>Email</label>
+
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="Enter Email"
+                            value={user.email}
+                            onChange={handleChange}
+                        />
+
+                        {errors.email &&
+                            <p className="field-error">
+                                {errors.email}
+                            </p>
+                        }
+
+                    </div>
+
+                    <div className="input-group">
+
+                        <label>Password</label>
+
+                        <input
+                            type="password"
+                            name="password"
+                            placeholder="Enter Password"
+                            value={user.password}
+                            onChange={handleChange}
+                        />
+
+                        {errors.password &&
+                            <p className="field-error">
+                                {errors.password}
+                            </p>
+                        }
+
+                    </div>
+
+                    <div className="password-hints">
+
+                        <p className={passwordChecks.minLength ? "valid" : ""}>
+                            ✔ Minimum 8 characters
+                        </p>
+
+                        <p className={passwordChecks.uppercase ? "valid" : ""}>
+                            ✔ One Uppercase Letter
+                        </p>
+
+                        <p className={passwordChecks.lowercase ? "valid" : ""}>
+                            ✔ One Lowercase Letter
+                        </p>
+
+                        <p className={passwordChecks.digit ? "valid" : ""}>
+                            ✔ One Number
+                        </p>
+
+                        <p className={passwordChecks.special ? "valid" : ""}>
+                            ✔ One Special Character
+                        </p>
+
+                    </div>
+
+                    <div className="input-group">
+
+                        <label>Confirm Password</label>
+
+                        <input
+                            type="password"
+                            name="confirmPassword"
+                            placeholder="Confirm Password"
+                            value={user.confirmPassword}
+                            onChange={handleChange}
+                        />
+
+                        {errors.confirmPassword &&
+                            <p className="field-error">
+                                {errors.confirmPassword}
+                            </p>
+                        }
+
+                    </div>
+
+                    <div className="input-group">
+
+                        <label>Register As</label>
+
+                        <select
+                            name="role"
+                            value={user.role}
+                            onChange={handleChange}
+                        >
+
+                            <option value="STUDENT">
+                                Student
+                            </option>
+
+                            <option value="COMPANY">
+                                Company
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    {errors.server &&
+                        <p className="field-error">
+                            {errors.server}
+                        </p>
+                    }
+
+                    <button
+                        type="submit"
+                        className="register-btn"
+                    >
+                        Create Account
+                    </button>
+
+                    <p className="login-text">
+
+                        Already have an account?
+
+                        <Link to="/login">
+                            Login
+                        </Link>
+
+                    </p>
+
+                </form>
+
+            </div>
 
         </div>
 
-    );
+    </div>
+
+);
 
 }
 

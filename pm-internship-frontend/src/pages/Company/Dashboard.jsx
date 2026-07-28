@@ -50,11 +50,35 @@ function CompanyDashboard() {
 
     return (
 
-        <DashboardLayout>
+    <DashboardLayout>
 
-            <h1>Company Dashboard</h1>
+        <div className="dashboard-page">
 
-            <h3>Welcome, {company.companyName}</h3>
+            {/* Header */}
+
+            <div className="dashboard-header">
+
+                <div>
+
+                    <h1>🏢 Company</h1>
+
+                    <p>
+                        Welcome ,
+                        <strong> {company.companyName || "Company"} </strong>
+                    </p>
+
+                </div>
+
+                <button
+                    className="dashboard-btn"
+                    onClick={() => navigate("/company/add-internship")}
+                >
+                    + Post Internship
+                </button>
+
+            </div>
+
+            {/* Statistics */}
 
             <div className="dashboard-grid">
 
@@ -82,9 +106,140 @@ function CompanyDashboard() {
 
             </div>
 
-        </DashboardLayout>
+            {/* Company Overview */}
 
-    );
+            <div className="dashboard-section">
+
+                <div className="company-card">
+
+                    <h2>🏢 Company Information</h2>
+
+                    <div className="company-grid">
+
+                        <div>
+
+                            <label>Company Name</label>
+
+                            <span>{company.companyName || "-"}</span>
+
+                        </div>
+
+                        <div>
+
+                            <label>Industry</label>
+
+                            <span>{company.industry || "-"}</span>
+
+                        </div>
+
+                        <div>
+
+                            <label>Website</label>
+
+                            <span>{company.website || "-"}</span>
+
+                        </div>
+
+                        <div>
+
+                            <label>Address</label>
+
+                            <span>{company.address || "-"}</span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {/* Recent Applications */}
+
+            <div className="dashboard-section">
+
+                <div className="applications-card">
+
+                    <div className="section-title">
+
+                        <h2>📄 Recent Applications</h2>
+
+                        <button
+                            className="view-all-btn"
+                            onClick={() => navigate("/company/applications")}
+                        >
+                            View All
+                        </button>
+
+                    </div>
+
+                    <table className="dashboard-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Student</th>
+                                <th>Internship</th>
+                                <th>Status</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            {applications.length > 0 ? (
+
+                                applications.slice(0, 5).map(app => (
+
+                                    <tr key={app.id}>
+
+                                        <td>{app.studentName}</td>
+
+                                        <td>{app.internshipTitle}</td>
+
+                                        <td>
+
+                                            <span
+                                                className={`status-badge ${app.status.toLowerCase()}`}
+                                            >
+                                                {app.status}
+                                            </span>
+
+                                        </td>
+
+                                    </tr>
+
+                                ))
+
+                            ) : (
+
+                                <tr>
+
+                                    <td colSpan="3">
+
+                                        No applications received.
+
+                                    </td>
+
+                                </tr>
+
+                            )}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </DashboardLayout>
+
+);
 
 }
 

@@ -1,36 +1,271 @@
-.navbar{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:15px 60px;
-    background:#2563eb;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
 }
 
-.logo{
+/* NAVBAR */
+
+.navbar{
+
+    width:100%;
+
+    height:70px;
+
+    background:linear-gradient(
+        90deg,
+        #0D47A1,
+        #1565C0,
+        #1976D2
+    );
+
     display:flex;
+
+    justify-content:space-between;
+
     align-items:center;
-    gap:8px;
+
+    padding:0 60px;
+
+    box-shadow:0 4px 15px rgba(0,0,0,.15);
+
+    position:sticky;
+
+    top:0;
+
+    z-index:1000;
+
+}
+
+
+
+/* LOGO */
+
+.logo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
     color:white;
+
+    font-size:28px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+}
+
+.logo svg{
+
+    font-size:32px;
+
+    color:#BBDEFB;
+
+}
+
+.logo span{
+
     font-size:24px;
-    font-weight:bold;
+
+    letter-spacing:.5px;
+
+}
+
+
+
+/* MENU */
+
+.navbar ul{
+
+    display:flex;
+
+    align-items:center;
+
+    list-style:none;
+
+    gap:35px;
+
+}
+
+
+
+/* LINKS */
+
+.navbar ul li a{
+
+    color:white;
+
+    text-decoration:none;
+
+    font-size:16px;
+
+    font-weight:500;
+
+    position:relative;
+
+    transition:.3s;
+
+    padding:8px 0;
+
+}
+
+
+
+/* UNDERLINE EFFECT */
+
+.navbar ul li a::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+
+    bottom:-4px;
+
+    width:0;
+
+    height:3px;
+
+    background:#BBDEFB;
+
+    border-radius:10px;
+
+    transition:.3s;
+
+}
+
+
+
+.navbar ul li a:hover::after{
+
+    width:100%;
+
+}
+
+
+
+.navbar ul li a:hover{
+
+    color:#E3F2FD;
+
+}
+
+
+
+/* LOGIN BUTTON */
+
+.navbar ul li:last-child a{
+
+    background:white;
+
+    color:#1565C0;
+
+    padding:10px 22px;
+
+    border-radius:25px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+
+
+.navbar ul li:last-child a::after{
+
+    display:none;
+
+}
+
+
+
+.navbar ul li:last-child a:hover{
+
+    background:#E3F2FD;
+
+    transform:translateY(-2px);
+
+}
+
+
+
+/* RESPONSIVE */
+
+@media(max-width:900px){
+
+.navbar{
+
+    flex-direction:column;
+
+    height:auto;
+
+    padding:20px;
+
+    gap:20px;
+
 }
 
 .navbar ul{
-    display:flex;
-    list-style:none;
-    gap:35px;
-    margin:0;
-    padding:0;
+
+    flex-wrap:wrap;
+
+    justify-content:center;
+
+    gap:20px;
+
+}
+
+.logo{
+
+    font-size:24px;
+
+}
+
+.logo span{
+
+    font-size:20px;
+
+}
+
+}
+
+@media(max-width:500px){
+
+.navbar{
+
+    padding:15px;
+
+}
+
+.navbar ul{
+
+    gap:15px;
+
 }
 
 .navbar ul li a{
-    text-decoration:none;
-    color:white;          /* Makes Home, Features, About white */
-    font-size:18px;
-    font-weight:600;
-    transition:0.3s;
+
+    font-size:14px;
+
 }
 
-.navbar ul li a:hover{
-    color:#FFD700;        /* Golden on hover */
+.logo svg{
+
+    font-size:28px;
+
+}
+
+.logo span{
+
+    font-size:18px;
+
+}
+
 }

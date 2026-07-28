@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import logo from "../../assets/images/mainlogo.jpeg";
 import {
     FaHome,
     FaBriefcase,
@@ -9,37 +10,24 @@ import {
 } from "react-icons/fa";
 import "./Header.css";
 
+
 export default function Header() {
     return (
         <>
             {/* Top Black Strip */}
-            <div className="gov-strip">
-                <div className="gov-left">
-                    <img src="https://pminternship.mca.gov.in/assets/aug_2025_assets/indian_flag.svg" alt="India" />
-                    <span>
-
-                    </span>
-                </div>
-
-                <div className="gov-right">
-                    <span>A-</span>
-                    <span>A</span>
-                    <span>A+</span>
-                </div>
-            </div>
+           
 
             {/* Main Header */}
             <header className="main-header">
                 <div className="logo-area">
 
                     <img
-                        src="https://pminternship.mca.gov.in/assets/img/MCA.svg"
-                        alt="College Logo"
-                        className="college-logo"
-                    />
-
+                            src={logo}
+                            alt="InternConnect Logo"
+                            className="sidebar-logo-img"
+                        />
                     <div className="portal-title">
-                        <h2>Internship Matching System</h2>
+                        <h2>InterConnect</h2>
                         <p>Smart Internship Allocation Platform</p>
                     </div>
                 </div>

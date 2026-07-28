@@ -24,75 +24,94 @@ function CompanyProfile() {
 
     }, [companyId]);
 
-    return (
+   return (
 
-        <DashboardLayout>
+    <DashboardLayout>
 
-            <div className="profile-container">
+        <div className="company-profile-page">
 
-                <h1>Company Profile</h1>
+            {/* Header */}
 
-                <div className="profile-card">
+            <div className="company-header">
 
-                    <div className="profile-row">
-                        <label>Company Name</label>
-                        <input
-                            type="text"
-                            value={company.companyName || "Not Added"}
-                            readOnly
-                        />
-                    </div>
+                <div>
 
-                    <div className="profile-row">
-                        <label>Email</label>
-                        <input
-                            type="text"
-                            value={company.industry || "Not Added"}
-                            readOnly
-                        />
-                    </div>
+                    <h1>🏢 Company Profile</h1>
 
-                    <div className="profile-row">
-                        <label>Industry</label>
-                        <input
-                            type="text"
-                            value={company.industry || ""}
-                            readOnly
-                        />
-                    </div>
-
-                    <div className="profile-row">
-                        <label>Address</label>
-                        <input
-                            type="text"
-                            value={company.address || "Not Added"}
-                            readOnly
-                        />
-                    </div>
-
-                    <div className="profile-row">
-                        <label>Website</label>
-                        <input
-                            type="text"
-                           value={company.website || "Not Added"}
-                            readOnly
-                        />
-                    </div>
+                    <p>
+                        View and manage your company information.
+                    </p>
 
                 </div>
 
                 <button
-                    className="btn-primary"
+                    className="edit-profile-btn"
                     onClick={() => navigate("/company/profile/edit")}
                 >
-                    Edit Profile
+                    ✏ Edit Profile
                 </button>
 
             </div>
 
-        </DashboardLayout>
+            {/* Company Information */}
 
-    );
+            <div className="company-card">
+
+                <h2>Company Information</h2>
+
+                <div className="company-grid">
+
+                    <div className="company-item">
+                        <label>Company Name</label>
+                        <span>{company.companyName || "Not Added"}</span>
+                    </div>
+
+                    <div className="company-item">
+                        <label>Email</label>
+                        <span>{company.email || "Not Added"}</span>
+                    </div>
+
+                    <div className="company-item">
+                        <label>Industry</label>
+                        <span>{company.industry || "Not Added"}</span>
+                    </div>
+
+                    <div className="company-item">
+                        <label>Website</label>
+
+                        {company.website ? (
+
+                            <a
+                                href={company.website}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="website-link"
+                            >
+                                {company.website}
+                            </a>
+
+                        ) : (
+
+                            <span>Not Added</span>
+
+                        )}
+
+                    </div>
+
+                    <div className="company-item full-width">
+                        <label>Company Address</label>
+                        <span>{company.address || "Not Added"}</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </DashboardLayout>
+
+);
 }
 
 export default CompanyProfile;

@@ -74,45 +74,105 @@ else {
 
     return (
 
-        <div className="login-container">
+    <div className="login-page">
 
-            <form className="login-form" onSubmit={login}>
+        <div className="background-shape shape1"></div>
+        <div className="background-shape shape2"></div>
 
-                <h2>Login</h2>
+        <div className="login-card">
 
-                <input
-                    type="email"
-                    placeholder="Email"
-                    onChange={(e) => setEmail(e.target.value)}
-                />
+            <div className="login-left">
 
-                <input
-                    type="password"
-                    placeholder="Password"
-                    onChange={(e) => setPassword(e.target.value)}
-                />
+                <h1>InternConnect</h1>
 
-                <button type="submit">
-                    Login
-                </button>
+                <h3>Internship Allocation System</h3>
 
                 <p>
+                    Discover internships, apply with one click,
+                    and let AI recommend opportunities based on
+                    your profile and skills.
+                </p>
 
-               Don't have an account?
+                <div className="login-features">
 
-              <Link to="/register">
+                    <div className="feature">
+                        🎯 AI Internship Recommendations
+                    </div>
 
-                Register
+                    <div className="feature">
+                        📄 Resume Management
+                    </div>
 
-               </Link>
+                    <div className="feature">
+                        💼 Company & Student Dashboard
+                    </div>
 
-</p>
+                </div>
 
-            </form>
+            </div>
+
+            <div className="login-right">
+
+                <form className="login-form" onSubmit={login}>
+
+                    <h2>Welcome Back 👋</h2>
+
+                    <p className="subtitle">
+                        Login to continue
+                    </p>
+
+                    <div className="input-group">
+
+                        <label>Email</label>
+
+                        <input
+                            type="email"
+                            placeholder="Enter your email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+
+                    </div>
+
+                    <div className="input-group">
+
+                        <label>Password</label>
+
+                        <input
+                            type="password"
+                            placeholder="Enter your password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+
+                    </div>
+
+                    <button
+                        type="submit"
+                        className="login-btn"
+                    >
+                        Login
+                    </button>
+
+                    <p className="register-text">
+
+                        Don't have an account?
+
+                        <Link to="/register">
+                            Register
+                        </Link>
+
+                    </p>
+
+                </form>
+
+            </div>
 
         </div>
 
-    );
+    </div>
+
+);
 
 }
 

@@ -58,84 +58,137 @@ function EditCompanyProfile() {
 
     };
 
-    return (
+   return (
 
-        <DashboardLayout>
+    <DashboardLayout>
 
-            <div className="edit-profile-container">
+        <div className="company-edit-page">
 
-                <h2> {isFirstTime ? "Complete Company Profile" : "Edit Company Profile"}</h2>
-                {
-    isFirstTime &&
+            <div className="page-header">
 
-    <div className="profile-info">
+                <div>
 
-        <h4>👋 Welcome</h4>
+                    <h1>
+                        {isFirstTime
+                            ? "🏢 Complete Company Profile"
+                            : "🏢 Edit Company Profile"}
+                    </h1>
 
-        <p>
-            Please complete your company profile before posting internships.
-        </p>
+                    <p>
+                        Keep your company details updated so students can
+                        discover and apply for your internship opportunities.
+                    </p>
 
-    </div>
-}
+                </div>
 
-                <form className="edit-profile-form" onSubmit={handleSubmit}>
+            </div>
 
-                    <label>Company Name</label>
-                    <input
-                        type="text"
-                        name="companyName"
-                        value={company.companyName || ""}
-                        onChange={handleChange}
-                    />
+            {isFirstTime && (
 
-                    <label>Industry</label>
-                    <input
-                        type="text"
-                        name="industry"
-                        value={company.industry || ""}
-                        onChange={handleChange}
-                    />
+                <div className="welcome-card">
 
-                    <label>Address</label>
-                    <input
-                        type="text"
-                        name="address"
-                        value={company.address || ""}
-                        onChange={handleChange}
-                    />
+                    <h3>✨ Welcome to InternConnect</h3>
 
-                    <label>Website</label>
-                    <input
-                        type="text"
-                        name="website"
-                       value={company.website || ""}
-                        onChange={handleChange}
-                    />
+                    <p>
+                        Please complete your company profile before posting
+                        internships. A complete profile helps students know
+                        more about your organization.
+                    </p>
+
+                </div>
+
+            )}
+
+            <div className="profile-card">
+
+                <form
+                    className="company-form"
+                    onSubmit={handleSubmit}
+                >
+
+                    <div className="form-grid">
+
+                        <div className="form-group">
+
+                            <label>Company Name</label>
+
+                            <input
+                                type="text"
+                                name="companyName"
+                                placeholder="Google Pvt Ltd"
+                                value={company.companyName || ""}
+                                onChange={handleChange}
+                            />
+
+                        </div>
+
+                        <div className="form-group">
+
+                            <label>Industry</label>
+
+                            <input
+                                type="text"
+                                name="industry"
+                                placeholder="Software Development"
+                                value={company.industry || ""}
+                                onChange={handleChange}
+                            />
+
+                        </div>
+
+                        <div className="form-group full-width">
+
+                            <label>Company Address</label>
+
+                            <input
+                                type="text"
+                                name="address"
+                                placeholder="Pune, Maharashtra"
+                                value={company.address || ""}
+                                onChange={handleChange}
+                            />
+
+                        </div>
+
+                        <div className="form-group full-width">
+
+                            <label>Website</label>
+
+                            <input
+                                type="text"
+                                name="website"
+                                placeholder="https://company.com"
+                                value={company.website || ""}
+                                onChange={handleChange}
+                            />
+
+                        </div>
+
+                    </div>
 
                     <div className="button-group">
 
-                        {
-    !isFirstTime &&
+                        {!isFirstTime && (
 
-    <button
-        type="button"
-        className="cancel-btn"
-        onClick={() => navigate("/company/profile")}
-    >
-        Cancel
-    </button>
-}
+                            <button
+                                type="button"
+                                className="cancel-btn"
+                                onClick={() => navigate("/company/profile")}
+                            >
+                                Cancel
+                            </button>
+
+                        )}
 
                         <button
                             type="submit"
                             className="update-btn"
                         >
-                            {
-    isFirstTime
-        ? "Complete Profile"
-        : "Update Profile"
-}
+
+                            {isFirstTime
+                                ? "Complete Profile"
+                                : "Update Profile"}
+
                         </button>
 
                     </div>
@@ -144,10 +197,11 @@ function EditCompanyProfile() {
 
             </div>
 
-        </DashboardLayout>
+        </div>
 
-    );
+    </DashboardLayout>
 
+);
 }
 
 export default EditCompanyProfile;

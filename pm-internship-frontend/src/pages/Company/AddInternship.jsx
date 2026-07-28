@@ -87,94 +87,201 @@ function AddInternship() {
 
     return (
 
-        <DashboardLayout>
+    <DashboardLayout>
 
-            <h2>Add Internship</h2>
+        <div className="add-internship-page">
 
-            <form
-                className="internship-form"
-                onSubmit={saveInternship}>
+            <div className="page-header">
 
-                <input
-                    name="title"
-                    placeholder="Title"
-                    onChange={handleChange}
-                />
+                <div>
 
-                <textarea
-                    name="description"
-                    placeholder="Description"
-                    onChange={handleChange}
-                />
+                    <h1>💼 Add New Internship</h1>
 
-                <input
-                    name="requiredSkills"
-                    placeholder="Java, Spring Boot, React"
-                    onChange={handleChange}
-                />
-
-                <input
-                    name="location"
-                    placeholder="Location"
-                    onChange={handleChange}
-                />
-
-                <input
-                    type="number"
-                    name="stipend"
-                    placeholder="Stipend"
-                    min="1"
-                    onChange={handleChange}
-                />
-
-                <input
-                    type="number"
-                    name="durationMonths"
-                    placeholder="Duration(In Months)"
-                    min="1"
-                    onChange={handleChange}
-                />
-
-                <input
-                    type="number"
-                    step="0.1"
-                    min="0"
-                    max="10"
-                    name="minimumCgpa"
-                    placeholder="Minimum CGPA"
-                    onKeyDown={(e) => {
-                        if (e.key === "-" || e.key === "e") {
-                            e.preventDefault();
-                        }
-                    }}
-                    onChange={handleChange}
-                />
-
-                {errors.minimumCgpa && (
-                    <p style={{ color: "red" }}>
-                        {errors.minimumCgpa}
+                    <p>
+                        Create internship opportunities and start receiving
+                        applications from talented students.
                     </p>
-                )}
 
-                <input
-                    type="number"
-                    name="availableSeats"
-                    placeholder="Available Seats"
-                    min="1"
-                    onChange={handleChange}
-                />
+                </div>
 
-                <button type="submit">
+            </div>
 
-                    Save Internship
+            <div className="internship-card">
 
-                </button>
+                <form
+                    className="internship-form"
+                    onSubmit={saveInternship}
+                >
 
-            </form>
+                    <div className="form-grid">
 
-        </DashboardLayout>
+                        <div className="form-group">
 
-    );
+                            <label>Internship Title</label>
+
+                            <input
+                                type="text"
+                                name="title"
+                                placeholder="Java Developer Intern"
+                                value={internship.title}
+                                onChange={handleChange}
+                            />
+
+                        </div>
+
+                        <div className="form-group">
+
+                            <label>Location</label>
+
+                            <input
+                                type="text"
+                                name="location"
+                                placeholder="Pune"
+                                value={internship.location}
+                                onChange={handleChange}
+                            />
+
+                        </div>
+
+                        <div className="form-group full-width">
+
+                            <label>Description</label>
+
+                            <textarea
+                                rows="5"
+                                name="description"
+                                placeholder="Describe internship responsibilities..."
+                                value={internship.description}
+                                onChange={handleChange}
+                            />
+
+                        </div>
+
+                        <div className="form-group full-width">
+
+                            <label>Required Skills</label>
+
+                            <input
+                                type="text"
+                                name="requiredSkills"
+                                placeholder="Java, Spring Boot, React, SQL"
+                                value={internship.requiredSkills}
+                                onChange={handleChange}
+                            />
+
+                        </div>
+
+                        <div className="form-group">
+
+                            <label>Monthly Stipend (₹)</label>
+
+                            <input
+                                type="number"
+                                name="stipend"
+                                min="1"
+                                placeholder="15000"
+                                value={internship.stipend}
+                                onChange={handleChange}
+                            />
+
+                        </div>
+
+                        <div className="form-group">
+
+                            <label>Duration (Months)</label>
+
+                            <input
+                                type="number"
+                                name="durationMonths"
+                                min="1"
+                                placeholder="6"
+                                value={internship.durationMonths}
+                                onChange={handleChange}
+                            />
+
+                        </div>
+
+                        <div className="form-group">
+
+                            <label>Minimum CGPA</label>
+
+                            <input
+                                type="number"
+                                step="0.1"
+                                min="0"
+                                max="10"
+                                name="minimumCgpa"
+                                placeholder="7.5"
+                                value={internship.minimumCgpa}
+                                onChange={handleChange}
+                                onKeyDown={(e) => {
+                                    if (e.key === "-" || e.key === "e") {
+                                        e.preventDefault();
+                                    }
+                                }}
+                            />
+
+                            {errors.minimumCgpa && (
+
+                                <p className="field-error">
+
+                                    {errors.minimumCgpa}
+
+                                </p>
+
+                            )}
+
+                        </div>
+
+                        <div className="form-group">
+
+                            <label>Available Seats</label>
+
+                            <input
+                                type="number"
+                                name="availableSeats"
+                                min="1"
+                                placeholder="5"
+                                value={internship.availableSeats}
+                                onChange={handleChange}
+                            />
+
+                        </div>
+
+                    </div>
+
+                    <div className="button-area">
+
+                        <button
+                            type="button"
+                            className="cancel-btn"
+                            onClick={() => navigate("/company/internships")}
+                        >
+
+                            Cancel
+
+                        </button>
+
+                        <button
+                            type="submit"
+                            className="save-btn"
+                        >
+
+                            Save Internship
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </DashboardLayout>
+
+);
 
 }
 
