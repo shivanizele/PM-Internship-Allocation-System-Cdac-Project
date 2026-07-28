@@ -27,7 +27,7 @@ export default function Header() {
                             className="sidebar-logo-img"
                         />
                     <div className="portal-title">
-                        <h2>InterConnect</h2>
+                        <h2>InternConnect</h2>
                         <p>Smart Internship Allocation Platform</p>
                     </div>
                 </div>
