@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/Dashboard/DashboardLayout";
 import api from "../../services/api";
+import "./MyApplications.css";
 
 function MyApplications() {
 
@@ -10,61 +11,120 @@ function MyApplications() {
 
     useEffect(() => {
 
-    console.log("Student ID =", studentId);
+        api.get(`/applications/student/${studentId}`)
+            .then(res => setApplications(res.data))
+            .catch(err => console.log(err));
 
-    api.get(`/applications/student/${studentId}`)
-        .then(res => {
-            console.log(res.data);
-            setApplications(res.data);
-        })
-        .catch(err => {
-            console.log(err);
-            console.log(err.response);
-        });
+    }, [studentId]);
 
-}, [studentId]);
+    const getStatusClass = (status) => {
+
+        switch (status?.toUpperCase()) {
+
+            case "APPROVED":
+            case "ACCEPTED":
+                return "status approved";
+
+            case "REJECTED":
+                return "status rejected";
+
+            case "PENDING":
+            default:
+                return "status pending";
+        }
+
+    };
 
     return (
 
         <DashboardLayout>
 
-            <h2>My Applications</h2>
+            <div className="applications-page">
 
-            <table className="internship-table">
+                <div className="page-header">
 
-                <thead>
+                    <h1>📋 My Applications</h1>
 
-                    <tr>
+                    <p>
+                        Track all your internship applications and their current status.
+                    </p>
 
-                        <th>Internship</th>
-                        <th>Status</th>
-                        <th>Applied On</th>
+                </div>
 
-                    </tr>
+                <div className="applications-card">
 
-                </thead>
+                    <table className="applications-table">
 
-                <tbody>
+                        <thead>
 
-                    {applications.map(app => (
+                            <tr>
 
-                        <tr key={app.id}>
+                                <th>Internship</th>
+                                <th>Status</th>
+                                <th>Applied On</th>
 
-                            <td>{app.internshipTitle}</td>
-                            <td>{app.status}</td>
-                            <td>{app.appliedAt}</td>
+                            </tr>
 
-                        </tr>
+                        </thead>
 
-                    ))}
+                        <tbody>
 
-                </tbody>
+                            {
 
-            </table>
+                                applications.length > 0 ?
+
+                                    applications.map(app => (
+
+                                        <tr key={app.id}>
+
+                                            <td>
+                                                {app.internshipTitle}
+                                            </td>
+
+                                            <td>
+
+                                                <span className={getStatusClass(app.status)}>
+                                                    {app.status}
+                                                </span>
+
+                                            </td>
+
+                                            <td>
+
+                                                {new Date(app.appliedAt).toLocaleDateString("en-IN")}
+
+                                            </td>
+
+                                        </tr>
+
+                                    ))
+
+                                    :
+
+                                    <tr>
+
+                                        <td colSpan="3" className="no-data">
+
+                                            🚀 You haven't applied for any internships yet.
+
+                                        </td>
+
+                                    </tr>
+
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
 
         </DashboardLayout>
 
     );
+
 }
 
 export default MyApplications;

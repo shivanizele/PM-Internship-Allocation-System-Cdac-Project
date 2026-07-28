@@ -1,15 +1,102 @@
-.main{
+/* Main Layout */
 
-    margin-left:250px;
+.dashboard-layout {
+    display: flex;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #eef4ff 0%, #f8fbff 100%);
+    overflow: hidden;
+    font-family: "Poppins", sans-serif;
+}
 
-    min-height:100vh;
+/* Main Section */
 
-    background:#F4F7FE;
+.main {
+    flex: 1;
+    margin-left: 260px; /* Sidebar Width */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    transition: all 0.3s ease;
+}
+
+/* Topbar Space */
+
+.main .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+/* Dashboard Content */
+
+.content {
+    flex: 1;
+    margin: 25px;
+    padding: 30px;
+    background: rgba(255,255,255,0.96);
+    border-radius: 22px;
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.08),
+        0 2px 8px rgba(0,82,204,0.08);
+    animation: fadeIn 0.5s ease;
+    overflow-y: auto;
+}
+
+/* Custom Scrollbar */
+
+.content::-webkit-scrollbar{
+    width:8px;
+}
+
+.content::-webkit-scrollbar-thumb{
+    background:#0d6efd;
+    border-radius:20px;
+}
+
+.content::-webkit-scrollbar-track{
+    background:#f3f3f3;
+}
+
+/* Animation */
+
+@keyframes fadeIn{
+
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* Responsive */
+
+@media(max-width:992px){
+
+    .main{
+        margin-left:80px;
+    }
+
+    .content{
+        margin:18px;
+        padding:22px;
+    }
 
 }
 
-.content{
+@media(max-width:768px){
 
-    padding:30px;
+    .main{
+        margin-left:0;
+    }
+
+    .content{
+        margin:15px;
+        padding:18px;
+        border-radius:15px;
+    }
 
 }

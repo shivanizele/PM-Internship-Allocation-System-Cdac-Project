@@ -58,57 +58,79 @@ function MyInternships() {
 
     return (
 
-        <DashboardLayout>
+<DashboardLayout>
 
-            <div className="internship-header">
+<div className="internship-page">
 
-                <h2>My Internships</h2>
+    <div className="internship-header">
 
-                <Link
-                    to="/company/add-internship"
-                    className="add-btn"
-                >
-                    + Add Internship
-                </Link>
+        <h2>💼 My Internships</h2>
 
-            </div>
+        <Link
+            to="/company/add-internship"
+            className="add-btn"
+        >
+            + Add Internship
+        </Link>
 
-            <table className="internship-table">
+    </div>
 
-                <thead>
+    <div className="table-card">
 
-                    <tr>
+        <table className="internship-table">
 
-                        <th>Title</th>
-                        <th>Location</th>
-                        <th>Stipend</th>
-                        <th>Duration</th>
-                        <th>Seats</th>
-                        <th>Actions</th>
+            <thead>
 
-                    </tr>
+                <tr>
 
-                </thead>
+                    <th>Title</th>
+                    <th>Location</th>
+                    <th>Stipend</th>
+                    <th>Duration</th>
+                    <th>Seats</th>
+                    <th>Actions</th>
 
-                <tbody>
+                </tr>
 
-                    {internships.length > 0 ? (
+            </thead>
 
-                        internships.map((i) => (
+            <tbody>
 
-                            <tr key={i.id}>
+                {internships.length > 0 ? (
 
-                                <td>{i.title}</td>
-                                <td>{i.location}</td>
-                                <td>₹{i.stipend}</td>
-                                <td>{i.durationMonths} Months</td>
-                                <td>{i.availableSeats}</td>
+                    internships.map((i) => (
 
-                                <td>
+                        <tr key={i.id}>
 
-                                    <Link
-                                        to={`/company/edit-internship/${i.id}`}
-                                    >
+                            <td>
+                                <strong>{i.title}</strong>
+                            </td>
+
+                            <td>{i.location}</td>
+
+                            <td>
+                                <span className="stipend">
+                                    ₹{i.stipend}
+                                </span>
+                            </td>
+
+                            <td>
+                                <span className="duration">
+                                    {i.durationMonths} Months
+                                </span>
+                            </td>
+
+                            <td>
+                                <span className="seats">
+                                    {i.availableSeats}
+                                </span>
+                            </td>
+
+                            <td>
+
+                                <div className="action-buttons">
+
+                                    <Link to={`/company/edit-internship/${i.id}`}>
                                         <button className="edit-btn">
                                             Edit
                                         </button>
@@ -120,36 +142,49 @@ function MyInternships() {
                                     >
                                         Delete
                                     </button>
-                                    <Link to={`/company/applications/${i.id}`}>
-                                     <button>Applications</button>
+
+                                    <Link
+                                        to={`/company/applications/${i.id}`}
+                                    >
+                                        <button className="application-btn">
+                                            Applications
+                                        </button>
                                     </Link>
 
-                                </td>
+                                </div>
 
-                            </tr>
-
-                        ))
-
-                    ) : (
-
-                        <tr>
-
-                            <td colSpan="6" style={{ textAlign: "center" }}>
-                                No internships found.
                             </td>
 
                         </tr>
 
-                    )}
+                    ))
 
-                </tbody>
+                ) : (
 
-            </table>
+                    <tr>
 
-        </DashboardLayout>
+                        <td
+                            colSpan="6"
+                            className="empty-row"
+                        >
+                            🚫 No internships posted yet.
+                        </td>
 
-    );
+                    </tr>
 
+                )}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+</DashboardLayout>
+
+);
 }
 
 export default MyInternships;

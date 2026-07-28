@@ -33,7 +33,7 @@ function Topbar() {
                     Home
                 </button>
 
-                <h2>{role} Dashboard</h2>
+                <h2>{role} </h2>
 
             </div>
 

@@ -90,78 +90,178 @@ function EditInternship() {
 
     return (
 
-        <DashboardLayout>
+    <DashboardLayout>
 
-            <h2>Edit Internship</h2>
+        <div className="add-internship-page">
 
-            <form
-                className="internship-form"
-                onSubmit={updateInternship}>
+            <div className="page-header">
 
-                <input
-                    name="title"
-                    value={internship.title}
-                    onChange={handleChange}
-                />
+                <div>
 
-                <textarea
-                    name="description"
-                    value={internship.description}
-                    onChange={handleChange}
-                />
+                    <h1>✏️ Edit Internship</h1>
 
-                <input
-                    name="requiredSkills"
-                    value={internship.requiredSkills}
-                    onChange={handleChange}
-                />
+                    <p>
+                        Update internship information and keep your job posting
+                        accurate for students.
+                    </p>
 
-                <input
-                    name="location"
-                    value={internship.location}
-                    onChange={handleChange}
-                />
+                </div>
 
-                <input
-                    type="number"
-                    name="stipend"
-                    value={internship.stipend}
-                    onChange={handleChange}
-                />
+            </div>
 
-                <input
-                    type="number"
-                    name="durationMonths"
-                    value={internship.durationMonths}
-                    onChange={handleChange}
-                />
+            <div className="internship-card">
 
-                <input
-                    type="number"
-                    step="0.1"
-                    name="minimumCgpa"
-                    value={internship.minimumCgpa}
-                    onChange={handleChange}
-                />
+                <form
+                    className="internship-form"
+                    onSubmit={updateInternship}
+                >
 
-                <input
-                    type="number"
-                    name="availableSeats"
-                    value={internship.availableSeats}
-                    onChange={handleChange}
-                />
+                    <div className="form-grid">
 
-                <button type="submit">
+                        <div className="form-group">
 
-                    Update Internship
+                            <label>Internship Title</label>
 
-                </button>
+                            <input
+                                type="text"
+                                name="title"
+                                value={internship.title}
+                                onChange={handleChange}
+                                placeholder="Java Developer Intern"
+                            />
 
-            </form>
+                        </div>
 
-        </DashboardLayout>
+                        <div className="form-group">
 
-    );
+                            <label>Location</label>
+
+                            <input
+                                type="text"
+                                name="location"
+                                value={internship.location}
+                                onChange={handleChange}
+                                placeholder="Pune"
+                            />
+
+                        </div>
+
+                        <div className="form-group full-width">
+
+                            <label>Description</label>
+
+                            <textarea
+                                rows="5"
+                                name="description"
+                                value={internship.description}
+                                onChange={handleChange}
+                                placeholder="Describe internship responsibilities..."
+                            />
+
+                        </div>
+
+                        <div className="form-group full-width">
+
+                            <label>Required Skills</label>
+
+                            <input
+                                type="text"
+                                name="requiredSkills"
+                                value={internship.requiredSkills}
+                                onChange={handleChange}
+                                placeholder="Java, Spring Boot, React, SQL"
+                            />
+
+                        </div>
+
+                        <div className="form-group">
+
+                            <label>Monthly Stipend (₹)</label>
+
+                            <input
+                                type="number"
+                                name="stipend"
+                                min="1"
+                                value={internship.stipend}
+                                onChange={handleChange}
+                            />
+
+                        </div>
+
+                        <div className="form-group">
+
+                            <label>Duration (Months)</label>
+
+                            <input
+                                type="number"
+                                name="durationMonths"
+                                min="1"
+                                value={internship.durationMonths}
+                                onChange={handleChange}
+                            />
+
+                        </div>
+
+                        <div className="form-group">
+
+                            <label>Minimum CGPA</label>
+
+                            <input
+                                type="number"
+                                step="0.1"
+                                min="0"
+                                max="10"
+                                name="minimumCgpa"
+                                value={internship.minimumCgpa}
+                                onChange={handleChange}
+                            />
+
+                        </div>
+
+                        <div className="form-group">
+
+                            <label>Available Seats</label>
+
+                            <input
+                                type="number"
+                                name="availableSeats"
+                                min="1"
+                                value={internship.availableSeats}
+                                onChange={handleChange}
+                            />
+
+                        </div>
+
+                    </div>
+
+                    <div className="button-area">
+
+                        <button
+                            type="button"
+                            className="cancel-btn"
+                            onClick={() => navigate("/company/internships")}
+                        >
+                            Cancel
+                        </button>
+
+                        <button
+                            type="submit"
+                            className="save-btn"
+                        >
+                            Update Internship
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </DashboardLayout>
+
+);
 
 }
 

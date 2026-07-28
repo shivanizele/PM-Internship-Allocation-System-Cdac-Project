@@ -1,56 +1,51 @@
 import "./Hero.css";
 import { motion } from "framer-motion";
-import heroImage from "../../assets/images/hero.svg";
 import { Link } from "react-router-dom";
-function Hero(){
+import logo from "../../assets/images/mainlogo.jpeg";
 
-return(
+function Hero() {
 
-<section id="home" className="hero">
+    return (
 
-<div className="hero-left">
+        <section className="hero" id="home">
 
-<motion.h1
+            <div className="hero-left">
 
-initial={{opacity:0,y:-40}}
-
-animate={{opacity:1,y:0}}
-
-transition={{duration:.8}}
-
->
-
-AI Based Internship Allocation System
-
-</motion.h1>
-
-<p>
-
-Find the best internship using Artificial Intelligence.
-
-</p>
-
- <Link
-                    to="/login"
-                    className="hero-btn"
+                <motion.h1
+                    initial={{ opacity: 0, y: -40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8 }}
                 >
+                    AI Based Internship Allocation System
+                </motion.h1>
+
+                <p>
+                    Find the best internship opportunities using Artificial Intelligence.
+                </p>
+
+                <Link to="/login" className="hero-btn">
                     Get Started
                 </Link>
 
-</div>
+            </div>
 
-<div className="hero-right">
+            <div className="hero-right">
 
-<img
-src={heroImage}
-alt="AI Internship"
-/>
+                <div className="logo-circle">
 
-</div>
+                    <img
+                        src={logo}
+                        alt="InterConnect Logo"
+                        className="hero-logo"
+                    />
 
-</section>
+                </div>
 
-)
+            </div>
+
+        </section>
+
+    );
 
 }
 

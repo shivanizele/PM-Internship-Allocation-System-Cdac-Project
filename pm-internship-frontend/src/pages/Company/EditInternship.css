@@ -73,12 +73,6 @@
     box-shadow:0 0 0 4px rgba(37,99,235,.15);
 }
 
-.field-error{
-    color:#ef4444;
-    margin-top:6px;
-    font-size:14px;
-}
-
 .button-area{
     display:flex;
     justify-content:flex-end;

@@ -1,90 +1,237 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+    FaClipboardList,
+    FaRobot,
+    FaBriefcase,
+    FaArrowRight
+} from "react-icons/fa";
+
 import DashboardLayout from "../../components/Dashboard/DashboardLayout";
 import DashboardCard from "../../components/DashboardCard/DashboardCard";
 import api from "../../services/api";
 import { isStudentProfileComplete } from "../../utils/studentProfile";
 import "./Dashboard.css";
-import { useNavigate } from "react-router-dom";
-
 
 function StudentDashboard() {
 
-    //const studentId = localStorage.getItem("id");
     const studentId = localStorage.getItem("studentId");
-  //  const [profile, setProfile] = useState({});
-    const [applications, setApplications] = useState([]);
-    const [internships, setInternships] = useState([]);
-    const navigate = useNavigate();
-    // const studentId = localStorage.getItem("studentId");
 
     const [student, setStudent] = useState({});
+    const [applications, setApplications] = useState([]);
+    const [internships, setInternships] = useState([]);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
 
-api.get(`/student/profile/${studentId}`)
-    .then(res => {
+        api.get(`/student/profile/${studentId}`)
 
-        setStudent(res.data);
+            .then(res => {
 
-        const profileComplete = isStudentProfileComplete(res.data);
+                setStudent(res.data);
 
-        if (!profileComplete) {
+                const profileComplete =
+                    isStudentProfileComplete(res.data);
 
-            alert("Please complete your profile before applying for internships.");
+                if (!profileComplete) {
 
-            navigate("/student/profile/edit");
+                    alert(
+                        "Please complete your profile before applying for internships."
+                    );
 
-            return;
-        }
+                    navigate("/student/profile/edit");
 
-        // Only after profile is complete
-        api.get(`/applications/student/${studentId}`)
-            .then(res => setApplications(res.data));
+                    return;
 
-        api.get("/internships")
-            .then(res => setInternships(res.data));
+                }
 
-    })
-    .catch(err => console.log(err));
+                api.get(`/applications/student/${studentId}`)
+                    .then(res => setApplications(res.data));
 
-}, [studentId, navigate]);
+                api.get("/internships")
+                    .then(res => setInternships(res.data));
+
+            })
+
+            .catch(err => console.log(err));
+
+    }, [studentId, navigate]);
+
     return (
 
         <DashboardLayout>
 
-            {/* <h1>Student Dashboard</h1> */}
+            <div className="student-dashboard">
 
-            <h3>Welcome {student.fullName}</h3>
+                {/* Header */}
 
-            <div className="dashboard-grid">
+                <div className="student-header">
 
-                <DashboardCard
-                    title="Applications"
-                    value={applications.length}
-                    color="#2563EB"
-                />
+                    <div>
 
-                <DashboardCard
-                    title="AI Recommendations"
-                    value="Top 5"
-                    color="#16A34A"
-                />
+                        <h1>
 
-                <DashboardCard
-                    title="Available Internships"
-                    value={internships.length}
-                    color="#F59E0B"
-                />
+                            👋 Welcome,
 
-            </div>
+                            <span>
 
-            <div style={{ marginTop: "24px" }}>
-                <button
-                    className="btn btn-primary"
-                    onClick={() => navigate("/student/recommendations")}
-                >
-                    Get AI Recommendations
-                </button>
+                                {" "}
+
+                                {student.fullName}
+
+                            </span>
+
+                        </h1>
+
+                        <p>
+
+                            Welcome to the AI-Powered Internship Allocation
+                            System. Track your applications, discover new
+                            internship opportunities and receive personalized
+                            AI recommendations.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+                {/* Cards */}
+
+                <div className="dashboard-grid">
+
+                    <DashboardCard
+                        title="Applications"
+                        value={applications.length}
+                        color="#2563EB"
+                        icon={<FaClipboardList />}
+                    />
+
+                    <DashboardCard
+                        title="AI Recommendations"
+                        value="Top 5"
+                        color="#16A34A"
+                        icon={<FaRobot />}
+                    />
+
+                    <DashboardCard
+                        title="Available Internships"
+                        value={internships.length}
+                        color="#F59E0B"
+                        icon={<FaBriefcase />}
+                    />
+
+                </div>
+
+                {/* Quick Actions */}
+
+                <div className="quick-actions">
+
+                    <h2>Quick Actions</h2>
+
+                    <div className="action-grid">
+
+                        <div
+                            className="action-card"
+                            onClick={() =>
+                                navigate("/student/recommendations")
+                            }
+                        >
+
+                            <FaRobot className="action-icon" />
+
+                            <h3>
+
+                                AI Recommendations
+
+                            </h3>
+
+                            <p>
+
+                                Get AI-powered internship suggestions based on
+                                your profile.
+
+                            </p>
+
+                            <button>
+
+                                Explore
+
+                                <FaArrowRight />
+
+                            </button>
+
+                        </div>
+
+                        <div
+                            className="action-card"
+                            onClick={() =>
+                                navigate("/student/internships")
+                            }
+                        >
+
+                            <FaBriefcase className="action-icon" />
+
+                            <h3>
+
+                                Browse Internships
+
+                            </h3>
+
+                            <p>
+
+                                View available internship opportunities from
+                                companies.
+
+                            </p>
+
+                            <button>
+
+                                View
+
+                                <FaArrowRight />
+
+                            </button>
+
+                        </div>
+
+                        <div
+                            className="action-card"
+                            onClick={() =>
+                                navigate("/student/applications")
+                            }
+                        >
+
+                            <FaClipboardList className="action-icon" />
+
+                            <h3>
+
+                                My Applications
+
+                            </h3>
+
+                            <p>
+
+                                Check your internship applications and their
+                                current status.
+
+                            </p>
+
+                            <button>
+
+                                Open
+
+                                <FaArrowRight />
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
             </div>
 
         </DashboardLayout>

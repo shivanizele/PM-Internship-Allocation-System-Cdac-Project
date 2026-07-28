@@ -2,59 +2,19 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Segoe UI,sans-serif;
+    font-family:'Poppins',sans-serif;
 }
 
-/* Top Strip */
 
-.gov-strip{
-
-    background:#000;
-    color:#fff;
-
-    height:42px;
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    padding:0 40px;
-}
-
-.gov-left{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:12px;
-}
-
-.gov-left img{
-
-    width:32px;
-}
-
-.gov-left span{
-
-    font-size:18px;
-    font-weight:500;
-}
-
-.gov-right{
-
-    display:flex;
-    gap:20px;
-    font-size:18px;
-}
-
-/* Main Header */
+/* MAIN HEADER */
 
 .main-header{
 
-    background:#fff;
+    width:100%;
+
+    height:95px;
+
+    background:white;
 
     display:flex;
 
@@ -62,87 +22,208 @@
 
     align-items:center;
 
-    padding:18px 40px;
+    padding:0 50px;
 
-    border-bottom:1px solid #ddd;
+    box-shadow:0 3px 12px rgba(0,0,0,.12);
+
 }
+
+
+
+
+
+/* LOGO AREA */
 
 .logo-area{
 
     display:flex;
+
     align-items:center;
+
     gap:20px;
+
 }
+
+
 
 .college-logo{
 
-    width:70px;
+    width:90px;
+
+    height:auto;
+
 }
+
+
 
 .portal-title h2{
 
-    color:#17345d;
+    font-size:28px;
 
-    font-size:36px;
+    color:#0D47A1;
+
+    margin-bottom:5px;
 
     font-weight:700;
+
 }
+
+
 
 .portal-title p{
 
-    color:#666;
+    font-size:15px;
 
-    margin-top:4px;
+    color:#607D8B;
+
 }
 
-.login-btn{
 
-    background:#f57c00;
 
-    color:white;
 
-    text-decoration:none;
 
-    padding:14px 30px;
+/* BUTTON AREA */
 
-    border-radius:12px;
-
-    font-size:20px;
-
-    font-weight:600;
+.header-buttons{
 
     display:flex;
 
-    align-items:center;
-
-    gap:10px;
-
-    transition:.3s;
-}
-
-.login-btn:hover{
-
-    background:#d96b00;
-}
-
-/* Navigation */
-
-.menu-bar{
-
-    background:#12335d;
-
-    height:60px;
-
-    display:flex;
+    flex-direction:row;
 
     align-items:center;
 
     justify-content:center;
 
+    gap:15px;
+
+}
+
+
+
+
+
+/* COMMON BUTTON STYLE */
+
+.login-btn,
+.register-btn{
+
+    width:130px;
+
+    height:45px;
+
+    display:flex;
+
+    flex-direction:row;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:8px;
+
+    border-radius:25px;
+
+    text-decoration:none;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    white-space:nowrap;
+
+    transition:.3s;
+
+}
+
+
+
+
+
+/* LOGIN BUTTON */
+
+.login-btn{
+
+    background:linear-gradient(
+        90deg,
+        #1565C0,
+        #2196F3
+    );
+
+    color:white;
+
+    border:2px solid transparent;
+
+}
+
+
+
+.login-btn:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:
+    0 8px 20px rgba(33,150,243,.35);
+
+}
+
+
+
+
+
+/* REGISTER BUTTON */
+
+.register-btn{
+
+    background:white;
+
+    color:#1565C0;
+
+    border:2px solid #1565C0;
+
+}
+
+
+
+.register-btn:hover{
+
+    background:#1565C0;
+
+    color:white;
+
+    transform:translateY(-3px);
+
+}
+
+
+
+
+
+/* NAVIGATION BAR */
+
+.menu-bar{
+
+    width:100%;
+
+    height:55px;
+
+    background:linear-gradient(
+        90deg,
+        #0D47A1,
+        #1565C0,
+        #1976D2
+    );
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
     gap:45px;
 
-    border-radius:0 0 10px 10px;
 }
+
+
 
 .menu-bar a{
 
@@ -150,44 +231,162 @@
 
     text-decoration:none;
 
+    font-size:16px;
+
+    font-weight:500;
+
     display:flex;
 
     align-items:center;
 
     gap:8px;
 
-    font-size:17px;
-
-    font-weight:600;
-
     transition:.3s;
+
 }
+
+
 
 .menu-bar a:hover{
 
-    color:#ffc107;
+    color:#BBDEFB;
+
+    transform:translateY(-2px);
+
 }
+
+
+
+
+
+/* RESPONSIVE DESIGN */
+
+@media(max-width:900px){
+
+
+.main-header{
+
+    height:auto;
+
+    flex-direction:column;
+
+    padding:20px;
+
+    gap:20px;
+
+}
+
+
+
+.logo-area{
+
+    flex-direction:column;
+
+    text-align:center;
+
+}
+
+
+
+.portal-title h2{
+
+    font-size:22px;
+
+}
+
+
 
 .header-buttons{
 
-    display:flex;
-    gap:12px;
+    flex-direction:row;
 
 }
 
+
+
+.menu-bar{
+
+    height:auto;
+
+    padding:15px;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+
+}
+
+
+}
+
+
+
+@media(max-width:500px){
+
+
+.login-btn,
 .register-btn{
 
-    background:#198754;
-    color:white;
-    padding:10px 18px;
-    border-radius:6px;
-    text-decoration:none;
-    font-weight:600;
+    width:110px;
+
+    height:40px;
+
+    font-size:14px;
 
 }
 
-.register-btn:hover{
 
-    background:#157347;
+
+.menu-bar a{
+
+    font-size:14px;
+
+}
+
+
+}/* FORCE LOGIN & REGISTER SAME LINE */
+
+.header-buttons{
+
+    display:flex !important;
+
+    flex-direction:row !important;
+
+    align-items:center !important;
+
+    justify-content:flex-end;
+
+    gap:15px;
+
+    width:auto;
+
+}
+
+
+
+/* BOTH BUTTONS SAME SIZE */
+
+.header-buttons .login-btn,
+.header-buttons .register-btn{
+
+    width:130px !important;
+
+    height:45px !important;
+
+    display:flex !important;
+
+    flex-direction:row !important;
+
+    justify-content:center !important;
+
+    align-items:center !important;
+
+    padding:0 !important;
+
+    margin:0 !important;
+
+    border-radius:25px;
+
+    white-space:nowrap;
 
 }
