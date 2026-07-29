@@ -29,6 +29,7 @@ public class Student {
 	@OneToMany(mappedBy = "student")
 	private List<Allocation> allocations = new ArrayList<>();
 	private String resume;
+	private String profilePhoto;
     @OneToOne(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private Qualification qualification;
 
@@ -97,6 +98,14 @@ public class Student {
 
 	public void setResumes(List<Resume> resumes) {
 		this.resumes = resumes;
+	}
+	
+	public String getProfilePhoto() {
+	    return profilePhoto;
+	}
+
+	public void setProfilePhoto(String profilePhoto) {
+	    this.profilePhoto = profilePhoto;
 	}
 
 	public List<Application> getApplications() {

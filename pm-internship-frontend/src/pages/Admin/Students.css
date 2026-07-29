@@ -206,13 +206,13 @@
 
 /* Empty Resume */
 
-.student-table span{
+/* .student-table span{
 
     color:#999;
 
     font-style:italic;
 
-}
+} */
 
 /* Responsive */
 
@@ -253,3 +253,34 @@ transform:translateY(0);
 }
 
 }
+
+.no-resume {
+   border:none;
+
+    cursor:pointer;
+
+    background:#2563EB;
+
+    color:white;
+
+    padding:11px 37px;
+
+    border-radius:10px;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    transition:.3s;
+}
+
+/* .resume-placeholder {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 13px;
+    color: #888;
+    background: #fff5f5;
+    border: 1px dashed #ffb3b3;
+    border-radius: 8px;
+    white-space: nowrap;
+} */

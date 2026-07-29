@@ -1,8 +1,12 @@
 package com.app.controller;
 
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+
 
 import com.app.dto.StudentProfileRequest;
 import com.app.dto.StudentResponse;
@@ -46,7 +50,17 @@ public class StudentController {
 
 	    return studentService.uploadResume(id, file);
 	}
+	
+	@PutMapping(
+		    value = "/profile/{id}/photo",
+		    consumes = "multipart/form-data"
+		)
+		public StudentResponse uploadProfilePhoto(
+		        @PathVariable Long id,
+		        @RequestParam("profilePhoto") MultipartFile file) {
 
+		    return studentService.uploadProfilePhoto(id, file);
+		}
 //	@PostMapping
 //	public StudentResponse addStudent(
 //	        @RequestBody StudentProfileRequest request) {

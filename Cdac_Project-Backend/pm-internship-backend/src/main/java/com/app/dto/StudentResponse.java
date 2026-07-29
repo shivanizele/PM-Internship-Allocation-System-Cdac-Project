@@ -13,27 +13,39 @@ public class StudentResponse {
 	private String location;
 	private Set<String> skills;
 	private String resume;
+	private String profilePhoto;
     private QualificationResponse qualification;
     private boolean profileComplete;
 
 	public StudentResponse() {
 	}
 
-	public StudentResponse(Long id, String fullName, String email, String collegeName, String branch, Double cgpa,
-			String location, Set<String> skills, String resume, QualificationResponse qualification,
-            boolean profileComplete) {
+	public StudentResponse(
+	        Long id,
+	        String fullName,
+	        String email,
+	        String collegeName,
+	        String branch,
+	        Double cgpa,
+	        String location,
+	        Set<String> skills,
+	        String resume,
+	        String profilePhoto,
+	        QualificationResponse qualification,
+	        boolean profileComplete) {
 
-		this.id = id;
-		this.fullName = fullName;
-		this.email = email;
-		this.collegeName = collegeName;
-		this.branch = branch;
-		this.cgpa = cgpa;
-		this.location = location;
-		this.skills = skills;
-		this.resume = resume;
-        this.qualification = qualification;
-        this.profileComplete = profileComplete;
+	    this.id = id;
+	    this.fullName = fullName;
+	    this.email = email;
+	    this.collegeName = collegeName;
+	    this.branch = branch;
+	    this.cgpa = cgpa;
+	    this.location = location;
+	    this.skills = skills;
+	    this.resume = resume;
+	    this.profilePhoto = profilePhoto;
+	    this.qualification = qualification;
+	    this.profileComplete = profileComplete;
 	}
 
 	public Long getId() {
@@ -106,6 +118,14 @@ public class StudentResponse {
 
 	public void setResume(String resume) {
 		this.resume = resume;
+	}
+	
+	public String getProfilePhoto() {
+	    return profilePhoto;
+	}
+
+	public void setProfilePhoto(String profilePhoto) {
+	    this.profilePhoto = profilePhoto;
 	}
 
     public QualificationResponse getQualification() {

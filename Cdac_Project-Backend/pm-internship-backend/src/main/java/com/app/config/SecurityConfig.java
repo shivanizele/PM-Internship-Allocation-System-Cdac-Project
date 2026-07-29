@@ -55,9 +55,15 @@ public class SecurityConfig {
                             "/swagger-ui.html",
                             "/v3/api-docs/**")
                     .permitAll()
+                    
+                 // Allow uploaded profile photos to be accessed without JWT 
+                    .requestMatchers("/uploads/**") .permitAll()
 
-                    .requestMatchers("/api/resume/**", "/api/student/**")
+                    .requestMatchers("/api/resume/**")
                     .hasAnyRole("STUDENT", "COMPANY", "ADMIN")
+
+                    .requestMatchers("/api/student/**")
+                    .hasRole("STUDENT")
 
                     // Recommendation
                     .requestMatchers("/api/ai/**")

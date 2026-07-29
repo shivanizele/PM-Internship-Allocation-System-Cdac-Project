@@ -95,7 +95,7 @@ function Recommendations() {
 
     return (
         <DashboardLayout>
-            <div className="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+            <div className="recommendation-header">
                 <div>
                     <h1>AI Recommendations</h1>
                     <p className="mb-0">
@@ -104,7 +104,7 @@ function Recommendations() {
                 </div>
 
                 <button
-                    className="btn btn-primary"
+                    className="btn btn-primary ai-recommendation-btn"
                     onClick={fetchRecommendations}
                     disabled={loading}
                 >

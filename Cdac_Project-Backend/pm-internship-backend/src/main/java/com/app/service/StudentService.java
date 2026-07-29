@@ -47,9 +47,20 @@ public class StudentService {
 
 		Set<String> skills = student.getSkills().stream().map(Skill::getSkillName).collect(Collectors.toSet());
 
-		return new StudentResponse(student.getId(), student.getUser().getFullName(), student.getUser().getEmail(),
-				student.getCollegeName(), student.getBranch(), student.getCgpa(), student.getLocation(), skills,
-				student.getResume(), mapQualification(student.getQualification()), isProfileComplete(student));
+		return new StudentResponse(
+			    student.getId(),
+			    student.getUser().getFullName(),
+			    student.getUser().getEmail(),
+			    student.getCollegeName(),
+			    student.getBranch(),
+			    student.getCgpa(),
+			    student.getLocation(),
+			    skills,
+			    student.getResume(),
+			    student.getProfilePhoto(),
+			    mapQualification(student.getQualification()),
+			    isProfileComplete(student)
+			);
 	}
 
 	public StudentResponse updateProfile(Long id, StudentProfileRequest request) {
@@ -119,15 +130,29 @@ public class StudentService {
 
 	public List<StudentResponse> getAllStudents() {
 
-		return studentRepository.findAll().stream().map(student -> {
+	    return studentRepository.findAll().stream().map(student -> {
 
-			Set<String> skills = student.getSkills().stream().map(Skill::getSkillName).collect(Collectors.toSet());
+	        Set<String> skills = student.getSkills()
+	                .stream()
+	                .map(Skill::getSkillName)
+	                .collect(Collectors.toSet());
 
-			return new StudentResponse(student.getId(), student.getUser().getFullName(), student.getUser().getEmail(),
-					student.getCollegeName(), student.getBranch(), student.getCgpa(), student.getLocation(),
-					student.getSkills().stream().map(Skill::getSkillName).collect(Collectors.toSet()),
-					student.getResume(), mapQualification(student.getQualification()), isProfileComplete(student));
-		}).collect(Collectors.toList());
+	        return new StudentResponse(
+	                student.getId(),
+	                student.getUser().getFullName(),
+	                student.getUser().getEmail(),
+	                student.getCollegeName(),
+	                student.getBranch(),
+	                student.getCgpa(),
+	                student.getLocation(),
+	                skills,
+	                student.getResume(),
+	                student.getProfilePhoto(),   // ADD THIS
+	                mapQualification(student.getQualification()),
+	                isProfileComplete(student)
+	        );
+
+	    }).collect(Collectors.toList());
 	}
 
 	@Transactional
@@ -168,6 +193,61 @@ public class StudentService {
 		studentRepository.save(student);
 
 		return getStudent(id);
+	}
+	
+	public StudentResponse uploadProfilePhoto(Long id, MultipartFile file) {
+
+	    accessControlService.requireStudent(id);
+
+	    Student student = studentRepository.findById(id)
+	            .orElseThrow(() -> new RuntimeException("Student not found"));
+
+	    if (file == null || file.isEmpty()) {
+	        throw new RuntimeException("Please select a profile photo");
+	    }
+
+	    String originalFileName = file.getOriginalFilename();
+
+	    if (originalFileName == null || originalFileName.isBlank()) {
+	        throw new RuntimeException("Invalid file name");
+	    }
+
+	    String extension = "";
+
+	    int lastDot = originalFileName.lastIndexOf(".");
+
+	    if (lastDot >= 0) {
+	        extension = originalFileName.substring(lastDot);
+	    }
+
+	    String fileName = id + "_profile" + extension;
+
+	    try {
+
+	        Path path = Paths.get("uploads/profile-photos");
+
+	        if (!Files.exists(path)) {
+	            Files.createDirectories(path);
+	        }
+
+	        Files.copy(
+	                file.getInputStream(),
+	                path.resolve(fileName),
+	                StandardCopyOption.REPLACE_EXISTING
+	        );
+
+	    } catch (Exception e) {
+
+	        throw new RuntimeException(
+	                "Failed to upload profile photo", e
+	        );
+	    }
+
+	    student.setProfilePhoto(fileName);
+
+	    studentRepository.save(student);
+
+	    return getStudent(id);
 	}
 
     private QualificationResponse mapQualification(Qualification qualification) {

@@ -443,3 +443,24 @@ h1{
 }
 
 }
+
+/* ================= AI RECOMMENDATION BUTTON ================= */
+
+.recommendation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.ai-recommendation-btn {
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    white-space: nowrap;
+    background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+    color: white !important;
+    border: none !important;
+    cursor: pointer;
+}
