@@ -15,6 +15,16 @@ import com.app.service.StudentService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+
 @RestController
 @RequestMapping("/api/student")
 @CrossOrigin("http://localhost:3000")
@@ -61,6 +71,47 @@ public class StudentController {
 
 		    return studentService.uploadProfilePhoto(id, file);
 		}
+	
+//	@GetMapping("/resume/{fileName}")
+//	public ResponseEntity<Resource> viewResume(@PathVariable String fileName) throws IOException {
+//
+//	    Path filePath = Paths.get("uploads").resolve(fileName).normalize();
+//
+//	    Resource resource = new UrlResource(filePath.toUri());
+//
+//	    if (!resource.exists()) {
+//	        return ResponseEntity.notFound().build();
+//	    }
+//
+//	    return ResponseEntity.ok()
+//	            .contentType(MediaType.APPLICATION_PDF)
+//	            .header(
+//	                HttpHeaders.CONTENT_DISPOSITION,
+//	                "inline; filename=\"" + resource.getFilename() + "\""
+//	            )
+//	            .body(resource);
+//	}
+	
+	@GetMapping("/resume/{fileName:.+}")
+	public ResponseEntity<Resource> viewResume(
+	        @PathVariable String fileName) throws IOException {
+
+	    Path filePath = Paths.get("uploads").resolve(fileName).normalize();
+
+	    Resource resource = new UrlResource(filePath.toUri());
+
+	    if (!resource.exists() || !resource.isReadable()) {
+	        return ResponseEntity.notFound().build();
+	    }
+
+	    return ResponseEntity.ok()
+	            .contentType(MediaType.APPLICATION_PDF)
+	            .header(
+	                    HttpHeaders.CONTENT_DISPOSITION,
+	                    "inline; filename=\"" + resource.getFilename() + "\""
+	            )
+	            .body(resource);
+	}
 //	@PostMapping
 //	public StudentResponse addStudent(
 //	        @RequestBody StudentProfileRequest request) {
@@ -68,3 +119,5 @@ public class StudentController {
 //	    return studentService.addStudent(request);
 //	}
 }
+
+

@@ -75,7 +75,7 @@ function Students() {
 
                 <div className="search-container">
 
-                    
+
 
                     <input
                         type="text"
@@ -148,10 +148,12 @@ function Students() {
 
                                             ) : (
 
-                                                <span className="no-resume">
-                                                    No Resume
-                                                </span>
-
+                                                <button
+                                                    className="no-resume-btn"
+                                                    disabled
+                                                >
+                                                    📄 No Resume
+                                                </button>
                                             )}
 
                                         </td>

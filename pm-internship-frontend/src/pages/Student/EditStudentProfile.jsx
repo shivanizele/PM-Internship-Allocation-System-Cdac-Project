@@ -126,55 +126,55 @@ function EditStudentProfile() {
     };
 
     const handleQualificationChange = (e) => {
-    const { name, value } = e.target;
+        const { name, value } = e.target;
 
-    // Validate 10th percentage
-    if (name === "tenthPercentage") {
-        if (value !== "") {
-            const percentage = Number(value);
+        // Validate 10th percentage
+        if (name === "tenthPercentage") {
+            if (value !== "") {
+                const percentage = Number(value);
 
-            if (percentage < 0 || percentage > 100) {
-                setErrors(prev => ({
-                    ...prev,
-                    tenthPercentage: "10th percentage must be between 0 and 100.",
-                    server: ""
-                }));
-                return;
+                if (percentage < 0 || percentage > 100) {
+                    setErrors(prev => ({
+                        ...prev,
+                        tenthPercentage: "10th percentage must be between 0 and 100.",
+                        server: ""
+                    }));
+                    return;
+                }
             }
         }
-    }
 
-    // Validate 12th / Diploma percentage
-    if (name === "twelfthOrDiplomaPercentage") {
-        if (value !== "") {
-            const percentage = Number(value);
+        // Validate 12th / Diploma percentage
+        if (name === "twelfthOrDiplomaPercentage") {
+            if (value !== "") {
+                const percentage = Number(value);
 
-            if (percentage < 0 || percentage > 100) {
-                setErrors(prev => ({
-                    ...prev,
-                    twelfthOrDiplomaPercentage:
-                        "12th/Diploma percentage must be between 0 and 100.",
-                    server: ""
-                }));
-                return;
+                if (percentage < 0 || percentage > 100) {
+                    setErrors(prev => ({
+                        ...prev,
+                        twelfthOrDiplomaPercentage:
+                            "12th/Diploma percentage must be between 0 and 100.",
+                        server: ""
+                    }));
+                    return;
+                }
             }
         }
-    }
 
-    setStudent(prev => ({
-        ...prev,
-        qualification: {
-            ...prev.qualification,
-            [name]: value
-        }
-    }));
+        setStudent(prev => ({
+            ...prev,
+            qualification: {
+                ...prev.qualification,
+                [name]: value
+            }
+        }));
 
-    setErrors(prev => ({
-        ...prev,
-        [name]: "",
-        server: ""
-    }));
-};
+        setErrors(prev => ({
+            ...prev,
+            [name]: "",
+            server: ""
+        }));
+    };
 
     const handlePasswordChange = (e) => {
         const { name, value } = e.target;
@@ -280,15 +280,23 @@ function EditStudentProfile() {
             const profileResponse = await api.put(`/student/profile/${studentId}`, request);
 
             if (resume) {
-                const formData = new FormData();
-                formData.append("file", resume);
+    const formData = new FormData();
+    formData.append("file", resume);
 
-                await api.post(`/resume/upload/${studentId}`, formData, {
-                    headers: {
-                        "Content-Type": "multipart/form-data"
-                    }
-                });
+    try {
+        await api.post(`/student/uploadResume/${studentId}`, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data"
             }
+        });
+
+        console.log("Resume uploaded successfully");
+
+    } catch (err) {
+        console.log("Resume upload failed");
+        console.log(err.response);
+    }
+}
 
             alert("Profile updated successfully.");
 
@@ -535,7 +543,17 @@ function EditStudentProfile() {
                                 >
                                     View Resume
                                 </a> */}
-                                <button className="resume-btn" onClick={() => openResume(student.resume).catch(() => console.log("Unable to open resume."))}>View Resume</button>
+                                <button
+                                    type="button"
+                                    className="resume-btn"
+                                    onClick={() =>
+                                        openResume(existingResume).catch(() =>
+                                            console.log("Unable to open resume.")
+                                        )
+                                    }
+                                >
+                                    View Resume
+                                </button>
                             </div>
                         ) : (
                             <p>No Resume Uploaded</p>

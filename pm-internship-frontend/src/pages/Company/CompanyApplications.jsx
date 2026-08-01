@@ -4,6 +4,7 @@ import DashboardLayout from "../../components/Dashboard/DashboardLayout";
 import api, { openResume } from "../../services/api";
 import "./CompanyApplications.css";
 
+
 function CompanyApplications() {
     const { id } = useParams();
     const [applications, setApplications] = useState([]);
@@ -43,9 +44,14 @@ function CompanyApplications() {
 
     return (
         <DashboardLayout>
-            <div className="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+            <div className="applications-header mb-3">
                 <h2 className="mb-0">Applications Received</h2>
-                <button className="btn btn-primary" onClick={loadRankings} disabled={loadingRankings}>
+
+                <button
+                    className="ai-ranking-btn"
+                    onClick={loadRankings}
+                    disabled={loadingRankings}
+                >
                     {loadingRankings ? "Ranking applicants..." : "View AI Applicant Ranking"}
                 </button>
             </div>

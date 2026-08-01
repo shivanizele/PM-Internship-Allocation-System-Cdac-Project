@@ -24,3 +24,50 @@
 .reject-btn:hover{
     background:#b91c1c;
 }
+
+/* Header containing title and AI ranking button */
+.applications-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 20px 25px 10px 25px;
+}
+
+/* AI Ranking Button */
+.ai-ranking-btn {
+    background-color: #2563eb !important;
+    border: none !important;
+    color: white !important;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.ai-ranking-btn:hover {
+    background-color: #1d4ed8 !important;
+}
+
+.applications-card {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+}
+
+/* Space between View AI Applicant Ranking button and card */
+.view-ranking-btn {
+    margin-bottom: 25px;
+}
+
+
+/* Space between Applications table and AI ranking section */
+.ai-ranking-section {
+    margin-top: 35px;
+}
+
+
+/* Space below AI ranking heading */
+.ai-ranking-section h3 {
+    margin-bottom: 15px;
+}

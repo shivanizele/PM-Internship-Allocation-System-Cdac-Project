@@ -5,6 +5,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
+
+import com.app.entity.Application;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,8 +67,16 @@ public class ResumeService {
 
             // Save filename in database
             student.setResume(fileName);
-
             studentRepository.save(student);
+
+            // Update all previous applications with the latest resume
+            List<Application> applications = applicationRepository.findByStudentId(studentId);
+
+            for (Application application : applications) {
+                application.setResume(fileName);
+            }
+
+            applicationRepository.saveAll(applications);
 
             return "Resume uploaded successfully";
 
@@ -87,6 +98,10 @@ public class ResumeService {
 
             Path uploadPath = Paths.get(uploadDir).toAbsolutePath().normalize();
             Path path = uploadPath.resolve(fileName).normalize();
+            System.out.println("Upload Directory : " + uploadPath);
+            System.out.println("Requested File   : " + fileName);
+            System.out.println("Full Path        : " + path);
+            System.out.println("File Exists      : " + Files.exists(path));
             if (!path.startsWith(uploadPath)) {
                 throw new ResumeProcessingException("Invalid resume file reference");
             }
@@ -106,6 +121,7 @@ public class ResumeService {
         } catch (ResourceNotFoundException | ResumeProcessingException e) {
             throw e;
         } catch (Exception e) {
+            e.printStackTrace();   // Print the real error in the console
             throw new ResumeProcessingException("Could not load resume", e);
         }
     }
@@ -129,14 +145,19 @@ public class ResumeService {
             return;
         }
 
-        Student owner = studentRepository.findByResume(fileName)
-                .orElseThrow(() -> new ResourceNotFoundException("Resume not found"));
-        if (user.getRole().name().equals("STUDENT") && owner.getUser().getId().equals(user.getId())) {
+        List<Application> applications = applicationRepository.findAllByResume(fileName);
+
+        if (applications.isEmpty()) {
+            throw new ResourceNotFoundException("Resume not found");
+        }
+
+        Application application = applications.get(0);
+
+        if (user.getRole().name().equals("STUDENT")
+                && application.getStudent().getUser().getId().equals(user.getId())) {
             return;
         }
-        if (user.getRole().name().equals("COMPANY")
-                && applicationRepository.existsByResumeAndInternshipCompanyId(fileName,
-                        accessControlService.currentCompany().getId())) {
+        if (user.getRole().name().equals("COMPANY")) {
             return;
         }
         throw new org.springframework.security.access.AccessDeniedException("You are not allowed to view this resume");

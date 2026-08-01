@@ -9,10 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.app.entity.Application;
 import com.app.entity.Internship;
 import com.app.entity.Student;
+import java.util.Optional;
 
 
 public interface ApplicationRepository extends JpaRepository<Application, Long> {
 	List<Application> findByStudentId(Long studentId);
+	
+	List<Application> findAllByResume(String resume);
 
 	List<Application> findByInternshipId(Long internshipId);
 
