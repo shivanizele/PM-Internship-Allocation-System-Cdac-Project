@@ -54,18 +54,14 @@ function StudentProfile() {
 
                         <tr>
                             <td>CGPA</td>
+
                             <td>
                                 {student.cgpa !== null &&
-                                    student.cgpa !== undefined &&
-                                    student.cgpa >= 0 &&
-                                    student.cgpa <= 10 ? (
-                                    student.cgpa
-                                ) : (
-                                    <span className="invalid-cgpa">
-                                        CGPA must be between 0 and 10
-                                    </span>
-                                )}
+                                    student.cgpa !== undefined
+                                    ? student.cgpa
+                                    : "-"}
                             </td>
+
                         </tr>
 
 
@@ -142,14 +138,7 @@ function StudentProfile() {
                                 {
                                     student.resume ?
 
-                                        // <a
-                                        //     href={`http://localhost:8080/api/resume/${student.resume}`}
-                                        //     target="_blank"
-                                        //     rel="noreferrer"
-                                        //     className="resume-link"
-                                        // >
-                                        //     📄 View Resume
-                                        // </a>
+
                                         <button className="resume-btn" onClick={() => openResume(student.resume).catch(() => console.log("Unable to open resume."))}>View Resume</button>
 
                                         :

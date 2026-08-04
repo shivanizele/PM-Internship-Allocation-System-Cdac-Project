@@ -102,7 +102,7 @@ function StudentResume() {
                     onChange={(e) => setFile(e.target.files[0])}
                 />
 
-                <button onClick={uploadResume}>
+                <button onClick={uploadResume} className="upload-btn">
                     Upload Resume
                 </button>
 

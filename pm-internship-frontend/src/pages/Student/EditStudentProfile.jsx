@@ -7,7 +7,6 @@ import { isStudentProfileComplete } from "../../utils/studentProfile";
 import "./EditStudentProfile.css";
 import api, { openResume } from "../../services/api";
 
-
 const initialStudentState = {
     collegeName: "",
     branch: "",
