@@ -142,7 +142,7 @@
 
 /* Resume Button */
 
-.resume-btn{
+/* .resume-btn{
 
     border:none;
 
@@ -161,6 +161,50 @@
     font-weight:600;
 
     transition:.3s;
+
+} */
+
+.resume-btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:6px;
+
+    min-width:110px;
+
+    height:36px;
+
+    padding:0 14px;
+
+    border:none;
+
+    border-radius:8px;
+
+    background:#2563EB;
+
+    color:#fff;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:all .3s ease;
+
+    white-space:nowrap;
+
+}
+
+.resume-btn:hover{
+
+    background:#1D4ED8;
+
+    transform:translateY(-2px);
 
 }
 

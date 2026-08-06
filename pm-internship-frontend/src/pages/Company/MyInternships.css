@@ -3,7 +3,7 @@
 .internship-page {
     padding: 30px;
     min-height: 100vh;
-    background: linear-gradient(135deg,#eef4ff,#f8fbff);
+    background: linear-gradient(135deg, #eef4ff, #f8fbff);
 }
 
 /* ================= HEADER ================= */
@@ -23,27 +23,40 @@
     font-weight: 700;
 }
 
+/* ================= ADD BUTTON ================= */
+
 .add-btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
     text-decoration: none;
-    background: linear-gradient(135deg,#2563eb,#1d4ed8);
+
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
     color: white;
+
     padding: 12px 22px;
-    border-radius: 12px;
+
+    border-radius: 10px;
+
     font-weight: 600;
-    transition: .3s;
-    box-shadow: 0 8px 18px rgba(37,99,235,.25);
+
+    transition: 0.3s;
+
+    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.25);
 }
 
 .add-btn:hover {
+    color: white;
+    text-decoration: none;
     transform: translateY(-3px);
-    box-shadow: 0 12px 22px rgba(37,99,235,.35);
+    box-shadow: 0 12px 22px rgba(37, 99, 235, 0.35);
 }
 
 /* ================= TABLE CARD ================= */
 
 .table-card {
-    background: rgba(255,255,255,.85);
-    backdrop-filter: blur(18px);
+    background: rgba(255,255,255,.9);
     border-radius: 18px;
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(0,0,0,.08);
@@ -75,7 +88,7 @@
 }
 
 .internship-table tbody tr {
-    transition: .25s;
+    transition: 0.25s;
 }
 
 .internship-table tbody tr:hover {
@@ -95,6 +108,7 @@
 }
 
 .seats {
+    display: inline-block;
     background: #eff6ff;
     color: #2563eb;
     padding: 5px 12px;
@@ -102,53 +116,112 @@
     font-weight: 600;
 }
 
-/* ================= ACTIONS ================= */
+/* ================= ACTION BUTTONS ================= */
 
 .action-buttons {
     display: flex;
     justify-content: center;
-    gap: 10px;
-    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap;
 }
+
+.action-buttons a {
+    text-decoration: none;
+}
+
+/* Common Style */
 
 .edit-btn,
 .delete-btn,
 .application-btn {
+
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 38px;
+
+    padding: 0 16px;
+
     border: none;
-    padding: 9px 18px;
-    border-radius: 10px;
-    cursor: pointer;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+
     font-weight: 600;
-    transition: .25s;
+
+    cursor: pointer;
+
+    transition: all .3s ease;
+
+    text-decoration: none;
+
+    white-space: nowrap;
+
+    box-sizing: border-box;
 }
 
+/* Edit */
+
 .edit-btn {
+
     background: #2563eb;
+
     color: white;
+
+    min-width: 80px;
 }
 
 .edit-btn:hover {
+
     background: #1d4ed8;
+
+    color: white;
+
+    text-decoration: none;
+
     transform: translateY(-2px);
 }
 
+/* Delete */
+
 .delete-btn {
+
     background: #ef4444;
+
     color: white;
+
+    min-width: 90px;
 }
 
 .delete-btn:hover {
+
     background: #dc2626;
+
     transform: translateY(-2px);
 }
 
+/* Applications */
+
 .application-btn {
+
     background: #10b981;
+
     color: white;
+
+    min-width: 130px;
 }
 
 .application-btn:hover {
+
     background: #059669;
+
+    color: white;
+
+    text-decoration: none;
+
     transform: translateY(-2px);
 }
 
@@ -163,19 +236,36 @@
 
 /* ================= RESPONSIVE ================= */
 
-@media(max-width:900px){
+@media (max-width:900px) {
 
-.internship-header{
-    flex-direction:column;
-    align-items:flex-start;
+    .internship-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .table-card {
+        overflow-x: auto;
+    }
+
+    .internship-table {
+        min-width: 900px;
+    }
+
+}
+.action-buttons a{
+    display:flex;
+    align-items:center;
 }
 
-.table-card{
-    overflow-x:auto;
+.action-buttons button{
+    margin:0;
+    vertical-align:middle;
 }
 
-.internship-table{
-    min-width:900px;
-}
-
+.edit-btn,
+.delete-btn,
+.application-btn{
+    height:40px;
+    line-height:40px;
+    padding:0 18px;
 }

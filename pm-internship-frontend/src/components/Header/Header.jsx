@@ -24,7 +24,8 @@ export default function Header() {
                     <img
                             src={logo}
                             alt="InternConnect Logo"
-                            className="sidebar-logo-img"
+                            // className="sidebar-logo-img"
+                            className="header-logo"
                         />
                     <div className="portal-title">
                         <h2>InternConnect</h2>

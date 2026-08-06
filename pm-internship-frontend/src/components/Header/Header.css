@@ -46,11 +46,27 @@
 
 
 
-.college-logo{
+/* .college-logo{
 
     width:90px;
 
     height:auto;
+
+} */
+ .header-logo{
+
+    width:70px;
+
+    height:70px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    background:white;
+    margin-top: -15px;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.15);
 
 }
 
