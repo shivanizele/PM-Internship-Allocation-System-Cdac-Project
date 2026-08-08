@@ -1,6 +1,7 @@
 package com.app.service;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -14,10 +15,14 @@ import com.app.dto.StudentProfileRequest;
 import com.app.dto.StudentResponse;
 import com.app.dto.QualificationRequest;
 import com.app.dto.QualificationResponse;
+import com.app.entity.Allocation;
+import com.app.entity.Application;
 import com.app.entity.Qualification;
 import com.app.entity.Skill;
 import com.app.entity.Student;
 import com.app.entity.User;
+import com.app.repository.AllocationRepository;
+import com.app.repository.ApplicationRepository;
 import com.app.repository.SkillRepository;
 import com.app.repository.StudentRepository;
 import com.app.repository.UserRepository;
@@ -39,6 +44,12 @@ public class StudentService {
 	private UserRepository userRepository;
 	@Autowired
 	private AccessControlService accessControlService;
+	
+	@Autowired
+	private AllocationRepository allocationRepository;
+	
+	@Autowired
+	private ApplicationRepository applicationRepository;
 
 	public StudentResponse getStudent(Long id) {
 		accessControlService.requireStudent(id);
@@ -134,7 +145,14 @@ public class StudentService {
 	public void deleteStudent(Long id) {
 
 		Student student = studentRepository.findById(id).orElseThrow(() -> new RuntimeException("Student not found"));
-
+		List<Allocation> allo = student.getAllocations();
+		for (Allocation allocation : allo) {
+			allocationRepository.delete(allocation);
+		}
+		List<Application> applicationList = student.getApplications();
+		for (Application application : applicationList) {
+			applicationRepository.delete(application);
+		}
 		User user = student.getUser();
 
 		studentRepository.delete(student);
